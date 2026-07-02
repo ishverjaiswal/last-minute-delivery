@@ -36,10 +36,11 @@ export default function SettingsPage() {
             name: session?.user?.name || '',
             email: session?.user?.email || '',
             role:
-                session?.user?.role === 'USER' ||
+                session?.user?.role === 'CUSTOMER' ||
+                session?.user?.role === 'DELIVERY_AGENT' ||
                 session?.user?.role === 'ADMIN'
-                    ? session.user.role
-                    : 'USER',
+                    ? (session.user.role as 'CUSTOMER' | 'DELIVERY_AGENT' | 'ADMIN')
+                    : 'CUSTOMER',
             isTwoFactorEnabled: session?.user?.twoFactorEnabled || false,
             password: '',
             newPassword: '',
@@ -95,21 +96,21 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="container max-w-2xl mx-auto py-10">
-            <div className="space-y-6">
+        <div className="container max-w-2xl mx-auto py-10 px-4 text-white">
+            <div className="space-y-8">
                 <div>
-                    <h1 className="text-3xl font-bold">Settings</h1>
-                    <p className="text-muted-foreground mt-2">
-                        Manage your account settings and preferences
+                    <h1 className="text-3xl font-extrabold tracking-tight">Settings</h1>
+                    <p className="text-neutral-400 text-sm mt-1">
+                        Manage your account settings and preferences.
                     </p>
                 </div>
 
                 {message && (
                     <div
-                        className={`p-4 rounded-md ${
+                        className={`p-4 rounded-xl text-sm text-center font-semibold ${
                             message.type === 'success'
-                                ? 'bg-green-50 text-green-800 border border-green-200'
-                                : 'bg-red-50 text-red-800 border border-red-200'
+                                ? 'bg-green-500/10 text-green-500 border border-green-500/50'
+                                : 'bg-red-500/10 text-red-500 border border-red-500/50'
                         }`}
                     >
                         {message.text}
@@ -118,27 +119,28 @@ export default function SettingsPage() {
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     {/* User Info Card */}
-                    <div className="border rounded-lg p-6 space-y-4">
-                        <h2 className="text-xl font-semibold">
+                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-4">
+                        <h2 className="text-lg font-bold border-b border-neutral-800 pb-2">
                             Profile Information
                         </h2>
 
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                             <Label htmlFor="name">Name</Label>
                             <Input
                                 id="name"
                                 {...register('name')}
                                 disabled={isPending}
                                 placeholder="Enter your name"
+                                className="bg-neutral-950 border-neutral-800 text-white text-sm"
                             />
                             {errors.name && (
-                                <p className="text-sm text-red-500">
+                                <p className="text-xs text-red-500">
                                     {errors.name.message}
                                 </p>
                             )}
                         </div>
 
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                             <Label htmlFor="email">Email</Label>
                             <Input
                                 id="email"
@@ -146,56 +148,56 @@ export default function SettingsPage() {
                                 {...register('email')}
                                 disabled={isPending || session?.user?.isOAuth}
                                 placeholder="Enter your email"
+                                className="bg-neutral-950 border-neutral-800 text-white text-sm"
                             />
                             {errors.email && (
-                                <p className="text-sm text-red-500">
+                                <p className="text-xs text-red-500">
                                     {errors.email.message}
                                 </p>
                             )}
                             {session?.user?.isOAuth && (
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-xs text-neutral-500">
                                     Email cannot be changed for OAuth accounts
                                 </p>
                             )}
                         </div>
 
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                             <Label htmlFor="role">Role</Label>
                             <select
                                 id="role"
                                 {...register('role')}
                                 disabled={isPending}
-                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                className="flex h-9 w-full rounded-md border border-neutral-800 bg-neutral-950 px-3 py-1 text-sm shadow-sm transition-colors text-white"
                             >
-                                <option value="USER">👤 User</option>
+                                <option value="CUSTOMER">👤 Customer</option>
+                                <option value="DELIVERY_AGENT">🛵 Delivery Agent</option>
                                 <option value="ADMIN">👑 Admin</option>
                             </select>
                             {errors.role && (
-                                <p className="text-sm text-red-500">
+                                <p className="text-xs text-red-500">
                                     {errors.role.message}
                                 </p>
                             )}
-                            <div className="flex items-center gap-2">
-                                <p className="text-sm text-muted-foreground">
+                            <div className="flex items-center gap-2 pt-1.5">
+                                <p className="text-xs text-neutral-400 font-medium">
                                     Current role:
                                 </p>
                                 <Badge
-                                    variant={
-                                        currentRole === 'ADMIN'
-                                            ? 'default'
-                                            : 'secondary'
-                                    }
+                                    className="bg-indigo-500/20 text-indigo-500 border border-indigo-500/50 px-2 py-0.5 rounded text-[10px] font-bold"
                                 >
                                     {currentRole === 'ADMIN'
                                         ? '👑 Admin'
-                                        : '👤 User'}
+                                        : currentRole === 'DELIVERY_AGENT'
+                                          ? '🛵 Delivery Agent'
+                                          : '👤 Customer'}
                                 </Badge>
                             </div>
                         </div>
 
-                        <div className="pt-2">
-                            <p className="text-sm text-muted-foreground">
-                                <strong>Account Type:</strong>{' '}
+                        <div className="pt-2 border-t border-neutral-850">
+                            <p className="text-xs text-neutral-400">
+                                <strong className="font-bold text-neutral-200">Account Type:</strong>{' '}
                                 {session?.user?.isOAuth
                                     ? 'OAuth'
                                     : 'Credentials'}
@@ -205,10 +207,10 @@ export default function SettingsPage() {
 
                     {/* Security Card */}
                     {!session?.user?.isOAuth && (
-                        <div className="border rounded-lg p-6 space-y-4">
-                            <h2 className="text-xl font-semibold">Security</h2>
+                        <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-4">
+                            <h2 className="text-lg font-bold border-b border-neutral-800 pb-2">Security</h2>
 
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 <Label htmlFor="password">
                                     Current Password
                                 </Label>
@@ -218,15 +220,16 @@ export default function SettingsPage() {
                                     {...register('password')}
                                     disabled={isPending}
                                     placeholder="Enter current password"
+                                    className="bg-neutral-950 border-neutral-800 text-white text-sm"
                                 />
                                 {errors.password && (
-                                    <p className="text-sm text-red-500">
+                                    <p className="text-xs text-red-500">
                                         {errors.password.message}
                                     </p>
                                 )}
                             </div>
 
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 <Label htmlFor="newPassword">
                                     New Password
                                 </Label>
@@ -236,13 +239,14 @@ export default function SettingsPage() {
                                     {...register('newPassword')}
                                     disabled={isPending}
                                     placeholder="Enter new password"
+                                    className="bg-neutral-950 border-neutral-800 text-white text-sm"
                                 />
                                 {errors.newPassword && (
-                                    <p className="text-sm text-red-500">
+                                    <p className="text-xs text-red-500">
                                         {errors.newPassword.message}
                                     </p>
                                 )}
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-xs text-neutral-500">
                                     Leave blank to keep current password
                                 </p>
                             </div>
@@ -250,8 +254,8 @@ export default function SettingsPage() {
                     )}
 
                     {/* Two Factor Authentication Card */}
-                    <div className="border rounded-lg p-6 space-y-4">
-                        <h2 className="text-xl font-semibold">
+                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-4">
+                        <h2 className="text-lg font-bold border-b border-neutral-800 pb-2">
                             Two-Factor Authentication
                         </h2>
 
@@ -261,26 +265,25 @@ export default function SettingsPage() {
                                 id="isTwoFactorEnabled"
                                 {...register('isTwoFactorEnabled')}
                                 disabled={isPending || session?.user?.isOAuth}
-                                className="h-4 w-4 rounded border-gray-300"
+                                className="h-4 w-4 rounded bg-neutral-950 border-neutral-800"
                             />
                             <Label
                                 htmlFor="isTwoFactorEnabled"
-                                className="cursor-pointer"
+                                className="cursor-pointer select-none"
                             >
                                 Enable Two-Factor Authentication
                             </Label>
                         </div>
 
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-xs text-neutral-400 font-semibold">
                             {isTwoFactorEnabled
                                 ? '✅ Two-factor authentication is enabled for your account'
                                 : '❌ Two-factor authentication is currently disabled'}
                         </p>
 
                         {session?.user?.isOAuth && (
-                            <p className="text-sm text-muted-foreground">
-                                Two-factor authentication is not available for
-                                OAuth accounts
+                            <p className="text-xs text-neutral-500">
+                                Two-factor authentication is not available for OAuth accounts
                             </p>
                         )}
                     </div>
@@ -289,9 +292,9 @@ export default function SettingsPage() {
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="w-full"
+                        className="w-full bg-white hover:bg-neutral-200 text-black font-extrabold py-3 rounded-lg text-sm transition-colors cursor-pointer"
                     >
-                        {isPending ? 'Saving...' : 'Save Changes'}
+                        {isPending ? 'Saving changes...' : 'Save Changes'}
                     </Button>
                 </form>
             </div>

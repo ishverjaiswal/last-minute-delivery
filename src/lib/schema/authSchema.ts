@@ -47,7 +47,7 @@ export const settingsSchema = z
             .min(2, 'Name must be at least 2 characters long')
             .optional(),
         email: z.string().email('Invalid email address').optional(),
-        role: z.enum(['USER', 'ADMIN']).optional(),
+        role: z.enum(['CUSTOMER', 'DELIVERY_AGENT', 'ADMIN']).optional(),
         isTwoFactorEnabled: z.boolean().optional(),
         password: z
             .string()
