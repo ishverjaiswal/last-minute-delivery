@@ -59,7 +59,11 @@ export async function POST(request: NextRequest) {
 
             if (role !== undefined) {
                 updateData.role =
-                    role === 'USER' ? UserRole.USER : UserRole.ADMIN
+                    role === 'CUSTOMER'
+                        ? UserRole.CUSTOMER
+                        : role === 'DELIVERY_AGENT'
+                          ? UserRole.DELIVERY_AGENT
+                          : UserRole.ADMIN
             }
 
             if (isTwoFactorEnabled !== undefined) {
@@ -147,7 +151,12 @@ export async function POST(request: NextRequest) {
 
         // Handle role toggle
         if (role !== undefined && role !== dbUser.role) {
-            updateData.role = role === 'USER' ? UserRole.USER : UserRole.ADMIN
+            updateData.role =
+                role === 'CUSTOMER'
+                    ? UserRole.CUSTOMER
+                    : role === 'DELIVERY_AGENT'
+                      ? UserRole.DELIVERY_AGENT
+                      : UserRole.ADMIN
         }
 
         // Handle 2FA toggle
