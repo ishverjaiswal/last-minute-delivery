@@ -1,67 +1,57 @@
+'use client'
 import React from 'react'
 
 const Contact = () => {
     return (
-        <section
-            id="contact"
-            className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-neutral-950 to-black"
-        >
-            <div className="container mx-auto px-4 py-20">
-                <h2 className="text-4xl md:text-6xl font-bold text-center mb-16">
-                    Contact Us
-                </h2>
-                <div className="max-w-2xl mx-auto">
-                    <form className="space-y-6">
-                        <div>
-                            <label
-                                htmlFor="name"
-                                className="block text-sm font-medium mb-2"
-                            >
-                                Name
-                            </label>
-                            <input
-                                type="text"
-                                id="name"
-                                className="w-full px-4 py-3 rounded-lg bg-neutral-900/50 border border-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                placeholder="Your name"
-                            />
-                        </div>
-                        <div>
-                            <label
-                                htmlFor="email"
-                                className="block text-sm font-medium mb-2"
-                            >
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                id="email"
-                                className="w-full px-4 py-3 rounded-lg bg-neutral-900/50 border border-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                placeholder="your@email.com"
-                            />
-                        </div>
-                        <div>
-                            <label
-                                htmlFor="message"
-                                className="block text-sm font-medium mb-2"
-                            >
-                                Message
-                            </label>
-                            <textarea
-                                id="message"
-                                rows={5}
-                                className="w-full px-4 py-3 rounded-lg bg-neutral-900/50 border border-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                placeholder="Your message"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-colors"
-                        >
-                            Send Message
-                        </button>
-                    </form>
+        <section id="contact" className="w-full bg-black py-24 text-white border-t border-neutral-900">
+            <div className="container mx-auto px-6 max-w-lg space-y-12">
+                <div className="text-center space-y-3">
+                    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">Contact Operations</h2>
+                    <p className="text-neutral-400 text-sm">
+                        Get in touch with our operations support desk for enterprise integration.
+                    </p>
                 </div>
+                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                    <div className="space-y-1.5">
+                        <label htmlFor="name" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                            Full Name
+                        </label>
+                        <input
+                            type="text"
+                            id="name"
+                            className="w-full h-10 px-3 rounded-md bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-700"
+                            placeholder="Your name"
+                        />
+                    </div>
+                    <div className="space-y-1.5">
+                        <label htmlFor="email" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                            Email Address
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="w-full h-10 px-3 rounded-md bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-700"
+                            placeholder="your@email.com"
+                        />
+                    </div>
+                    <div className="space-y-1.5">
+                        <label htmlFor="message" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                            Message
+                        </label>
+                        <textarea
+                            id="message"
+                            rows={4}
+                            className="w-full p-3 rounded-md bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-700"
+                            placeholder="How can our dispatch team assist you?"
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full h-10 bg-white hover:bg-neutral-200 text-black text-sm font-bold rounded-md transition-colors cursor-pointer"
+                    >
+                        Send Inquiry
+                    </button>
+                </form>
             </div>
         </section>
     )

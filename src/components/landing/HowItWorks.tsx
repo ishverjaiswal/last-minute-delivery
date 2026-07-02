@@ -1,55 +1,51 @@
 import React from 'react'
 
 const HowItWorks = () => {
+    const steps = [
+        {
+            num: '01',
+            title: 'Customer Books Delivery',
+            desc: 'Calculate pricing instantly based on serviceable PIN codes and package weight brackets.',
+        },
+        {
+            num: '02',
+            title: 'Admin Reviews & Assigns Agent',
+            desc: 'Dispatcher validates incoming order details and assigns an available driver.',
+        },
+        {
+            num: '03',
+            title: 'Delivery Agent Picks Up Parcel',
+            desc: 'The designated delivery driver picks up the package and begins the shipment route.',
+        },
+        {
+            num: '04',
+            title: 'Customer Tracks Delivery Until Completion',
+            desc: 'Get status logs updates at each stage of the lifecycle from confirmation to final handoff.',
+        },
+    ]
+
     return (
-        <section
-            id="how-it-works"
-            className="min-h-screen w-full flex items-center justify-center bg-neutral-950"
-        >
-            <div className="container mx-auto px-4 py-20">
-                <h2 className="text-4xl md:text-6xl font-bold text-center mb-16">
-                    How It Works
-                </h2>
-                <div className="max-w-4xl mx-auto space-y-12">
-                    <div className="flex items-start gap-6">
-                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-xl font-bold">
-                            1
+        <section id="how-it-works" className="w-full bg-black py-24 text-white border-t border-neutral-900">
+            <div className="container mx-auto px-6 max-w-5xl space-y-16">
+                <div className="text-center space-y-3">
+                    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">How It Works</h2>
+                    <p className="text-neutral-400 text-sm md:text-base max-w-xl mx-auto">
+                        A seamless, automated dispatch lifecycle from user booking to driver delivery.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    {steps.map((step, idx) => (
+                        <div key={`step-${idx}`} className="space-y-4 relative">
+                            <div className="text-xs font-mono font-bold text-indigo-500 tracking-wider">
+                                STEP {step.num}
+                            </div>
+                            <div className="space-y-2">
+                                <h3 className="text-lg font-bold tracking-tight text-neutral-200">{step.title}</h3>
+                                <p className="text-xs text-neutral-400 leading-relaxed">{step.desc}</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-2xl font-semibold mb-2">
-                                Step One
-                            </h3>
-                            <p className="text-neutral-400">
-                                Get started with our amazing platform
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex items-start gap-6">
-                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-xl font-bold">
-                            2
-                        </div>
-                        <div>
-                            <h3 className="text-2xl font-semibold mb-2">
-                                Step Two
-                            </h3>
-                            <p className="text-neutral-400">
-                                Configure your settings and preferences
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex items-start gap-6">
-                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-xl font-bold">
-                            3
-                        </div>
-                        <div>
-                            <h3 className="text-2xl font-semibold mb-2">
-                                Step Three
-                            </h3>
-                            <p className="text-neutral-400">
-                                Start achieving amazing results
-                            </p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </section>

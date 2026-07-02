@@ -1,40 +1,38 @@
-import BlurText from '@/components/landing/ui/hero-text'
-import { HeroVideoDialog } from '@/components/landing/ui/hero-video-dialog'
-import ShinyText from '@/components/landing/ui/hero-subtext'
+import { LoginButton } from './ui/login-button'
 
 export const Hero = () => {
     return (
-        <section className="min-h-screen pt-30 flex items-center justify-center">
-            <div className="flex flex-col items-center justify-center gap-8 py-32 px-4 sm:px-8 lg:px-16">
-                <BlurText
-                    text="Visibility for every delivery stop."
-                    delay={150}
-                    animateBy="words"
-                    direction="top"
-                    className="text-4xl md:text-6xl font-bold text-center"
-                />
-                <ShinyText
-                    text="Secure operations for modern last-mile teams."
-                    disabled={false}
-                    speed={3}
-                    className="custom-class"
-                />
-            </div>
-            <div className=" relative w-full max-w-2xl mx-auto pb-20">
-                <HeroVideoDialog
-                    className="block dark:hidden"
-                    animationStyle="top-in-bottom-out"
-                    videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                    thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                    thumbnailAlt="Hero Video"
-                />
-                <HeroVideoDialog
-                    className="hidden dark:block"
-                    animationStyle="top-in-bottom-out"
-                    videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                    thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                    thumbnailAlt="Hero Video"
-                />
+        <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-6 py-24 bg-black text-white">
+            <div className="max-w-4xl mx-auto space-y-8">
+                {/* Badge/Announce */}
+                <div className="inline-flex items-center space-x-2 bg-neutral-900 border border-neutral-800 rounded-full px-4 py-1.5 text-xs text-neutral-300 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Real-time logistics coordination platform</span>
+                </div>
+
+                {/* Headline */}
+                <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-none">
+                    Last Mile Delivery Tracker
+                </h1>
+
+                {/* Subheading */}
+                <p className="max-w-2xl mx-auto text-lg md:text-xl text-neutral-400 font-normal leading-relaxed">
+                    Manage parcel deliveries, assign delivery agents, calculate shipping costs, and track every order from booking to delivery through a single unified dashboard.
+                </p>
+
+                {/* CTAs */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                    <LoginButton mode="redirect" type="signup">
+                        <button className="w-full sm:w-auto bg-white hover:bg-neutral-200 text-black px-8 py-3.5 rounded-lg text-sm font-bold transition-all shadow-lg cursor-pointer">
+                            Book Delivery
+                        </button>
+                    </LoginButton>
+                    <LoginButton mode="redirect" type="login">
+                        <button className="w-full sm:w-auto bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 px-8 py-3.5 rounded-lg text-sm font-bold transition-all cursor-pointer">
+                            View Dashboard
+                        </button>
+                    </LoginButton>
+                </div>
             </div>
         </section>
     )
