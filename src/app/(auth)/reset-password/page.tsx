@@ -2,9 +2,9 @@
 import { Suspense } from 'react'
 import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm'
 
-const ResetPasswordPage = ({}) => {
+const ResetPasswordPage = () => {
     return (
-        <div className="min-h-screen flex items-center justify-center  from-neutral-900 to-black p-4">
+        <div className="w-full flex items-center justify-center p-4">
             <Suspense fallback={<div className="text-white">Loading...</div>}>
                 <ResetPasswordForm
                     title="Reset Password"

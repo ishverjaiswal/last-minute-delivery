@@ -31,9 +31,10 @@ interface LoginFormProps {
     subtitle?: string
     buttonLabel?: string
     buttonHref?: string
+    isModal?: boolean
 }
 
-export function LoginForm({ title, subtitle, buttonLabel }: LoginFormProps) {
+export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: LoginFormProps) {
     const router = useRouter()
     const [showPassword, setShowPassword] = useState(false)
     const [isPending, startTransition] = useTransition()
@@ -127,7 +128,7 @@ export function LoginForm({ title, subtitle, buttonLabel }: LoginFormProps) {
     }
 
     const handleClose = () => {
-        router.back()
+        router.push('/')
     }
 
     const onClickSocialLogin = (provider: string) => {
@@ -137,21 +138,28 @@ export function LoginForm({ title, subtitle, buttonLabel }: LoginFormProps) {
     const submitLabel = buttonLabel ?? 'Log In'
 
     return (
-        <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black relative">
-            <button
-                onClick={handleClose}
-                className="absolute top-4 right-4 p-1 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-                aria-label="Close"
-                type="button"
-            >
-                <IconX className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
-            </button>
+        <div className={cn(
+            "w-full max-w-md mx-auto relative text-white",
+            isModal 
+                ? "bg-transparent p-0" 
+                : "shadow-input bg-neutral-900 border border-neutral-850 p-6 md:p-8 rounded-2xl"
+        )}>
+            {!isModal && (
+                <button
+                    onClick={handleClose}
+                    className="absolute top-4 right-4 p-1 rounded-full hover:bg-neutral-800 transition-colors"
+                    aria-label="Close"
+                    type="button"
+                >
+                    <IconX className="h-5 w-5 text-neutral-400" />
+                </button>
+            )}
 
             <div className="mb-6 text-center">
-                <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
+                <h2 className="text-xl font-bold text-neutral-200">
                     {title}
                 </h2>
-                <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
+                <p className="mt-2 max-w-sm text-sm text-neutral-400">
                     {subtitle}
                 </p>
             </div>

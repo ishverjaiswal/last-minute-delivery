@@ -42,16 +42,17 @@ export function LoginButton({
                     <DialogTrigger asChild={asChild}>
                         <span className="login-button modal">{children}</span>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-lg">
-                        <DialogTitle>Login</DialogTitle>
-                        <DialogDescription>
+                    <DialogContent className="sm:max-w-md bg-neutral-900 border border-neutral-850 text-white p-6 rounded-2xl dark">
+                        <DialogTitle className="sr-only">Login</DialogTitle>
+                        <DialogDescription className="sr-only">
                             Please enter your credentials to log in.
                         </DialogDescription>
                         <LoginForm
                             title="Welcome Back"
-                            subtitle="Please enter your credentials"
+                            subtitle="Please enter your credentials to log in."
                             buttonLabel="Log In"
                             buttonHref="/dashboard"
+                            isModal={true}
                         />
                     </DialogContent>
                 </Dialog>
