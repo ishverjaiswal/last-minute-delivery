@@ -1,26 +1,27 @@
 import React from 'react'
+import { Package, Bike, Map, Navigation } from 'lucide-react'
 
 const Features = () => {
     const featuresList = [
         {
             title: 'Order Management',
             description: 'Create, organize and monitor parcel deliveries from one place.',
-            icon: '📦',
+            icon: <Package className="w-6 h-6 text-neutral-300" />,
         },
         {
             title: 'Delivery Agent Assignment',
             description: 'Assign delivery agents and monitor active deliveries.',
-            icon: '🛵',
+            icon: <Bike className="w-6 h-6 text-neutral-300" />,
         },
         {
             title: 'Zone & Rate Management',
             description: 'Configure service zones and pricing rules.',
-            icon: '🗺️',
+            icon: <Map className="w-6 h-6 text-neutral-300" />,
         },
         {
             title: 'Real-Time Tracking',
             description: 'Track order lifecycle from booking to successful delivery.',
-            icon: '🎯',
+            icon: <Navigation className="w-6 h-6 text-neutral-300" />,
         },
     ]
 
@@ -42,7 +43,7 @@ const Features = () => {
                             key={`feat-${idx}`}
                             className="p-8 rounded-xl bg-neutral-900/40 border border-neutral-900 hover:border-neutral-800 hover:bg-neutral-900/60 transition-all space-y-4"
                         >
-                            <div className="w-12 h-12 rounded-lg bg-neutral-850 border border-neutral-800 flex items-center justify-center text-xl">
+                            <div className="w-12 h-12 rounded-lg bg-neutral-850 border border-neutral-800 flex items-center justify-center">
                                 {feat.icon}
                             </div>
                             <div className="space-y-1">

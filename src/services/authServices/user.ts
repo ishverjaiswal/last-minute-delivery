@@ -29,11 +29,14 @@ export const userServices = async (payload: SignupRequestBody) => {
         .join(' ')
         .trim()
 
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
     try {
         newUser = await createUser({
             name: fullName.length ? fullName : normalizedPayload.email,
             email: normalizedPayload.email,
             password: hashedPassword,
+            emailVerified: isDemoMode ? new Date() : null,
         })
     } catch (error) {
         if (isUniqueViolationError(error)) {
@@ -41,6 +44,14 @@ export const userServices = async (payload: SignupRequestBody) => {
         }
 
         throw error
+    }
+
+    if (isDemoMode) {
+        return {
+            user: toPublicUser(newUser),
+            message: 'Demo Mode: Account created and verified successfully!',
+            emailSent: false,
+        }
     }
 
     const verificationToken = await generateVerificationToken({

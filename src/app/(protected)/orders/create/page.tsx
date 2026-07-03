@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any, react-hooks/set-state-in-effect */
 'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { DEMO_DATA } from '@/lib/demo-data'
+import { Sparkles } from 'lucide-react'
+import { StatusBadge } from '@/components/ui/StatusBadge'
 
 export default function CreateOrderPage() {
     const router = useRouter()
@@ -27,6 +27,7 @@ export default function CreateOrderPage() {
         register,
         handleSubmit,
         watch,
+        setValue,
         formState: { errors, isValid },
     } = useForm({
         mode: 'onChange',
@@ -106,11 +107,24 @@ export default function CreateOrderPage() {
         })
     }, [watchedPin, watchedWeight, zones, rateCards])
 
+    const fillSampleOrder = () => {
+        setValue('senderName', DEMO_DATA.customer.name, { shouldValidate: true })
+        setValue('senderPhone', DEMO_DATA.customer.phone, { shouldValidate: true })
+        setValue('pickupAddress', DEMO_DATA.customer.pickupAddress, { shouldValidate: true })
+        setValue('recipientName', DEMO_DATA.customer.recipientName, { shouldValidate: true })
+        setValue('recipientPhone', DEMO_DATA.customer.recipientPhone, { shouldValidate: true })
+        setValue('deliveryAddress', DEMO_DATA.customer.deliveryAddress, { shouldValidate: true })
+        setValue('deliveryPinCode', DEMO_DATA.customer.pin, { shouldValidate: true })
+        setValue('weight', DEMO_DATA.customer.weight, { shouldValidate: true })
+        setValue('category', DEMO_DATA.customer.packageCategory, { shouldValidate: true })
+        setValue('specialInstructions', DEMO_DATA.customer.notes, { shouldValidate: true })
+        setValue('isFragile', true, { shouldValidate: true })
+    }
+
     const onSubmit = async (values: any) => {
         setIsPending(true)
         setError(null)
         try {
-            // Concatenate recipient/sender names nicely into address strings to store details
             const payload = {
                 pickupAddress: `${values.senderName} (${values.senderPhone}) - ${values.pickupAddress}`,
                 deliveryAddress: `${values.recipientName} (${values.recipientPhone}) - ${values.deliveryAddress}`,
@@ -132,67 +146,79 @@ export default function CreateOrderPage() {
     }
 
     return (
-        <div className="w-full max-w-6xl space-y-8 px-4 text-white">
+        <div className="w-full max-w-6xl space-y-6 px-4 text-white">
             {/* Header Section */}
-            <div className="space-y-1">
-                <h1 className="text-3xl font-extrabold tracking-tight">Book a New Delivery</h1>
-                <p className="text-neutral-400 text-sm">
-                    Create a parcel shipment and receive an estimated delivery cost.
-                </p>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div className="space-y-1">
+                    <h1 className="premium-tyo-display">Book a New Delivery</h1>
+                    <p className="premium-tyo-secondary">
+                        Create a parcel shipment and receive an estimated delivery cost.
+                    </p>
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        onClick={fillSampleOrder}
+                        className="premium-button-secondary text-xs h-9"
+                    >
+                        <Sparkles className="w-3.5 h-3.5 mr-1 text-indigo-400" />
+                        Autofill Order Details
+                    </button>
+                </div>
             </div>
 
             {error && (
-                <div className="bg-red-500/10 border border-red-500/50 text-red-500 rounded-lg p-4 text-sm text-center">
+                <div className="bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg p-4 text-xs text-center">
                     {error}
                 </div>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Form Inputs (Left side) */}
-                <div className="lg:col-span-2 space-y-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Form Inputs (Left side) (70%) */}
+                <div className="lg:col-span-2 space-y-6">
                     {/* Sender Card */}
-                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-4">
-                        <h2 className="text-lg font-bold tracking-tight border-b border-neutral-800 pb-2">
+                    <div className="premium-card space-y-4">
+                        <h2 className="premium-tyo-card border-b border-neutral-850 pb-2">
                             1. Sender Information
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-1.5">
-                                <Label htmlFor="senderName">
+                            <div className="premium-form-group">
+                                <label htmlFor="senderName" className="premium-form-label">
                                     Sender Name <span className="text-red-500">*</span>
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                     id="senderName"
                                     type="text"
                                     {...register('senderName', { required: 'Sender name is required' })}
                                     placeholder="Your name"
                                     disabled={isPending}
-                                    className="bg-neutral-950 border-neutral-800"
+                                    className="premium-input w-full"
                                 />
                                 {errors.senderName && (
-                                    <p className="text-xs text-red-500">{errors.senderName.message as string}</p>
+                                    <p className="premium-form-error">{errors.senderName.message as string}</p>
                                 )}
                             </div>
-                            <div className="space-y-1.5">
-                                <Label htmlFor="senderPhone">
+                            <div className="premium-form-group">
+                                <label htmlFor="senderPhone" className="premium-form-label">
                                     Sender Phone <span className="text-red-500">*</span>
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                     id="senderPhone"
                                     type="text"
                                     {...register('senderPhone', { required: 'Sender phone is required' })}
                                     placeholder="e.g. +91 9876543210"
                                     disabled={isPending}
-                                    className="bg-neutral-950 border-neutral-800"
+                                    className="premium-input w-full"
                                 />
                                 {errors.senderPhone && (
-                                    <p className="text-xs text-red-500">{errors.senderPhone.message as string}</p>
+                                    <p className="premium-form-error">{errors.senderPhone.message as string}</p>
                                 )}
                             </div>
-                            <div className="space-y-1.5 md:col-span-2">
-                                <Label htmlFor="pickupAddress">
+                            <div className="premium-form-group md:col-span-2">
+                                <label htmlFor="pickupAddress" className="premium-form-label">
                                     Pickup Address <span className="text-red-500">*</span>
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                     id="pickupAddress"
                                     type="text"
                                     {...register('pickupAddress', {
@@ -201,58 +227,58 @@ export default function CreateOrderPage() {
                                     })}
                                     placeholder="Enter full pickup address details"
                                     disabled={isPending}
-                                    className="bg-neutral-950 border-neutral-800"
+                                    className="premium-input w-full"
                                 />
                                 {errors.pickupAddress && (
-                                    <p className="text-xs text-red-500">{errors.pickupAddress.message as string}</p>
+                                    <p className="premium-form-error">{errors.pickupAddress.message as string}</p>
                                 )}
                             </div>
                         </div>
                     </div>
 
                     {/* Recipient Card */}
-                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-4">
-                        <h2 className="text-lg font-bold tracking-tight border-b border-neutral-800 pb-2">
+                    <div className="premium-card space-y-4">
+                        <h2 className="premium-tyo-card border-b border-neutral-855 pb-2">
                             2. Recipient Information
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-1.5">
-                                <Label htmlFor="recipientName">
+                            <div className="premium-form-group">
+                                <label htmlFor="recipientName" className="premium-form-label">
                                     Recipient Name <span className="text-red-500">*</span>
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                     id="recipientName"
                                     type="text"
                                     {...register('recipientName', { required: 'Recipient name is required' })}
                                     placeholder="Recipient name"
                                     disabled={isPending}
-                                    className="bg-neutral-950 border-neutral-800"
+                                    className="premium-input w-full"
                                 />
                                 {errors.recipientName && (
-                                    <p className="text-xs text-red-500">{errors.recipientName.message as string}</p>
+                                    <p className="premium-form-error">{errors.recipientName.message as string}</p>
                                 )}
                             </div>
-                            <div className="space-y-1.5">
-                                <Label htmlFor="recipientPhone">
+                            <div className="premium-form-group">
+                                <label htmlFor="recipientPhone" className="premium-form-label">
                                     Recipient Phone <span className="text-red-500">*</span>
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                     id="recipientPhone"
                                     type="text"
                                     {...register('recipientPhone', { required: 'Recipient phone is required' })}
                                     placeholder="e.g. +91 9876543210"
                                     disabled={isPending}
-                                    className="bg-neutral-950 border-neutral-800"
+                                    className="premium-input w-full"
                                 />
                                 {errors.recipientPhone && (
-                                    <p className="text-xs text-red-500">{errors.recipientPhone.message as string}</p>
+                                    <p className="premium-form-error">{errors.recipientPhone.message as string}</p>
                                 )}
                             </div>
-                            <div className="space-y-1.5 md:col-span-2">
-                                <Label htmlFor="deliveryAddress">
+                            <div className="premium-form-group md:col-span-2">
+                                <label htmlFor="deliveryAddress" className="premium-form-label">
                                     Delivery Address <span className="text-red-500">*</span>
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                     id="deliveryAddress"
                                     type="text"
                                     {...register('deliveryAddress', {
@@ -261,17 +287,17 @@ export default function CreateOrderPage() {
                                     })}
                                     placeholder="Enter full recipient address details"
                                     disabled={isPending}
-                                    className="bg-neutral-950 border-neutral-800"
+                                    className="premium-input w-full"
                                 />
                                 {errors.deliveryAddress && (
-                                    <p className="text-xs text-red-500">{errors.deliveryAddress.message as string}</p>
+                                    <p className="premium-form-error">{errors.deliveryAddress.message as string}</p>
                                 )}
                             </div>
-                            <div className="space-y-1.5 md:col-span-2">
-                                <Label htmlFor="deliveryPinCode">
-                                    Delivery PIN Code (Serviceability Checking) <span className="text-red-500">*</span>
-                                </Label>
-                                <Input
+                            <div className="premium-form-group md:col-span-2">
+                                <label htmlFor="deliveryPinCode" className="premium-form-label">
+                                    Delivery PIN Code (Kanpur Coverage Range) <span className="text-red-500">*</span>
+                                </label>
+                                <input
                                     id="deliveryPinCode"
                                     type="text"
                                     {...register('deliveryPinCode', {
@@ -280,24 +306,24 @@ export default function CreateOrderPage() {
                                     })}
                                     placeholder="e.g. 209305"
                                     disabled={isPending}
-                                    className="bg-neutral-950 border-neutral-800 font-mono tracking-wider"
+                                    className="premium-input w-full font-mono tracking-wider"
                                 />
                                 {errors.deliveryPinCode && (
-                                    <p className="text-xs text-red-500">{errors.deliveryPinCode.message as string}</p>
+                                    <p className="premium-form-error">{errors.deliveryPinCode.message as string}</p>
                                 )}
 
-                                {/* Serviceability Info Badge */}
+                                {/* PIN Check Status indicators */}
                                 {pinCheck.status === 'checking' && (
-                                    <p className="text-xs text-neutral-400">Verifying logistics serviceability...</p>
+                                    <p className="premium-form-helper">Checking coverage region...</p>
                                 )}
                                 {pinCheck.status === 'available' && (
-                                    <p className="text-xs text-green-500 font-semibold">
-                                        ✓ Service Available in Zone: <span className="underline">{pinCheck.zoneName}</span>
+                                    <p className="premium-form-helper text-green-500 font-semibold">
+                                        ✓ Service Area Zone: <span className="underline">{pinCheck.zoneName}</span>
                                     </p>
                                 )}
                                 {pinCheck.status === 'unavailable' && (
-                                    <p className="text-xs text-red-500 font-semibold">
-                                        ✕ Service Unavailable for PIN code {watchedPin}
+                                    <p className="premium-form-helper text-red-500 font-semibold">
+                                        ✕ PIN code {watchedPin} is outside coverage zone network
                                     </p>
                                 )}
                             </div>
@@ -305,16 +331,16 @@ export default function CreateOrderPage() {
                     </div>
 
                     {/* Package Information Card */}
-                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-4">
-                        <h2 className="text-lg font-bold tracking-tight border-b border-neutral-800 pb-2">
+                    <div className="premium-card space-y-4">
+                        <h2 className="premium-tyo-card border-b border-neutral-850 pb-2">
                             3. Package Information
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-1.5">
-                                <Label htmlFor="weight">
+                            <div className="premium-form-group">
+                                <label htmlFor="weight" className="premium-form-label">
                                     Package Weight (kg) <span className="text-red-500">*</span>
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                     id="weight"
                                     type="number"
                                     step="0.1"
@@ -324,19 +350,19 @@ export default function CreateOrderPage() {
                                         min: { value: 0.1, message: 'Weight must be at least 0.1kg' },
                                     })}
                                     disabled={isPending}
-                                    className="bg-neutral-950 border-neutral-800"
+                                    className="premium-input w-full"
                                 />
                                 {errors.weight && (
-                                    <p className="text-xs text-red-500">{errors.weight.message as string}</p>
+                                    <p className="premium-form-error">{errors.weight.message as string}</p>
                                 )}
                             </div>
-                            <div className="space-y-1.5">
-                                <Label htmlFor="category">Package Category</Label>
+                            <div className="premium-form-group">
+                                <label htmlFor="category" className="premium-form-label">Package Category</label>
                                 <select
                                     id="category"
                                     {...register('category')}
                                     disabled={isPending}
-                                    className="flex h-9 w-full rounded-md border border-neutral-800 bg-neutral-950 px-3 py-1 text-sm shadow-sm transition-colors text-white"
+                                    className="premium-input w-full h-[2.25rem] bg-neutral-950 text-white"
                                 >
                                     <option value="Documents">Documents</option>
                                     <option value="Electronics">Electronics</option>
@@ -345,50 +371,50 @@ export default function CreateOrderPage() {
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                            <div className="space-y-1.5 md:col-span-2 flex items-center gap-2 pt-2">
+                            <div className="md:col-span-2 flex items-center gap-2 py-1">
                                 <input
                                     id="isFragile"
                                     type="checkbox"
                                     {...register('isFragile')}
                                     disabled={isPending}
-                                    className="w-4 h-4 rounded bg-neutral-950 border border-neutral-800"
+                                    className="w-4 h-4 accent-indigo-650 rounded bg-neutral-950 border border-neutral-800 cursor-pointer"
                                 />
-                                <Label htmlFor="isFragile" className="cursor-pointer select-none">
+                                <label htmlFor="isFragile" className="text-xs font-semibold text-neutral-300 cursor-pointer select-none">
                                     This package contains fragile contents
-                                </Label>
+                                </label>
                             </div>
-                            <div className="space-y-1.5 md:col-span-2">
-                                <Label htmlFor="specialInstructions">Special Instructions</Label>
+                            <div className="premium-form-group md:col-span-2">
+                                <label htmlFor="specialInstructions" className="premium-form-label">Special Instructions</label>
                                 <textarea
                                     id="specialInstructions"
                                     rows={3}
                                     {...register('specialInstructions')}
                                     placeholder="Enter any driver delivery instructions here..."
                                     disabled={isPending}
-                                    className="w-full p-3 rounded-md bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-700"
+                                    className="premium-input w-full h-auto p-3"
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Sticky Summary Card (Right side) */}
+                {/* Sticky Summary Card (Right side) (30%) */}
                 <div className="lg:col-span-1">
-                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-6 lg:sticky lg:top-24">
-                        <h2 className="text-lg font-bold tracking-tight border-b border-neutral-800 pb-2">
+                    <div className="premium-card space-y-6 lg:sticky lg:top-24">
+                        <h2 className="premium-tyo-card border-b border-neutral-850 pb-2">
                             Delivery Summary
                         </h2>
 
-                        <div className="space-y-4 text-sm">
-                            <div className="flex justify-between py-1 border-b border-neutral-850">
-                                <span className="text-neutral-500 font-semibold">Selected Zone</span>
+                        <div className="space-y-4 text-xs">
+                            <div className="flex justify-between py-1.5 border-b border-neutral-850">
+                                <span className="text-neutral-500 font-semibold">Assigned Region</span>
                                 <span className="font-bold text-neutral-200">
                                     {pinCheck.status === 'available' ? pinCheck.zoneName : '—'}
                                 </span>
                             </div>
-                            <div className="flex justify-between py-1 border-b border-neutral-850">
+                            <div className="flex justify-between py-1.5 border-b border-neutral-855">
                                 <span className="text-neutral-500 font-semibold">Estimated Cost</span>
-                                <span className="font-extrabold text-indigo-400 text-lg">
+                                <span className="font-extrabold text-indigo-400 text-sm">
                                     {pinCheck.status === 'available' && pinCheck.estimatedCost !== undefined
                                         ? `$${pinCheck.estimatedCost.toFixed(2)}`
                                         : pinCheck.status === 'available'
@@ -396,25 +422,28 @@ export default function CreateOrderPage() {
                                         : '—'}
                                 </span>
                             </div>
-                            <div className="flex justify-between py-1 border-b border-neutral-850">
-                                <span className="text-neutral-500 font-semibold">Delivery Status</span>
-                                <span className="bg-yellow-500/20 text-yellow-500 border border-yellow-500/50 px-2 py-0.5 rounded text-[10px] font-bold">
-                                    PENDING
-                                </span>
+                            <div className="flex justify-between py-1.5 border-b border-neutral-850 items-center">
+                                <span className="text-neutral-500 font-semibold">Initial Status</span>
+                                <StatusBadge status="PENDING" />
                             </div>
-                            <div className="flex justify-between py-1">
-                                <span className="text-neutral-500 font-semibold">Est. Delivery Time</span>
+                            <div className="flex justify-between py-1.5">
+                                <span className="text-neutral-500 font-semibold">Transit Duration</span>
                                 <span className="font-medium text-neutral-200">2-3 Business Days</span>
                             </div>
                         </div>
 
-                        <Button
+                        <button
                             type="submit"
                             disabled={isPending || !isValid || pinCheck.status !== 'available'}
-                            className="w-full bg-white hover:bg-neutral-200 text-black font-extrabold py-3 rounded-lg text-sm shadow transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="premium-button-primary w-full h-10 select-none"
                         >
-                            {isPending ? 'Booking Shipment...' : 'Confirm Delivery Booking'}
-                        </Button>
+                            {isPending ? (
+                                <span className="flex items-center justify-center gap-1.5">
+                                    <span className="w-3.5 h-3.5 border-2 border-neutral-900 border-t-transparent animate-spin rounded-full" />
+                                    Booking Shipment...
+                                </span>
+                            ) : 'Confirm Delivery Booking'}
+                        </button>
                         {pinCheck.status !== 'available' && watchedPin.length >= 5 && (
                             <p className="text-[10px] text-center text-red-500 font-semibold">
                                 Booking disabled: Selected PIN code is not serviceable.

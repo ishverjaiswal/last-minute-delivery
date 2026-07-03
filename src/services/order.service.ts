@@ -92,6 +92,10 @@ export const orderService = {
             throw new Error(`Invalid order status: ${status}`)
         }
 
+        if (status === 'DELIVERED') {
+            throw new Error('A parcel can never become DELIVERED unless verified via OTP.')
+        }
+
         const updated = await updateOrder(id, { status })
         await statusHistoryService.logStatusChange(id, status, updatedById)
         return updated
