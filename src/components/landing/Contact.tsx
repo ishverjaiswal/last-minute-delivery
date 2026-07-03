@@ -12,42 +12,42 @@ const Contact = () => {
                     </p>
                 </div>
                 <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                    <div className="space-y-1.5">
-                        <label htmlFor="name" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <div className="premium-form-group">
+                        <label htmlFor="name" className="premium-form-label">
                             Full Name
                         </label>
                         <input
                             type="text"
                             id="name"
-                            className="w-full h-10 px-3 rounded-md bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-700"
+                            className="premium-input w-full"
                             placeholder="Your name"
                         />
                     </div>
-                    <div className="space-y-1.5">
-                        <label htmlFor="email" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <div className="premium-form-group">
+                        <label htmlFor="email" className="premium-form-label">
                             Email Address
                         </label>
                         <input
                             type="email"
                             id="email"
-                            className="w-full h-10 px-3 rounded-md bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-700"
+                            className="premium-input w-full"
                             placeholder="your@email.com"
                         />
                     </div>
-                    <div className="space-y-1.5">
-                        <label htmlFor="message" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <div className="premium-form-group">
+                        <label htmlFor="message" className="premium-form-label">
                             Message
                         </label>
                         <textarea
                             id="message"
                             rows={4}
-                            className="w-full p-3 rounded-md bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-700"
+                            className="premium-input w-full h-auto p-3"
                             placeholder="How can our dispatch team assist you?"
                         />
                     </div>
                     <button
                         type="submit"
-                        className="w-full h-10 bg-white hover:bg-neutral-200 text-black text-sm font-bold rounded-md transition-colors cursor-pointer"
+                        className="premium-button-primary w-full cursor-pointer"
                     >
                         Send Inquiry
                     </button>

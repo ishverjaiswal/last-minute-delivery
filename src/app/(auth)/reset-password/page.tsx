@@ -1,11 +1,12 @@
 'use client'
 import { Suspense } from 'react'
+import { AuthFormSkeleton } from '@/components/auth/AuthFormSkeleton'
 import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm'
 
 const ResetPasswordPage = () => {
     return (
         <div className="w-full flex items-center justify-center p-4">
-            <Suspense fallback={<div className="text-white">Loading...</div>}>
+            <Suspense fallback={<AuthFormSkeleton />}>
                 <ResetPasswordForm
                     title="Reset Password"
                     subtitle="Please enter your email to reset your password"

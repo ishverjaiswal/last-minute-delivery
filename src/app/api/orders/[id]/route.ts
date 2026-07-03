@@ -26,6 +26,22 @@ export async function GET(
             )
         }
 
+        // Fetch latest OTP record for this order
+        const { db } = await import('@/lib/dbconfig/db')
+        const { deliveryOtpsTable } = await import('@/lib/dbconfig/schema')
+        const { eq, desc } = await import('drizzle-orm')
+        const [otpRecord] = await db
+            .select()
+            .from(deliveryOtpsTable)
+            .where(eq(deliveryOtpsTable.orderId, order.id))
+            .orderBy(desc(deliveryOtpsTable.createdAt))
+            .limit(1)
+
+        const orderWithPod = {
+            ...order,
+            podOtp: otpRecord || null,
+        }
+
         // Access check
         if (session.user.role !== 'ADMIN' && order.customerId !== session.user.id) {
             // Check if it's assigned to this courier agent
@@ -39,7 +55,7 @@ export async function GET(
             }
         }
 
-        return NextResponse.json({ success: true, data: order })
+        return NextResponse.json({ success: true, data: orderWithPod })
     } catch (err: any) {
         return NextResponse.json(
             { success: false, error: { code: 'INTERNAL_SERVER_ERROR', message: err.message } },

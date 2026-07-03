@@ -7,7 +7,7 @@
  *
  */
 
-export const publicRoutes = ['/', '/verify-email']
+export const publicRoutes = ['/', '/verify-email', '/api/seed']
 
 export const publicRoutePrefixes: string[] = []
 

@@ -5,7 +5,24 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import useCurrentUser from '@/lib/hooks/useCurrentUser'
 import axios from 'axios'
-import { Badge } from '@/components/ui/badge'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+import { SkeletonDetails } from '@/components/ui/Skeleton'
+import { Timeline } from '@/components/ui/Timeline'
+import { ActivityTimeline } from '@/components/ui/ActivityTimeline'
+import { PremiumDialog } from '@/components/ui/PremiumDialog'
+import { PremiumButton } from '@/components/ui/PremiumButton'
+import { 
+    Clock, 
+    CheckCircle, 
+    Bike, 
+    Package, 
+    MapPin, 
+    DollarSign, 
+    AlertTriangle, 
+    HelpCircle, 
+    ArrowLeft, 
+    Map 
+} from 'lucide-react'
 
 export default function OrderDetailPage() {
     const params = useParams()
@@ -22,6 +39,15 @@ export default function OrderDetailPage() {
     // Admin state inputs
     const [selectedAgent, setSelectedAgent] = useState('')
     const [selectedStatus, setSelectedStatus] = useState('')
+
+    // Proof of Delivery state inputs
+    const [otpValues, setOtpValues] = useState<string[]>(Array(6).fill(''))
+    const [isVerifying, setIsVerifying] = useState(false)
+    const [demoOtp, setDemoOtp] = useState<string | null>(null)
+    const [recipientEmail, setRecipientEmail] = useState<string | null>(null)
+    const [verificationError, setVerificationError] = useState<string | null>(null)
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
+    const [loadingAction, setLoadingAction] = useState(false)
 
     const fetchOrderDetail = async () => {
         try {
@@ -87,7 +113,97 @@ export default function OrderDetailPage() {
         }
     }
 
-    // Address & details parser helper
+    const handleSendOtp = async () => {
+        setLoadingAction(true)
+        setVerificationError(null)
+        try {
+            const res = await axios.post(`/api/orders/${params.id}/pod/send`)
+            if (res.data.success) {
+                if (res.data.data.otp) {
+                    setDemoOtp(res.data.data.otp)
+                    setRecipientEmail(res.data.data.recipientEmail)
+                }
+                alert('Verification OTP code sent to customer successfully.')
+                setIsVerifying(true)
+                fetchOrderDetail()
+            }
+        } catch (err: any) {
+            alert(err.response?.data?.error?.message || 'Failed to send OTP')
+        } finally {
+            setLoadingAction(false)
+        }
+    }
+
+    const handleVerifyOtp = async () => {
+        const otpCode = otpValues.join('')
+        if (otpCode.length !== 6) {
+            setVerificationError('Verification code must be exactly 6 digits.')
+            return
+        }
+
+        setLoadingAction(true)
+        setVerificationError(null)
+        try {
+            const res = await axios.post(`/api/orders/${params.id}/pod/verify`, {
+                otp: otpCode,
+            })
+            if (res.data.success) {
+                setShowSuccessModal(true)
+                setIsVerifying(false)
+                setOtpValues(Array(6).fill(''))
+                setDemoOtp(null)
+            }
+        } catch (err: any) {
+            setVerificationError(err.response?.data?.error?.message || 'Verification failed')
+        } finally {
+            setLoadingAction(false)
+        }
+    }
+
+    const handleOtpChange = (value: string, index: number) => {
+        if (value && !/^\d$/.test(value)) return
+
+        const newOtp = [...otpValues]
+        newOtp[index] = value
+        setOtpValues(newOtp)
+
+        if (value && index < 5) {
+            const nextInput = document.getElementById(`otp-input-${index + 1}`)
+            if (nextInput) {
+                nextInput.focus()
+            }
+        }
+    }
+
+    const handleOtpKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+        if (e.key === 'Backspace') {
+            if (!otpValues[index] && index > 0) {
+                const newOtp = [...otpValues]
+                newOtp[index - 1] = ''
+                setOtpValues(newOtp)
+                const prevInput = document.getElementById(`otp-input-${index - 1}`)
+                if (prevInput) {
+                    prevInput.focus()
+                }
+            } else {
+                const newOtp = [...otpValues]
+                newOtp[index] = ''
+                setOtpValues(newOtp)
+            }
+        }
+    }
+
+    const handleOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        const text = e.clipboardData.getData('text').trim()
+        if (/^\d{6}$/.test(text)) {
+            const newOtp = text.split('')
+            setOtpValues(newOtp)
+            const lastInput = document.getElementById('otp-input-5')
+            if (lastInput) lastInput.focus()
+        }
+    }
+
     const parseAddressDetails = (addressStr: string) => {
         if (!addressStr) return { name: 'N/A', phone: 'N/A', address: 'N/A' }
         const match = addressStr.match(/^(.*?)\s*\((.*?)\)\s*-\s*(.*)$/)
@@ -100,29 +216,28 @@ export default function OrderDetailPage() {
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'PENDING':
-                return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/50'
+                return 'premium-badge-pending'
             case 'CONFIRMED':
-                return 'bg-blue-500/20 text-blue-500 border-blue-500/50'
+                return 'premium-badge-confirmed'
             case 'ASSIGNED':
-                return 'bg-indigo-500/20 text-indigo-500 border-indigo-500/50'
+                return 'premium-badge-assigned'
             case 'PICKED_UP':
-                return 'bg-purple-500/20 text-purple-500 border-purple-500/50'
+                return 'premium-badge-picked-up'
             case 'OUT_FOR_DELIVERY':
-                return 'bg-orange-500/20 text-orange-500 border-orange-500/50'
+                return 'premium-badge-out-for-delivery'
             case 'DELIVERED':
-                return 'bg-green-500/20 text-green-500 border-green-500/50'
+                return 'premium-badge-delivered'
             case 'CANCELLED':
-                return 'bg-red-500/20 text-red-500 border-red-500/50'
+                return 'premium-badge-cancelled'
             default:
-                return 'bg-neutral-500/20 text-neutral-500 border-neutral-500/50'
+                return 'premium-badge'
         }
     }
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[50vh] text-white">
-                <div className="w-12 h-12 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin mb-4" />
-                <p className="text-neutral-400">Loading order info...</p>
+            <div className="w-full max-w-6xl space-y-6 px-4">
+                <SkeletonDetails />
             </div>
         )
     }
@@ -134,7 +249,7 @@ export default function OrderDetailPage() {
                 <p className="text-neutral-400">{error || 'Order record not found.'}</p>
                 <button
                     onClick={() => router.push('/dashboard')}
-                    className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded text-sm font-semibold transition-colors"
+                    className="premium-button-primary"
                 >
                     Back to Dashboard
                 </button>
@@ -142,11 +257,9 @@ export default function OrderDetailPage() {
         )
     }
 
-    // Parse sender/recipient
     const pickupInfo = parseAddressDetails(order.pickupAddress)
     const deliveryInfo = parseAddressDetails(order.deliveryAddress)
 
-    // Timeline Configuration
     const timelineStates = [
         { label: 'Order Created', key: 'PENDING' },
         { label: 'Confirmed', key: 'CONFIRMED' },
@@ -165,271 +278,323 @@ export default function OrderDetailPage() {
         return new Date(found.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
 
-    // Get current assigned agent profile or placeholder
     const assignedAgentObj = agents.find((a) => a.id === order.agentId)
 
     return (
-        <div className="w-full max-w-6xl space-y-8 px-4 text-white">
-            {/* SECTION 1: PAGE HEADER */}
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-neutral-900 pb-6">
-                <div className="space-y-2">
-                    <div className="flex items-center space-x-3">
-                        <span className="text-neutral-500 text-xs font-bold font-mono tracking-widest">SHIPMENT</span>
-                        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+        <div className="w-full max-w-6xl space-y-6 px-4 text-white">
+            {/* Page Header */}
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-neutral-900 pb-4">
+                <div className="space-y-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <span className="premium-tyo-caption">Shipment Details</span>
+                        <h1 className="premium-tyo-page leading-none">
                             LMD-{order.id.slice(0, 8).toUpperCase()}
                         </h1>
-                        <Badge className={`${getStatusColor(order.status)} text-xs font-bold border px-2 py-0.5 rounded`}>
-                            {order.status}
-                        </Badge>
+                        <StatusBadge status={order.status} />
                     </div>
-                    <p className="text-xs text-neutral-400 font-medium">
-                        Sender: <span className="font-bold text-neutral-200">{pickupInfo.name}</span> • Created:{' '}
+                    <p className="premium-tyo-secondary">
+                        Sender: <strong className="text-neutral-200">{pickupInfo.name}</strong> • Created:{' '}
                         {new Date(order.createdAt).toLocaleDateString()}
                     </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <button
                         onClick={() => router.push('/orders')}
-                        className="bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 px-4 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer"
+                        className="premium-button-secondary text-xs h-9"
                     >
+                        <ArrowLeft className="w-3.5 h-3.5 mr-1" />
                         Back to Orders
                     </button>
                     <button
-                        onClick={() => alert('Tracking map initialized (Mock).')}
-                        className="bg-white hover:bg-neutral-200 text-black px-4 py-2 rounded-lg text-sm font-bold transition-all shadow cursor-pointer"
+                        onClick={() => alert('Tracking map (Mocked).')}
+                        className="premium-button-primary text-xs h-9"
                     >
                         Track Shipment
                     </button>
                 </div>
             </div>
 
-            {/* Main Details Grid - Two Columns (70% / 30%) */}
-            <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
-                {/* Left Side (70%) */}
-                <div className="lg:col-span-7 space-y-8">
-                    {/* SECTION 2: SHIPMENT SUMMARY CARD */}
-                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-6">
-                        <h2 className="text-lg font-bold tracking-tight border-b border-neutral-800 pb-2">
-                            Shipment Overview
+            {/* Desktop Layout 70/30 split */}
+            <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
+                
+                {/* Left Side Timeline & Details (70%) */}
+                <div className="lg:col-span-7 space-y-6">
+                    
+                    {/* Visual Status Timeline (Visually Dominates) */}
+                    <div className="premium-card space-y-6">
+                        <h2 className="premium-tyo-card border-b border-neutral-850 pb-2">
+                            Delivery Journey Timeline
                         </h2>
 
-                        <div className="flex flex-col md:flex-row justify-between gap-8">
-                            {/* Route Path */}
-                            <div className="space-y-6 md:w-1/2">
-                                <div className="space-y-1">
-                                    <p className="text-neutral-500 font-semibold uppercase tracking-wider text-[10px]">
-                                        Pickup Address
-                                    </p>
-                                    <p className="text-sm font-bold text-neutral-200">{pickupInfo.name}</p>
-                                    <p className="text-xs text-neutral-400">{pickupInfo.phone}</p>
-                                    <p className="text-xs text-neutral-400">{pickupInfo.address}</p>
-                                </div>
-                                <div className="text-neutral-600 font-bold pl-2">↓</div>
-                                <div className="space-y-1">
-                                    <p className="text-neutral-500 font-semibold uppercase tracking-wider text-[10px]">
-                                        Delivery Address
-                                    </p>
-                                    <p className="text-sm font-bold text-neutral-200">{deliveryInfo.name}</p>
-                                    <p className="text-xs text-neutral-400">{deliveryInfo.phone}</p>
-                                    <p className="text-xs text-neutral-400">{deliveryInfo.address}</p>
-                                    <p className="text-xs text-neutral-400 font-mono">PIN: {order.deliveryPinCode}</p>
-                                </div>
-                            </div>
+                        <Timeline
+                            steps={timelineStates.map((state) => ({
+                                ...state,
+                                timestamp: getTimelineTimestamp(state.key),
+                            }))}
+                            currentIndex={currentStatusIndex}
+                            isComplete={order.status === 'DELIVERED'}
+                        />
+                    </div>
 
-                            {/* Meta Metrics */}
-                            <div className="grid grid-cols-2 gap-4 md:w-1/2 text-sm h-fit">
-                                <div className="space-y-1 border-l border-neutral-800 pl-4">
-                                    <span className="text-neutral-500 text-[10px] uppercase font-bold tracking-wider">
-                                        Weight
-                                    </span>
-                                    <p className="font-bold text-neutral-200">{order.weight} kg</p>
-                                </div>
-                                <div className="space-y-1 border-l border-neutral-800 pl-4">
-                                    <span className="text-neutral-500 text-[10px] uppercase font-bold tracking-wider">
-                                        Category
-                                    </span>
-                                    <p className="font-bold text-neutral-200">Clothing</p>
-                                </div>
-                                <div className="space-y-1 border-l border-neutral-800 pl-4">
-                                    <span className="text-neutral-500 text-[10px] uppercase font-bold tracking-wider">
-                                        Pricing Paid
-                                    </span>
-                                    <p className="font-extrabold text-indigo-400">${order.price.toFixed(2)}</p>
-                                </div>
-                                <div className="space-y-1 border-l border-neutral-800 pl-4">
-                                    <span className="text-neutral-500 text-[10px] uppercase font-bold tracking-wider">
-                                        Est. Delivery
-                                    </span>
-                                    <p className="font-bold text-neutral-200">2-3 Business Days</p>
-                                </div>
+                    {/* Shipment Overview Cards (Address Route details) */}
+                    <div className="premium-card space-y-6">
+                        <h2 className="premium-tyo-card border-b border-neutral-850 pb-2">
+                            Shipment Addresses
+                        </h2>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Route Path */}
+                            <div className="space-y-1">
+                                <p className="premium-tyo-caption">Pickup Location</p>
+                                <p className="text-sm font-bold text-neutral-200">{pickupInfo.name}</p>
+                                <p className="text-xs text-neutral-400">{pickupInfo.phone}</p>
+                                <p className="text-xs text-neutral-400 leading-relaxed">{pickupInfo.address}</p>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="premium-tyo-caption">Recipient Location</p>
+                                <p className="text-sm font-bold text-neutral-200">{deliveryInfo.name}</p>
+                                <p className="text-xs text-neutral-400">{deliveryInfo.phone}</p>
+                                <p className="text-xs text-neutral-400 leading-relaxed">{deliveryInfo.address}</p>
+                                <p className="text-xs text-neutral-400 font-mono">Kanpur PIN: {order.deliveryPinCode}</p>
                             </div>
                         </div>
                     </div>
 
-                    {/* SECTION 3: HERO STATUS TIMELINE */}
-                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-6">
-                        <h2 className="text-lg font-bold tracking-tight border-b border-neutral-800 pb-2">
-                            Shipment Timeline
-                        </h2>
-
-                        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 relative">
-                            {timelineStates.map((state, idx) => {
-                                const isCompleted = idx < currentStatusIndex || order.status === 'DELIVERED'
-                                const isCurrent = idx === currentStatusIndex && order.status !== 'DELIVERED'
-                                const timestamp = getTimelineTimestamp(state.key)
-
-                                let circleColor = 'border-neutral-800 bg-neutral-950 text-neutral-500'
-                                let textColor = 'text-neutral-500'
-                                if (isCompleted) {
-                                    circleColor = 'border-green-500 bg-green-500/10 text-green-500'
-                                    textColor = 'text-green-500 font-bold'
-                                } else if (isCurrent) {
-                                    circleColor = 'border-indigo-500 bg-indigo-500/10 text-indigo-400'
-                                    textColor = 'text-indigo-400 font-extrabold'
-                                }
-
-                                return (
-                                    <div
-                                        key={`timeline-${idx}`}
-                                        className="flex md:flex-col items-center md:text-center gap-4 md:gap-2 relative"
-                                    >
-                                        <div
-                                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold z-10 ${circleColor}`}
-                                        >
-                                            {isCompleted ? '✓' : idx + 1}
+                    {/* Proof of Delivery OTP verification form */}
+                    {((['OUT_FOR_DELIVERY', 'DELIVERED'].includes(order.status)) || order.podOtp) && (
+                        <div className="premium-card space-y-6">
+                            <div className="border-b border-neutral-850 pb-2">
+                                <h2 className="premium-tyo-card">Proof of Delivery (POD)</h2>
+                                <p className="premium-tyo-secondary">
+                                    Recipient OTP verification is required to complete delivery.
+                                </p>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div className="space-y-3">
+                                    <div className="flex justify-between py-1 border-b border-neutral-850">
+                                        <span className="text-neutral-500 font-semibold">Verification</span>
+                                        <span className={`font-bold px-2 py-0.5 rounded text-[10px] uppercase border ${
+                                            !order.podOtp ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
+                                            order.podOtp.verified ? 'bg-green-500/10 text-green-500 border-green-500/20' :
+                                            new Date(order.podOtp.expiresAt) < new Date() ? 'bg-red-500/10 text-red-500 border-red-500/20' :
+                                            'bg-blue-500/10 text-blue-500 border-blue-500/20'
+                                        }`}>
+                                            {!order.podOtp ? 'Waiting' :
+                                             order.podOtp.verified ? 'Verified' :
+                                             new Date(order.podOtp.expiresAt) < new Date() ? 'Expired' :
+                                             'OTP Sent'}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between py-1 border-b border-neutral-850">
+                                        <span className="text-neutral-500 font-semibold">Resend Limit</span>
+                                        <span className="text-neutral-200 font-medium">
+                                            {order.podOtp ? `${order.podOtp.resentCount} / 3 times` : '0'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="space-y-3">
+                                    <div className="flex justify-between py-1 border-b border-neutral-850">
+                                        <span className="text-neutral-500 font-semibold">Attempts Rem.</span>
+                                        <span className="text-neutral-200 font-medium">
+                                            {order.podOtp ? Math.max(0, 5 - order.podOtp.attemptCount) : '5'}
+                                        </span>
+                                    </div>
+                                    {order.podOtp && order.podOtp.verifiedAt && (
+                                        <div className="flex justify-between py-1 border-b border-neutral-850">
+                                            <span className="text-neutral-500 font-semibold">Verified Time</span>
+                                            <span className="text-neutral-200 font-medium">
+                                                {new Date(order.podOtp.verifiedAt).toLocaleString()}
+                                            </span>
                                         </div>
-                                        <div className="space-y-1 md:text-center">
-                                            <p className={`text-xs ${textColor}`}>{state.label}</p>
-                                            {timestamp && (
-                                                <p className="text-[10px] text-neutral-500 font-medium">{timestamp}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Demo Mode helper */}
+                            {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' && demoOtp && (
+                                <div className="p-4 rounded-lg border border-indigo-500/20 bg-indigo-500/10 text-xs space-y-2">
+                                    <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">🧪 DEMO MODE AUTO-VERIFICATION</p>
+                                    <div className="flex justify-between items-center">
+                                        <span>Recipient Verification Code:</span>
+                                        <span className="font-extrabold text-white text-base tracking-widest">{demoOtp}</span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Verification Form logic */}
+                            {role === 'DELIVERY_AGENT' && order.status === 'OUT_FOR_DELIVERY' && (
+                                <div className="space-y-4 pt-4 border-t border-neutral-850">
+                                    {!order.podOtp && (
+                                        <button
+                                            onClick={handleSendOtp}
+                                            disabled={loadingAction}
+                                            className="premium-button-primary w-full h-10"
+                                        >
+                                            {loadingAction ? 'Sending OTP...' : 'Send Delivery OTP'}
+                                        </button>
+                                    )}
+
+                                    {order.podOtp && !order.podOtp.verified && (
+                                        <div className="space-y-4">
+                                            {isVerifying ? (
+                                                <div className="space-y-3">
+                                                    <label className="premium-form-label block text-center">
+                                                        Enter 6-Digit OTP:
+                                                    </label>
+                                                    <div className="flex gap-2 justify-center">
+                                                        {otpValues.map((val, idx) => (
+                                                            <input
+                                                                key={idx}
+                                                                id={`otp-input-${idx}`}
+                                                                type="text"
+                                                                maxLength={1}
+                                                                value={val}
+                                                                onChange={(e) => handleOtpChange(e.target.value, idx)}
+                                                                onKeyDown={(e) => handleOtpKeyDown(e, idx)}
+                                                                onPaste={handleOtpPaste}
+                                                                className="w-9 h-11 bg-neutral-950 border border-neutral-800 rounded-lg text-center font-bold text-base focus:outline-none focus:border-neutral-700 text-white font-mono"
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    
+                                                    {verificationError && (
+                                                        <div className="bg-red-500/10 border border-red-500/50 text-red-500 rounded-lg p-2.5 text-xs text-center">
+                                                            {verificationError}
+                                                        </div>
+                                                    )}
+
+                                                    <div className="flex gap-2 pt-2">
+                                                        <button
+                                                            onClick={handleVerifyOtp}
+                                                            disabled={loadingAction || otpValues.join('').length < 6}
+                                                            className="premium-button-primary flex-1 h-9"
+                                                        >
+                                                            {loadingAction ? 'Verifying...' : 'Verify OTP'}
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                setIsVerifying(false)
+                                                                setOtpValues(Array(6).fill(''))
+                                                                setVerificationError(null)
+                                                            }}
+                                                            className="premium-button-secondary h-9"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="flex gap-2">
+                                                    {new Date(order.podOtp.expiresAt) > new Date() && order.podOtp.attemptCount < 5 && (
+                                                        <button
+                                                            onClick={() => setIsVerifying(true)}
+                                                            className="premium-button-primary flex-1 h-9 bg-indigo-650 text-white"
+                                                        >
+                                                            Verify OTP
+                                                        </button>
+                                                    )}
+                                                    <button
+                                                        onClick={handleSendOtp}
+                                                        disabled={loadingAction}
+                                                        className="premium-button-secondary flex-1 h-9"
+                                                    >
+                                                        {loadingAction ? 'Resending...' : 'Resend OTP Code'}
+                                                    </button>
+                                                </div>
                                             )}
                                         </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
+                                    )}
+                                </div>
+                            )}
 
-                    {/* SECTION 5: RECENT ACTIVITY */}
-                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-6">
-                        <h2 className="text-lg font-bold tracking-tight border-b border-neutral-800 pb-2">
-                            Activity Log
+                            {/* Completed verification state */}
+                            {order.podOtp && order.podOtp.verified && (
+                                <div className="text-center py-2 text-green-500 font-bold text-xs flex items-center justify-center gap-1.5 bg-green-500/10 border border-green-500/30 rounded-lg">
+                                    ✓ Delivery Successfully Verified
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Activity Log */}
+                    <div className="premium-card space-y-6">
+                        <h2 className="premium-tyo-card border-b border-neutral-850 pb-2">
+                            Shipment Tracking Updates
                         </h2>
 
-                        {history.length > 0 ? (
-                            <div className="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[2px] before:bg-neutral-800">
-                                {history
-                                    .slice()
-                                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                                    .map((step) => (
-                                        <div key={step.id} className="flex gap-4 relative">
-                                            <div className="w-6 h-6 rounded-full bg-neutral-800 border-2 border-neutral-700 flex items-center justify-center text-xs z-10 shrink-0 mt-0.5 font-bold">
-                                                ✓
-                                            </div>
-                                            <div className="space-y-1">
-                                                <div className="flex items-center space-x-2">
-                                                    <Badge className={getStatusColor(step.status)}>{step.status}</Badge>
-                                                    {step.changedByName && (
-                                                        <span className="text-xs text-neutral-400">
-                                                            by {step.changedByName}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <p className="text-[10px] text-neutral-500 font-medium">
-                                                    {new Date(step.createdAt).toLocaleString()}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
-                            </div>
-                        ) : (
-                            <p className="text-sm text-neutral-500 py-6 text-center">
-                                No shipment updates available yet.
-                            </p>
-                        )}
+                        <ActivityTimeline
+                            items={history
+                                .slice()
+                                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                                .map((step) => ({
+                                    id: step.id,
+                                    status: step.status,
+                                    timestamp: new Date(step.createdAt).toLocaleString(),
+                                    actor: step.changedByName,
+                                }))}
+                            emptyMessage="No shipment tracking updates recorded."
+                        />
                     </div>
                 </div>
 
-                {/* Right Side (30%) */}
-                <div className="lg:col-span-3 space-y-8">
-                    {/* SECTION 6: DELIVERY SUMMARY */}
-                    <div className="bg-neutral-900 border border-neutral-850 rounded-xl p-6 space-y-4">
-                        <h2 className="text-sm font-bold tracking-wider uppercase text-neutral-400">
-                            Current Delivery Status
-                        </h2>
-                        <div className="space-y-3">
-                            <Badge className={`${getStatusColor(order.status)} font-extrabold w-full text-center py-2`}>
-                                {order.status}
-                            </Badge>
-                            <div className="space-y-1 text-xs text-neutral-400 pt-2 border-t border-neutral-850">
-                                <div className="flex justify-between">
-                                    <span>Pricing</span>
-                                    <span className="font-bold text-neutral-200">${order.price.toFixed(2)}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Weight Bracket</span>
-                                    <span className="font-bold text-neutral-200">{order.weight} kg</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Est. Arrival</span>
-                                    <span className="font-bold text-neutral-200">2-3 Business Days</span>
-                                </div>
+                {/* Right Side Allocation, package params & support actions (30%) */}
+                <div className="lg:col-span-3 space-y-6">
+                    
+                    {/* Status & pricing details card */}
+                    <div className="premium-card space-y-4">
+                        <h2 className="premium-tyo-caption">Shipment Specifications</h2>
+                        <div className="space-y-3 text-xs text-neutral-400">
+                            <div className="flex justify-between py-1 border-b border-neutral-850">
+                                <span>Weight</span>
+                                <span className="font-bold text-neutral-200">{order.weight} kg</span>
+                            </div>
+                            <div className="flex justify-between py-1 border-b border-neutral-850">
+                                <span>Price Paid</span>
+                                <span className="font-extrabold text-indigo-400">${order.price.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between py-1">
+                                <span>Estimated Transit</span>
+                                <span className="font-bold text-neutral-200">2-3 Business Days</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* SECTION 4: ASSIGNED DELIVERY AGENT */}
-                    <div className="bg-neutral-900 border border-neutral-855 rounded-xl p-6 space-y-4">
-                        <h2 className="text-sm font-bold tracking-wider uppercase text-neutral-400">
-                            Delivery Agent Details
-                        </h2>
-
+                    {/* Assigned Driver Agent details */}
+                    <div className="premium-card space-y-4">
+                        <h2 className="premium-tyo-caption">Assigned Delivery Agent</h2>
                         {order.agentId ? (
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 rounded-full bg-neutral-850 border border-neutral-800 flex items-center justify-center text-lg font-bold">
-                                        🛵
+                                    <div className="w-10 h-10 rounded-full bg-neutral-850 border border-neutral-800 flex items-center justify-center">
+                                        <Bike className="w-5 h-5 text-neutral-400" />
                                     </div>
                                     <div className="space-y-0.5">
-                                        <p className="text-sm font-bold text-neutral-200">
-                                            {assignedAgentObj?.name || 'Rahul Sharma'}
+                                        <p className="text-xs font-bold text-neutral-200">
+                                            {assignedAgentObj?.name || 'Assigned Courier'}
                                         </p>
-                                        <p className="text-xs text-neutral-500 font-medium">
+                                        <p className="text-[10px] text-neutral-500 font-mono">
                                             {assignedAgentObj?.phone || '+91 98765 43210'}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="space-y-1.5 text-xs text-neutral-400 border-t border-neutral-850 pt-3">
-                                    <div className="flex justify-between">
-                                        <span>Current Status</span>
-                                        <span className="text-emerald-500 font-bold">Online</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Assigned Zone</span>
-                                        <span className="text-neutral-200 font-semibold">Kanpur Zone</span>
-                                    </div>
-                                </div>
                             </div>
                         ) : (
-                            <div className="text-center py-6 space-y-2">
-                                <p className="text-xs text-neutral-500">Waiting for assignment.</p>
-                            </div>
+                            <p className="text-xs text-neutral-500 italic py-2 text-center">Unassigned</p>
                         )}
                     </div>
 
-                    {/* SECTION 7: ROLE-BASED QUICK ACTIONS */}
-                    <div className="bg-neutral-900 border border-neutral-855 rounded-xl p-6 space-y-4">
-                        <h2 className="text-sm font-bold tracking-wider uppercase text-neutral-400">
-                            Operation Actions
-                        </h2>
+                    {/* Action forms for Dispatcher or Courier */}
+                    <div className="premium-card space-y-4">
+                        <h2 className="premium-tyo-caption">Operations Console</h2>
 
-                        {/* Customer Mode */}
+                        {/* Customer Cancel action */}
                         {role === 'CUSTOMER' && (
                             <div className="space-y-3">
                                 {order.status === 'PENDING' ? (
                                     <button
                                         onClick={() => handleStatusTransition('CANCELLED')}
-                                        className="w-full py-2.5 bg-red-650 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                                        className="premium-button-primary w-full bg-red-600 hover:bg-red-700 text-white h-9"
                                     >
                                         Cancel Shipment Booking
                                     </button>
@@ -440,20 +605,20 @@ export default function OrderDetailPage() {
                                 )}
                                 <button
                                     onClick={() => alert('Support desk ticket created!')}
-                                    className="w-full py-2.5 bg-neutral-950 hover:bg-neutral-850 border border-neutral-800 text-neutral-300 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                                    className="premium-button-secondary w-full h-9"
                                 >
                                     Contact Support
                                 </button>
                             </div>
                         )}
 
-                        {/* Delivery Driver Agent Mode */}
+                        {/* Driver status updates */}
                         {role === 'DELIVERY_AGENT' && (
                             <div className="space-y-3">
                                 {order.status === 'ASSIGNED' && (
                                     <button
                                         onClick={() => handleStatusTransition('PICKED_UP')}
-                                        className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-750 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                                        className="premium-button-primary w-full h-9 bg-indigo-600 text-white"
                                     >
                                         Mark Picked Up
                                     </button>
@@ -461,32 +626,29 @@ export default function OrderDetailPage() {
                                 {order.status === 'PICKED_UP' && (
                                     <button
                                         onClick={() => handleStatusTransition('OUT_FOR_DELIVERY')}
-                                        className="w-full py-2.5 bg-orange-600 hover:bg-orange-750 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                                        className="premium-button-primary w-full h-9 bg-orange-600 text-white"
                                     >
                                         Mark Out For Delivery
                                     </button>
                                 )}
                                 {order.status === 'OUT_FOR_DELIVERY' && (
-                                    <button
-                                        onClick={() => handleStatusTransition('DELIVERED')}
-                                        className="w-full py-2.5 bg-green-600 hover:bg-green-750 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
-                                    >
-                                        Mark Delivered
-                                    </button>
+                                    <p className="text-xs text-neutral-500 text-center py-2">
+                                        Please perform Proof of Delivery verification to complete delivery.
+                                    </p>
                                 )}
                                 {['DELIVERED', 'CANCELLED'].includes(order.status) && (
-                                    <p className="text-xs text-neutral-500 text-center py-2">
+                                    <p className="text-xs text-neutral-500 text-center py-2 text-neutral-500 italic">
                                         No active driver transitions available.
                                     </p>
                                 )}
                             </div>
                         )}
 
-                        {/* Dispatcher Admin Mode */}
+                        {/* Dispatcher controls */}
                         {role === 'ADMIN' && (
                             <div className="space-y-4">
-                                <div className="space-y-1.5">
-                                    <label htmlFor="agentAssign" className="text-xs text-neutral-400 font-bold">
+                                <div className="premium-form-group">
+                                    <label htmlFor="agentAssign" className="premium-form-label">
                                         Assign Agent
                                     </label>
                                     <div className="flex gap-2">
@@ -494,7 +656,7 @@ export default function OrderDetailPage() {
                                             id="agentAssign"
                                             value={selectedAgent}
                                             onChange={(e) => setSelectedAgent(e.target.value)}
-                                            className="flex-1 h-9 rounded-md border border-neutral-800 bg-neutral-950 px-2 text-xs text-white"
+                                            className="premium-input flex-1 h-9 bg-neutral-950"
                                         >
                                             <option value="">Unassigned</option>
                                             {agents.map((agent) => (
@@ -505,15 +667,15 @@ export default function OrderDetailPage() {
                                         </select>
                                         <button
                                             onClick={handleAssignAgent}
-                                            className="bg-white hover:bg-neutral-200 text-black text-xs font-bold px-3 py-1.5 rounded transition-all cursor-pointer"
+                                            className="premium-button-primary h-9 px-3"
                                         >
                                             Save
                                         </button>
                                     </div>
                                 </div>
 
-                                <div className="space-y-1.5 border-t border-neutral-850 pt-3">
-                                    <label htmlFor="statusOverride" className="text-xs text-neutral-400 font-bold">
+                                <div className="premium-form-group border-t border-neutral-850 pt-3">
+                                    <label htmlFor="statusOverride" className="premium-form-label">
                                         Status Override
                                     </label>
                                     <div className="flex gap-2">
@@ -521,7 +683,7 @@ export default function OrderDetailPage() {
                                             id="statusOverride"
                                             value={selectedStatus}
                                             onChange={(e) => setSelectedStatus(e.target.value)}
-                                            className="flex-1 h-9 rounded-md border border-neutral-800 bg-neutral-950 px-2 text-xs text-white"
+                                            className="premium-input flex-1 h-9 bg-neutral-955"
                                         >
                                             {allStatuses.map((st) => (
                                                 <option key={st} value={st}>
@@ -531,7 +693,7 @@ export default function OrderDetailPage() {
                                         </select>
                                         <button
                                             onClick={() => handleStatusTransition()}
-                                            className="bg-white hover:bg-neutral-200 text-black text-xs font-bold px-3 py-1.5 rounded transition-all cursor-pointer"
+                                            className="premium-button-primary h-9 px-3"
                                         >
                                             Save
                                         </button>
@@ -542,6 +704,36 @@ export default function OrderDetailPage() {
                     </div>
                 </div>
             </div>
+
+            <PremiumDialog
+                open={showSuccessModal}
+                onClose={() => {
+                    setShowSuccessModal(false)
+                    fetchOrderDetail()
+                }}
+                title="Proof of Delivery"
+                footer={
+                    <PremiumButton
+                        variant="primary"
+                        className="h-9 w-full"
+                        onClick={() => {
+                            setShowSuccessModal(false)
+                            fetchOrderDetail()
+                        }}
+                    >
+                        Continue
+                    </PremiumButton>
+                }
+            >
+                <div className="space-y-3 text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-green-500/50 bg-green-500/20 text-green-500">
+                        <CheckCircle className="h-6 w-6" aria-hidden="true" />
+                    </div>
+                    <p className="premium-typo-secondary">
+                        Recipient verification succeeded. Order status changed to DELIVERED.
+                    </p>
+                </div>
+            </PremiumDialog>
         </div>
     )
 }

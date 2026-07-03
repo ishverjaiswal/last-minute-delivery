@@ -238,6 +238,27 @@ export const orderStatusHistoryTable = pgTable('order_status_history', {
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
 })
 
+export const deliveryOtpsTable = pgTable('delivery_otp', {
+    id: text('id')
+        .primaryKey()
+        .$defaultFn(() => crypto.randomUUID()),
+    orderId: text('orderId')
+        .notNull()
+        .references(() => ordersTable.id, { onDelete: 'cascade' }),
+    otpHash: text('otpHash').notNull(),
+    expiresAt: timestamp('expiresAt', { mode: 'date' }).notNull(),
+    verified: boolean('verified').default(false).notNull(),
+    verifiedAt: timestamp('verifiedAt', { mode: 'date' }),
+    verifiedBy: text('verifiedBy')
+        .references(() => usersTable.id, { onDelete: 'set null' }),
+    attemptCount: integer('attemptCount').default(0).notNull(),
+    resentCount: integer('resentCount').default(0).notNull(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(() => new Date()),
+    createdBy: text('createdBy')
+        .references(() => usersTable.id, { onDelete: 'set null' }),
+})
+
 export type InsertZone = typeof zonesTable.$inferInsert
 export type SelectZone = typeof zonesTable.$inferSelect
 
@@ -252,4 +273,7 @@ export type SelectOrder = typeof ordersTable.$inferSelect
 
 export type InsertOrderStatusHistory = typeof orderStatusHistoryTable.$inferInsert
 export type SelectOrderStatusHistory = typeof orderStatusHistoryTable.$inferSelect
+
+export type InsertDeliveryOtp = typeof deliveryOtpsTable.$inferInsert
+export type SelectDeliveryOtp = typeof deliveryOtpsTable.$inferSelect
 

@@ -37,83 +37,81 @@
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
     --color-card: var(--card);
-    --radius-sm: calc(var(--radius) - 4px);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-lg: var(--radius);
+    --radius-sm: calc(var(--radius) - 2px);
+    --radius-md: var(--radius);
+    --radius-lg: calc(var(--radius) + 2px);
     --radius-xl: calc(var(--radius) + 4px);
     --shadow-input:
-        0px 2px 3px -1px rgba(0, 0, 0, 0.1),
-        0px 1px 0px 0px rgba(25, 28, 33, 0.02),
-        0px 0px 0px 1px rgba(25, 28, 33, 0.08);
+        0px 1px 2px 0px rgba(0, 0, 0, 0.05);
 }
 
 :root {
-    --radius: 0.625rem;
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --radius: 0.375rem; /* Standardized 6px radius */
+    --background: oklch(0.99 0 0);
+    --foreground: oklch(0.12 0 0);
+    --card: oklch(0.99 0 0);
+    --card-foreground: oklch(0.12 0 0);
+    --popover: oklch(0.99 0 0);
+    --popover-foreground: oklch(0.12 0 0);
+    --primary: oklch(0.25 0 0);
+    --primary-foreground: oklch(0.99 0 0);
+    --secondary: oklch(0.96 0 0);
+    --secondary-foreground: oklch(0.25 0 0);
+    --muted: oklch(0.96 0 0);
+    --muted-foreground: oklch(0.55 0 0);
+    --accent: oklch(0.96 0 0);
+    --accent-foreground: oklch(0.25 0 0);
+    --destructive: oklch(0.60 0.22 25);
+    --border: oklch(0.90 0 0);
+    --input: oklch(0.90 0 0);
+    --ring: oklch(0.60 0.20 264);
+    --chart-1: oklch(0.60 0.20 264);
+    --chart-2: oklch(0.69 0.17 162);
+    --chart-3: oklch(0.76 0.18 70);
+    --chart-4: oklch(0.62 0.26 303);
+    --chart-5: oklch(0.64 0.24 16);
+    --sidebar: oklch(0.99 0 0);
+    --sidebar-foreground: oklch(0.12 0 0);
+    --sidebar-primary: oklch(0.25 0 0);
+    --sidebar-primary-foreground: oklch(0.99 0 0);
+    --sidebar-accent: oklch(0.96 0 0);
+    --sidebar-accent-foreground: oklch(0.25 0 0);
+    --sidebar-border: oklch(0.90 0 0);
+    --sidebar-ring: oklch(0.60 0 0);
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --background: oklch(0.09 0 0); /* Pure professional dark bg */
+    --foreground: oklch(0.98 0 0);
+    --card: oklch(0.12 0 0); /* Vercel/Linear dark card surface */
+    --card-foreground: oklch(0.98 0 0);
+    --popover: oklch(0.14 0 0);
+    --popover-foreground: oklch(0.98 0 0);
+    --primary: oklch(0.92 0 0);
+    --primary-foreground: oklch(0.12 0 0);
+    --secondary: oklch(0.16 0 0);
+    --secondary-foreground: oklch(0.98 0 0);
+    --muted: oklch(0.15 0 0);
+    --muted-foreground: oklch(0.60 0 0);
+    --accent: oklch(0.16 0 0);
+    --accent-foreground: oklch(0.98 0 0);
+    --destructive: oklch(0.58 0.22 25); /* Crimson destructive tag */
+    --border: oklch(1 0 0 / 7%); /* Clean subtle border lines */
+    --input: oklch(1 0 0 / 4%);
+    --ring: oklch(0.55 0.22 264); /* Indigo focus indicator */
+    --chart-1: oklch(0.55 0.22 264);
+    --chart-2: oklch(0.69 0.17 162);
+    --chart-3: oklch(0.76 0.18 70);
+    --chart-4: oklch(0.62 0.26 303);
+    --chart-5: oklch(0.64 0.24 16);
+    --sidebar: oklch(0.11 0 0);
+    --sidebar-foreground: oklch(0.98 0 0);
+    --sidebar-primary: oklch(0.55 0.22 264);
+    --sidebar-primary-foreground: oklch(0.98 0 0);
+    --sidebar-accent: oklch(0.16 0 0);
+    --sidebar-accent-foreground: oklch(0.98 0 0);
+    --sidebar-border: oklch(1 0 0 / 7%);
+    --sidebar-ring: oklch(0.55 0 0);
 }
 
 @layer base {
@@ -121,6 +119,451 @@
         @apply border-border outline-ring/50;
     }
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground antialiased;
+    }
+}
+
+/* ==========================================================================
+   PREMIUM DESIGN SYSTEM UTILITIES
+   ========================================================================== */
+
+/* 1. Typography Primitives */
+@utility premium-typo-display {
+    font-size: 1.875rem; /* 30px */
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--foreground);
+    line-height: 1.25;
+}
+
+@utility premium-typo-page {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--foreground);
+    line-height: 1.35;
+}
+
+@utility premium-typo-section {
+    font-size: 1.125rem; /* 18px */
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: oklch(0.92 0 0);
+}
+
+@utility premium-typo-card {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: oklch(0.92 0 0);
+}
+
+@utility premium-typo-table {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+@utility premium-typo-body {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 400;
+    color: oklch(0.85 0 0);
+    line-height: 1.5;
+}
+
+@utility premium-typo-secondary {
+    font-size: 0.75rem; /* 12px */
+    font-weight: 400;
+    color: var(--muted-foreground);
+}
+
+@utility premium-typo-caption {
+    font-size: 0.625rem; /* 10px */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: oklch(0.55 0 0);
+}
+
+@utility premium-typo-label {
+    font-size: 0.75rem; /* 12px */
+    font-weight: 600;
+    color: oklch(0.85 0 0);
+}
+
+/* Legacy alias — prefer premium-typo-* in new code */
+@utility premium-tyo-display {
+    font-size: 1.875rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--foreground);
+    line-height: 1.25;
+}
+
+@utility premium-tyo-page {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--foreground);
+    line-height: 1.35;
+}
+
+@utility premium-tyo-section {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: oklch(0.92 0 0);
+}
+
+@utility premium-tyo-card {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: oklch(0.92 0 0);
+}
+
+@utility premium-tyo-table {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+@utility premium-tyo-body {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: oklch(0.85 0 0);
+    line-height: 1.5;
+}
+
+@utility premium-tyo-secondary {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--muted-foreground);
+}
+
+@utility premium-tyo-caption {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: oklch(0.55 0 0);
+}
+
+@utility premium-tyo-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: oklch(0.85 0 0);
+}
+
+/* 2. Cards */
+@utility premium-card {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-input);
+}
+
+/* 3. Inputs & Forms */
+@utility premium-input {
+    background-color: oklch(0.08 0 0);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--foreground);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    height: 2.25rem; /* Standardized 36px height */
+    outline: none;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:focus {
+        border-color: var(--ring);
+        box-shadow: 0 0 0 1px var(--ring);
+    }
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+@utility premium-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-bottom: 1rem;
+}
+
+@utility premium-form-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: oklch(0.85 0 0);
+}
+
+@utility premium-form-helper {
+    font-size: 0.6875rem;
+    color: var(--muted-foreground);
+    margin-top: 0.125rem;
+}
+
+@utility premium-form-error {
+    font-size: 0.6875rem;
+    color: var(--destructive);
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+/* 4. Buttons */
+@utility premium-button-primary {
+    background-color: var(--foreground);
+    color: var(--background);
+    font-weight: 600;
+    font-size: 0.875rem;
+    height: 2.25rem; /* Standardized 36px height */
+    padding: 0 1rem;
+    border-radius: var(--radius);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.15s ease;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.9;
+    }
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+    }
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+@utility premium-button-secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    font-weight: 600;
+    font-size: 0.875rem;
+    height: 2.25rem; /* Standardized 36px height */
+    padding: 0 1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease;
+    cursor: pointer;
+
+    &:hover {
+        background-color: oklch(0.18 0 0);
+    }
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+    }
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+/* 5. Tables */
+@utility premium-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.75rem;
+}
+
+@utility premium-table-header {
+    border-bottom: 1px solid var(--border);
+    background-color: oklch(0.08 0 0);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    height: 2.25rem; /* Standardized header height */
+    padding: 0 1rem;
+}
+
+@utility premium-table-row {
+    border-bottom: 1px solid var(--border);
+    height: 3rem; /* Standardized row height */
+    transition: background-color 0.15s ease;
+
+    &:hover {
+        background-color: oklch(1 0 0 / 1.5%);
+    }
+}
+
+@utility premium-table-cell {
+    padding: 0.5rem 1rem;
+    vertical-align: middle;
+}
+
+@utility premium-table-action {
+    text-align: right;
+    padding: 0.5rem 1rem;
+}
+
+/* 6. Status Badges */
+@utility premium-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem; /* 10px uppercase font-bold */
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius);
+    border-width: 1px;
+    line-height: 1;
+}
+
+@utility premium-badge-pending {
+    background-color: oklch(0.72 0.16 75 / 10%);
+    color: oklch(0.72 0.16 75);
+    border-color: oklch(0.72 0.16 75 / 20%);
+}
+
+@utility premium-badge-confirmed {
+    background-color: oklch(0.60 0.16 220 / 10%);
+    color: oklch(0.60 0.16 220);
+    border-color: oklch(0.60 0.16 220 / 20%);
+}
+
+@utility premium-badge-assigned {
+    background-color: oklch(0.50 0.18 290 / 10%);
+    color: oklch(0.50 0.18 290);
+    border-color: oklch(0.50 0.18 290 / 20%);
+}
+
+@utility premium-badge-picked-up {
+    background-color: oklch(0.55 0.22 264 / 10%);
+    color: oklch(0.55 0.22 264);
+    border-color: oklch(0.55 0.22 264 / 20%);
+}
+
+@utility premium-badge-out-for-delivery {
+    background-color: oklch(0.68 0.18 45 / 10%);
+    color: oklch(0.68 0.18 45);
+    border-color: oklch(0.68 0.18 45 / 20%);
+}
+
+@utility premium-badge-delivered {
+    background-color: oklch(0.62 0.17 145 / 10%);
+    color: oklch(0.62 0.17 145);
+    border-color: oklch(0.62 0.17 145 / 20%);
+}
+
+@utility premium-badge-cancelled {
+    background-color: oklch(0.58 0.22 25 / 10%);
+    color: oklch(0.58 0.22 25);
+    border-color: oklch(0.58 0.22 25 / 20%);
+}
+
+/* 7. Sidebar Links */
+@utility premium-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.25rem; /* Standardized height */
+    padding: 0 0.75rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+        background-color: var(--secondary);
+        color: var(--foreground);
+    }
+}
+
+@utility premium-sidebar-active {
+    background-color: var(--secondary);
+    color: var(--foreground);
+    font-weight: 600;
+}
+
+/* 8. Empty States */
+@utility premium-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 1.5rem;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    background-color: oklch(1 0 0 / 1%);
+}
+
+@utility premium-empty-icon {
+    font-size: 1.5rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.75rem;
+}
+
+@utility premium-empty-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 0.25rem;
+}
+
+@utility premium-empty-desc {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    max-width: 280px;
+    margin-bottom: 1rem;
+}
+
+/* 9. Dialogs & Modals */
+@utility premium-dialog {
+    background-color: var(--popover);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) + 4px);
+    padding: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    max-width: 28rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@utility premium-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+}
+
+@utility premium-dialog-body {
+    font-size: 0.875rem;
+    color: oklch(0.85 0 0);
+    line-height: 1.5;
+}
+
+@utility premium-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+}
+
+@utility premium-dialog-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted-foreground);
+    transition: color 0.15s ease;
+
+    &:hover {
+        color: var(--foreground);
     }
 }
