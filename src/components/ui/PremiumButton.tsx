@@ -19,7 +19,10 @@ export function PremiumButton({
     type = 'button',
     ...props
 }: PremiumButtonProps) {
-    const baseClass = variant === 'primary' ? 'premium-button-primary' : 'premium-button-secondary'
+    const baseClass =
+        variant === 'primary'
+            ? 'premium-button-primary'
+            : 'premium-button-secondary'
 
     return (
         <button

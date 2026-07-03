@@ -1,5 +1,10 @@
 import { db } from '@/lib/dbconfig/db'
-import { ordersTable, usersTable, deliveryAgentProfilesTable, zonesTable } from '@/lib/dbconfig/schema'
+import {
+    ordersTable,
+    usersTable,
+    deliveryAgentProfilesTable,
+    zonesTable,
+} from '@/lib/dbconfig/schema'
 import { eq } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
@@ -22,7 +27,7 @@ const selectWithDetails = () => {
             price: ordersTable.price,
             createdAt: ordersTable.createdAt,
             updatedAt: ordersTable.updatedAt,
-            
+
             // Customer details
             customerName: customers.name,
             customerEmail: customers.email,
@@ -37,8 +42,14 @@ const selectWithDetails = () => {
         })
         .from(ordersTable)
         .leftJoin(customers, eq(ordersTable.customerId, customers.id))
-        .leftJoin(deliveryAgentProfilesTable, eq(ordersTable.agentId, deliveryAgentProfilesTable.id))
-        .leftJoin(agentUsers, eq(deliveryAgentProfilesTable.userId, agentUsers.id))
+        .leftJoin(
+            deliveryAgentProfilesTable,
+            eq(ordersTable.agentId, deliveryAgentProfilesTable.id)
+        )
+        .leftJoin(
+            agentUsers,
+            eq(deliveryAgentProfilesTable.userId, agentUsers.id)
+        )
         .leftJoin(zonesTable, eq(ordersTable.zoneId, zonesTable.id))
 }
 

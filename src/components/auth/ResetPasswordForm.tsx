@@ -87,12 +87,12 @@ export function ResetPasswordForm({
     const submitLabel = buttonLabel ?? 'Send Reset Link'
 
     return (
-        <div className={cn(
-            "w-full max-w-md mx-auto relative text-white",
-            isModal 
-                ? "bg-transparent p-0" 
-                : "premium-card"
-        )}>
+        <div
+            className={cn(
+                'w-full max-w-md mx-auto relative text-white',
+                isModal ? 'bg-transparent p-0' : 'premium-card'
+            )}
+        >
             {!isModal && (
                 <button
                     onClick={handleClose}
@@ -108,9 +108,7 @@ export function ResetPasswordForm({
                 <h2 className="text-xl font-bold tracking-tight text-neutral-200">
                     {title}
                 </h2>
-                <p className="mt-2 text-xs text-neutral-400">
-                    {subtitle}
-                </p>
+                <p className="mt-2 text-xs text-neutral-400">{subtitle}</p>
             </div>
 
             <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -119,8 +117,12 @@ export function ResetPasswordForm({
                     control={form.control}
                     render={({ field, fieldState }) => (
                         <div className="premium-form-group">
-                            <Label htmlFor="email" className="premium-form-label">
-                                Email Address <span className="text-red-500">*</span>
+                            <Label
+                                htmlFor="email"
+                                className="premium-form-label"
+                            >
+                                Email Address{' '}
+                                <span className="text-red-500">*</span>
                             </Label>
                             <Input
                                 id="email"
@@ -132,7 +134,9 @@ export function ResetPasswordForm({
                                 disabled={isPending}
                             />
                             {fieldState.invalid && (
-                                <p className="premium-form-error">{fieldState.error?.message}</p>
+                                <p className="premium-form-error">
+                                    {fieldState.error?.message}
+                                </p>
                             )}
                         </div>
                     )}
@@ -153,7 +157,9 @@ export function ResetPasswordForm({
                             <span className="w-4 h-4 border-2 border-neutral-900 border-t-transparent animate-spin rounded-full" />
                             Sending Link...
                         </span>
-                    ) : submitLabel}
+                    ) : (
+                        submitLabel
+                    )}
                 </button>
             </form>
 

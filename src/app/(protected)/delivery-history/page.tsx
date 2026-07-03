@@ -45,7 +45,9 @@ export default function DeliveryHistoryPage() {
     }, [])
 
     const historyDeliveries = useMemo(() => {
-        return orders.filter((o) => ['DELIVERED', 'CANCELLED'].includes(o.status))
+        return orders.filter((o) =>
+            ['DELIVERED', 'CANCELLED'].includes(o.status)
+        )
     }, [orders])
 
     const completedDeliveries = useMemo(() => {
@@ -54,7 +56,10 @@ export default function DeliveryHistoryPage() {
 
     const completedCount = completedDeliveries.length
     const totalDistance = completedCount * 4.2
-    const totalEarnings = completedDeliveries.reduce((sum, o) => sum + (o.price * 0.15 + 3.5), 0)
+    const totalEarnings = completedDeliveries.reduce(
+        (sum, o) => sum + (o.price * 0.15 + 3.5),
+        0
+    )
     const successRate =
         historyDeliveries.length > 0
             ? Math.round((completedCount / historyDeliveries.length) * 100)
@@ -78,7 +83,11 @@ export default function DeliveryHistoryPage() {
                     title="Failed to load delivery history"
                     description={error}
                     action={
-                        <button type="button" onClick={fetchOrders} className="premium-button-primary h-8 text-xs">
+                        <button
+                            type="button"
+                            onClick={fetchOrders}
+                            className="premium-button-primary h-8 text-xs"
+                        >
                             Retry
                         </button>
                     }
@@ -101,11 +110,15 @@ export default function DeliveryHistoryPage() {
                 </div>
                 <div className="premium-card flex h-20 flex-col justify-between p-4">
                     <p className="premium-typo-caption">Earnings</p>
-                    <p className="text-xl font-bold text-green-500">${totalEarnings.toFixed(2)}</p>
+                    <p className="text-xl font-bold text-green-500">
+                        ${totalEarnings.toFixed(2)}
+                    </p>
                 </div>
                 <div className="premium-card flex h-20 flex-col justify-between p-4">
                     <p className="premium-typo-caption">Total Distance</p>
-                    <p className="text-xl font-bold">{totalDistance.toFixed(1)} km</p>
+                    <p className="text-xl font-bold">
+                        {totalDistance.toFixed(1)} km
+                    </p>
                 </div>
                 <div className="premium-card flex h-20 flex-col justify-between p-4">
                     <p className="premium-typo-caption">Avg Transit Time</p>
@@ -113,11 +126,16 @@ export default function DeliveryHistoryPage() {
                 </div>
                 <div className="premium-card col-span-2 flex h-20 flex-col justify-between p-4 md:col-span-1">
                     <p className="premium-typo-caption">Success Rate</p>
-                    <p className="text-xl font-bold text-indigo-400">{successRate}%</p>
+                    <p className="text-xl font-bold text-indigo-400">
+                        {successRate}%
+                    </p>
                 </div>
             </div>
 
-            <TableContainer title="Finalized Shipment Log" count={historyDeliveries.length}>
+            <TableContainer
+                title="Finalized Shipment Log"
+                count={historyDeliveries.length}
+            >
                 {historyDeliveries.length > 0 ? (
                     <PremiumTable>
                         <TableHeader>
@@ -128,8 +146,12 @@ export default function DeliveryHistoryPage() {
                                 <TableHead>PIN</TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead>Completed Date</TableHead>
-                                <TableHead className="text-right">Earning</TableHead>
-                                <TableHead className="text-right">Actions</TableHead>
+                                <TableHead className="text-right">
+                                    Earning
+                                </TableHead>
+                                <TableHead className="text-right">
+                                    Actions
+                                </TableHead>
                             </TableHeaderRow>
                         </TableHeader>
                         <TableBody>
@@ -142,17 +164,25 @@ export default function DeliveryHistoryPage() {
                                         <p className="font-semibold text-neutral-200">
                                             {order.customerName || 'Anonymous'}
                                         </p>
-                                        <p className="font-mono text-[10px] text-neutral-500">{order.customerEmail}</p>
+                                        <p className="font-mono text-[10px] text-neutral-500">
+                                            {order.customerEmail}
+                                        </p>
                                     </TableCell>
                                     <TableCell className="max-w-xs truncate text-neutral-400">
-                                        <span title={order.deliveryAddress}>{order.deliveryAddress}</span>
+                                        <span title={order.deliveryAddress}>
+                                            {order.deliveryAddress}
+                                        </span>
                                     </TableCell>
-                                    <TableCell className="font-mono text-neutral-300">{order.deliveryPinCode}</TableCell>
+                                    <TableCell className="font-mono text-neutral-300">
+                                        {order.deliveryPinCode}
+                                    </TableCell>
                                     <TableCell>
                                         <StatusBadge status={order.status} />
                                     </TableCell>
                                     <TableCell className="text-neutral-400">
-                                        {new Date(order.updatedAt || order.createdAt).toLocaleDateString()}
+                                        {new Date(
+                                            order.updatedAt || order.createdAt
+                                        ).toLocaleDateString()}
                                     </TableCell>
                                     <TableCell className="text-right font-bold text-neutral-200">
                                         {order.status === 'DELIVERED'
@@ -177,7 +207,10 @@ export default function DeliveryHistoryPage() {
                         title="No delivery history yet"
                         description="Complete assigned deliveries to see finalized shipment records here."
                         action={
-                            <Link href="/orders" className="premium-button-primary h-8 text-xs">
+                            <Link
+                                href="/orders"
+                                className="premium-button-primary h-8 text-xs"
+                            >
                                 View Active Deliveries
                             </Link>
                         }

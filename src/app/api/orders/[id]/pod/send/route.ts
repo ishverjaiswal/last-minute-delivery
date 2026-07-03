@@ -10,22 +10,34 @@ export async function POST(
     const session = await auth()
     if (!session || !session.user || !session.user.id) {
         return NextResponse.json(
-            { success: false, error: { code: 'UNAUTHENTICATED', message: 'Auth required' } },
+            {
+                success: false,
+                error: { code: 'UNAUTHENTICATED', message: 'Auth required' },
+            },
             { status: 401 }
         )
     }
 
     try {
         const { id } = await params
-        
-        if (session.user.role !== 'DELIVERY_AGENT' && session.user.role !== 'ADMIN') {
+
+        if (
+            session.user.role !== 'DELIVERY_AGENT' &&
+            session.user.role !== 'ADMIN'
+        ) {
             return NextResponse.json(
-                { success: false, error: { code: 'UNAUTHORIZED', message: 'Access denied' } },
+                {
+                    success: false,
+                    error: { code: 'UNAUTHORIZED', message: 'Access denied' },
+                },
                 { status: 403 }
             )
         }
 
-        const result = await ProofOfDeliveryService.sendDeliveryOtp(id, session.user.id)
+        const result = await ProofOfDeliveryService.sendDeliveryOtp(
+            id,
+            session.user.id
+        )
 
         return NextResponse.json({
             success: true,
@@ -37,7 +49,10 @@ export async function POST(
         })
     } catch (err: any) {
         return NextResponse.json(
-            { success: false, error: { code: 'BAD_REQUEST', message: err.message } },
+            {
+                success: false,
+                error: { code: 'BAD_REQUEST', message: err.message },
+            },
             { status: 400 }
         )
     }

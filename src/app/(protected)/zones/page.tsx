@@ -24,12 +24,7 @@ export default function ZonesPage() {
     const [error, setError] = useState<string | null>(null)
     const [isPending, setIsPending] = useState(false)
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        setValue,
-    } = useForm({
+    const { register, handleSubmit, reset, setValue } = useForm({
         defaultValues: {
             name: '',
             city: '',
@@ -69,7 +64,9 @@ export default function ZonesPage() {
         setValue('name', DEMO_DATA.zone.name, { shouldValidate: true })
         setValue('city', DEMO_DATA.zone.city, { shouldValidate: true })
         setValue('state', DEMO_DATA.zone.state, { shouldValidate: true })
-        setValue('pinCodesString', DEMO_DATA.zone.pinCodes, { shouldValidate: true })
+        setValue('pinCodesString', DEMO_DATA.zone.pinCodes, {
+            shouldValidate: true,
+        })
     }
 
     const onSubmit = async (values: any) => {
@@ -90,7 +87,9 @@ export default function ZonesPage() {
 
             const parsed = createZoneSchema.safeParse(payload)
             if (!parsed.success) {
-                setError(parsed.error.issues[0]?.message || 'Invalid validation')
+                setError(
+                    parsed.error.issues[0]?.message || 'Invalid validation'
+                )
                 setIsPending(false)
                 return
             }
@@ -136,17 +135,23 @@ export default function ZonesPage() {
         <div className="w-full max-w-6xl space-y-6 px-4 text-white">
             {/* Header */}
             <div className="space-y-1">
-                <h1 className="premium-tyo-display">Geographic Service Zones</h1>
-                <p className="premium-tyo-secondary">Define logistics dispatch zones and list serviceable PIN codes.</p>
+                <h1 className="premium-tyo-display">
+                    Geographic Service Zones
+                </h1>
+                <p className="premium-tyo-secondary">
+                    Define logistics dispatch zones and list serviceable PIN
+                    codes.
+                </p>
             </div>
 
             {/* Split layout (Left Form / Right Table) */}
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
-                
                 {/* Left Card: Create Zone Form (30% equivalent / col-span-3) */}
                 <div className="lg:col-span-3 premium-card space-y-4 h-fit">
                     <div className="flex flex-col sm:flex-row lg:flex-col gap-3 justify-between border-b border-neutral-850 pb-2">
-                        <h2 className="premium-tyo-card">Create Service Area</h2>
+                        <h2 className="premium-tyo-card">
+                            Create Service Area
+                        </h2>
                         <button
                             type="button"
                             onClick={fillSampleZone}
@@ -163,10 +168,17 @@ export default function ZonesPage() {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-4"
+                    >
                         <div className="premium-form-group">
-                            <label htmlFor="name" className="premium-form-label">
-                                Zone Name <span className="text-red-500">*</span>
+                            <label
+                                htmlFor="name"
+                                className="premium-form-label"
+                            >
+                                Zone Name{' '}
+                                <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="name"
@@ -179,7 +191,10 @@ export default function ZonesPage() {
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="city" className="premium-form-label">
+                            <label
+                                htmlFor="city"
+                                className="premium-form-label"
+                            >
                                 City <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -193,7 +208,10 @@ export default function ZonesPage() {
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="state" className="premium-form-label">
+                            <label
+                                htmlFor="state"
+                                className="premium-form-label"
+                            >
                                 State <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -207,18 +225,26 @@ export default function ZonesPage() {
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="pinCodesString" className="premium-form-label">
-                                Serviceable PIN Codes (Comma-separated) <span className="text-red-500">*</span>
+                            <label
+                                htmlFor="pinCodesString"
+                                className="premium-form-label"
+                            >
+                                Serviceable PIN Codes (Comma-separated){' '}
+                                <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="pinCodesString"
                                 type="text"
-                                {...register('pinCodesString', { required: true })}
+                                {...register('pinCodesString', {
+                                    required: true,
+                                })}
                                 placeholder="e.g. 208001, 208002"
                                 disabled={isPending}
                                 className="premium-input w-full font-mono"
                             />
-                            <p className="premium-form-helper">Provide numbers separated by commas.</p>
+                            <p className="premium-form-helper">
+                                Provide numbers separated by commas.
+                            </p>
                         </div>
 
                         <button
@@ -231,7 +257,9 @@ export default function ZonesPage() {
                                     <span className="w-3.5 h-3.5 border-2 border-neutral-900 border-t-transparent animate-spin rounded-full" />
                                     Creating Zone...
                                 </span>
-                            ) : 'Create Zone'}
+                            ) : (
+                                'Create Zone'
+                            )}
                         </button>
                     </form>
                 </div>
@@ -239,7 +267,9 @@ export default function ZonesPage() {
                 {/* Right Card: Zones Table (70% equivalent / col-span-7) */}
                 <div className="lg:col-span-7 bg-neutral-900 border border-neutral-850 rounded-xl overflow-hidden">
                     <div className="p-5 border-b border-neutral-855 bg-neutral-900/50">
-                        <h2 className="premium-tyo-card">Active Service Zones ({zones.length})</h2>
+                        <h2 className="premium-tyo-card">
+                            Active Service Zones ({zones.length})
+                        </h2>
                     </div>
 
                     {zones.length > 0 ? (
@@ -249,10 +279,14 @@ export default function ZonesPage() {
                                     <tr className="border-b border-neutral-850 bg-neutral-950 text-neutral-400 text-[10px] uppercase font-bold tracking-wider">
                                         <th className="p-4">Zone</th>
                                         <th className="p-4">City / State</th>
-                                        <th className="p-4 font-mono">PIN Count</th>
+                                        <th className="p-4 font-mono">
+                                            PIN Count
+                                        </th>
                                         <th className="p-4">Active Orders</th>
                                         <th className="p-4">Rate Cards</th>
-                                        <th className="p-4 text-right">Actions</th>
+                                        <th className="p-4 text-right">
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-neutral-850">
@@ -262,12 +296,23 @@ export default function ZonesPage() {
                                             pins = JSON.parse(zone.pinCodes)
                                         } catch {}
 
-                                        const zoneOrdersCount = orders.filter((o) => pins.includes(o.deliveryPinCode)).length
-                                        const zoneRateCardsCount = rateCards.filter((r) => r.zoneId === zone.id).length
+                                        const zoneOrdersCount = orders.filter(
+                                            (o) =>
+                                                pins.includes(o.deliveryPinCode)
+                                        ).length
+                                        const zoneRateCardsCount =
+                                            rateCards.filter(
+                                                (r) => r.zoneId === zone.id
+                                            ).length
 
                                         return (
-                                            <tr key={zone.id} className="premium-table-row">
-                                                <td className="premium-table-cell font-bold text-neutral-200">{zone.name}</td>
+                                            <tr
+                                                key={zone.id}
+                                                className="premium-table-row"
+                                            >
+                                                <td className="premium-table-cell font-bold text-neutral-200">
+                                                    {zone.name}
+                                                </td>
                                                 <td className="premium-table-cell text-neutral-400 text-xs">
                                                     {zone.city}, {zone.state}
                                                 </td>
@@ -282,7 +327,11 @@ export default function ZonesPage() {
                                                 </td>
                                                 <td className="premium-table-action">
                                                     <button
-                                                        onClick={() => alert(`Zone editing or deletion is restricted.`)}
+                                                        onClick={() =>
+                                                            alert(
+                                                                `Zone editing or deletion is restricted.`
+                                                            )
+                                                        }
                                                         className="premium-button-secondary h-8 text-[10px] cursor-pointer"
                                                     >
                                                         Details
@@ -296,10 +345,10 @@ export default function ZonesPage() {
                         </div>
                     ) : (
                         /* Empty state primitive */
-                        <EmptyState 
-                            icon={Map} 
-                            title="No zones configured" 
-                            description="Create a coverage zone to link serviceable Kanpur regions." 
+                        <EmptyState
+                            icon={Map}
+                            title="No zones configured"
+                            description="Create a coverage zone to link serviceable Kanpur regions."
                         />
                     )}
                 </div>

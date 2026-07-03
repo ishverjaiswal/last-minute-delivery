@@ -5,7 +5,12 @@ export interface StatusBadgeProps extends React.HTMLAttributes<HTMLSpanElement> 
     status?: string
 }
 
-export function StatusBadge({ status, className, children, ...props }: StatusBadgeProps) {
+export function StatusBadge({
+    status,
+    className,
+    children,
+    ...props
+}: StatusBadgeProps) {
     const rawVal = status || (typeof children === 'string' ? children : '')
     const normalized = rawVal.trim().toUpperCase()
 

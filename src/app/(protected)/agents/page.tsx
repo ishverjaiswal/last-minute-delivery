@@ -97,9 +97,14 @@ export default function DeliveryAgentsPage() {
         }
     }
 
-    const toggleAvailability = async (agentId: string, currentAvailability: boolean) => {
+    const toggleAvailability = async (
+        agentId: string,
+        currentAvailability: boolean
+    ) => {
         try {
-            alert(`Toggled availability status for Driver #${agentId.slice(0, 8)}`)
+            alert(
+                `Toggled availability status for Driver #${agentId.slice(0, 8)}`
+            )
         } catch {}
     }
 
@@ -133,13 +138,13 @@ export default function DeliveryAgentsPage() {
             <div className="space-y-1">
                 <h1 className="premium-tyo-display">Delivery Agents</h1>
                 <p className="premium-tyo-secondary">
-                    Register new delivery personnel and assign geographic service coverage zones.
+                    Register new delivery personnel and assign geographic
+                    service coverage zones.
                 </p>
             </div>
 
             {/* Split layout (Left Form / Right Table) */}
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
-                
                 {/* Left Card: Register Agent (30% equivalent / col-span-3) */}
                 <div className="lg:col-span-3 premium-card space-y-4 h-fit">
                     <div className="flex flex-col sm:flex-row lg:flex-col gap-3 justify-between border-b border-neutral-850 pb-2">
@@ -160,9 +165,15 @@ export default function DeliveryAgentsPage() {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-4"
+                    >
                         <div className="premium-form-group">
-                            <label htmlFor="userId" className="premium-form-label">
+                            <label
+                                htmlFor="userId"
+                                className="premium-form-label"
+                            >
                                 User ID <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -174,13 +185,19 @@ export default function DeliveryAgentsPage() {
                                 className="premium-input w-full"
                             />
                             {errors.userId && (
-                                <p className="premium-form-error">{errors.userId.message as string}</p>
+                                <p className="premium-form-error">
+                                    {errors.userId.message as string}
+                                </p>
                             )}
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="phone" className="premium-form-label">
-                                Phone Number <span className="text-red-500">*</span>
+                            <label
+                                htmlFor="phone"
+                                className="premium-form-label"
+                            >
+                                Phone Number{' '}
+                                <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="phone"
@@ -191,12 +208,19 @@ export default function DeliveryAgentsPage() {
                                 className="premium-input w-full"
                             />
                             {errors.phone && (
-                                <p className="premium-form-error">{errors.phone.message as string}</p>
+                                <p className="premium-form-error">
+                                    {errors.phone.message as string}
+                                </p>
                             )}
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="assignedZoneId" className="premium-form-label">Assigned Zone</label>
+                            <label
+                                htmlFor="assignedZoneId"
+                                className="premium-form-label"
+                            >
+                                Assigned Zone
+                            </label>
                             <select
                                 id="assignedZoneId"
                                 {...register('assignedZoneId')}
@@ -211,7 +235,9 @@ export default function DeliveryAgentsPage() {
                                 ))}
                             </select>
                             {errors.assignedZoneId && (
-                                <p className="premium-form-error">{errors.assignedZoneId.message as string}</p>
+                                <p className="premium-form-error">
+                                    {errors.assignedZoneId.message as string}
+                                </p>
                             )}
                         </div>
 
@@ -225,7 +251,9 @@ export default function DeliveryAgentsPage() {
                                     <span className="w-3.5 h-3.5 border-2 border-neutral-900 border-t-transparent animate-spin rounded-full" />
                                     Registering...
                                 </span>
-                            ) : 'Register Profile'}
+                            ) : (
+                                'Register Profile'
+                            )}
                         </button>
                     </form>
                 </div>
@@ -233,7 +261,9 @@ export default function DeliveryAgentsPage() {
                 {/* Right Card: Active Agents Table (70% equivalent / col-span-7) */}
                 <div className="lg:col-span-7 bg-neutral-900 border border-neutral-850 rounded-xl overflow-hidden">
                     <div className="p-5 border-b border-neutral-855 bg-neutral-900/50">
-                        <h2 className="premium-tyo-card">Active Agents ({agents.length})</h2>
+                        <h2 className="premium-tyo-card">
+                            Active Agents ({agents.length})
+                        </h2>
                     </div>
 
                     {agents.length > 0 ? (
@@ -246,31 +276,62 @@ export default function DeliveryAgentsPage() {
                                         <th className="p-4">Zone</th>
                                         <th className="p-4">Availability</th>
                                         <th className="p-4">Assigned Orders</th>
-                                        <th className="p-4 text-right">Actions</th>
+                                        <th className="p-4 text-right">
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-neutral-850">
                                     {agents.map((agent) => {
-                                        const zone = zones.find((z) => z.id === agent.assignedZoneId)
-                                        const assignedCount = orders.filter((o) => o.agentId === agent.id).length
+                                        const zone = zones.find(
+                                            (z) => z.id === agent.assignedZoneId
+                                        )
+                                        const assignedCount = orders.filter(
+                                            (o) => o.agentId === agent.id
+                                        ).length
                                         return (
-                                            <tr key={agent.id} className="premium-table-row">
+                                            <tr
+                                                key={agent.id}
+                                                className="premium-table-row"
+                                            >
                                                 <td className="premium-table-cell">
                                                     <div className="space-y-0.5">
-                                                        <p className="font-bold text-neutral-200">{agent.name || 'Anonymous Agent'}</p>
-                                                        <p className="text-[10px] text-neutral-500 font-mono tracking-wider">{agent.email}</p>
+                                                        <p className="font-bold text-neutral-200">
+                                                            {agent.name ||
+                                                                'Anonymous Agent'}
+                                                        </p>
+                                                        <p className="text-[10px] text-neutral-500 font-mono tracking-wider">
+                                                            {agent.email}
+                                                        </p>
                                                     </div>
                                                 </td>
-                                                <td className="premium-table-cell font-mono text-neutral-300">{agent.phone}</td>
+                                                <td className="premium-table-cell font-mono text-neutral-300">
+                                                    {agent.phone}
+                                                </td>
                                                 <td className="premium-table-cell">
-                                                    <span className="text-indigo-400 font-semibold">{zone ? zone.name : 'None Assigned'}</span>
+                                                    <span className="text-indigo-400 font-semibold">
+                                                        {zone
+                                                            ? zone.name
+                                                            : 'None Assigned'}
+                                                    </span>
                                                 </td>
                                                 <td className="premium-table-cell">
                                                     <button
-                                                        onClick={() => toggleAvailability(agent.id, agent.availability)}
+                                                        onClick={() =>
+                                                            toggleAvailability(
+                                                                agent.id,
+                                                                agent.availability
+                                                            )
+                                                        }
                                                         className="cursor-pointer"
                                                     >
-                                                        <StatusBadge status={agent.availability ? 'ONLINE' : 'OFFLINE'} />
+                                                        <StatusBadge
+                                                            status={
+                                                                agent.availability
+                                                                    ? 'ONLINE'
+                                                                    : 'OFFLINE'
+                                                            }
+                                                        />
                                                     </button>
                                                 </td>
                                                 <td className="premium-table-cell font-mono font-bold text-neutral-300">
@@ -278,7 +339,11 @@ export default function DeliveryAgentsPage() {
                                                 </td>
                                                 <td className="premium-table-action">
                                                     <button
-                                                        onClick={() => alert(`Direct Agent profile editing is restricted to database config.`)}
+                                                        onClick={() =>
+                                                            alert(
+                                                                `Direct Agent profile editing is restricted to database config.`
+                                                            )
+                                                        }
                                                         className="premium-button-secondary h-8 text-[10px] cursor-pointer"
                                                     >
                                                         Edit
@@ -292,10 +357,10 @@ export default function DeliveryAgentsPage() {
                         </div>
                     ) : (
                         /* Empty state primitive */
-                        <EmptyState 
-                            icon={Bike} 
-                            title="No agents registered" 
-                            description="Create an agent profile to begin dispatch assignments." 
+                        <EmptyState
+                            icon={Bike}
+                            title="No agents registered"
+                            description="Create an agent profile to begin dispatch assignments."
                         />
                     )}
                 </div>

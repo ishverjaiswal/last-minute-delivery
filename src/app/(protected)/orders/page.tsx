@@ -80,7 +80,9 @@ export default function OrdersPage() {
         }
 
         if (searchQuery.trim()) {
-            results = results.filter((o) => matchesSearch(o, searchQuery.trim()))
+            results = results.filter((o) =>
+                matchesSearch(o, searchQuery.trim())
+            )
         }
 
         return sortOrders(results, sortOrder)
@@ -106,7 +108,9 @@ export default function OrdersPage() {
 
     const isAllSelected = useMemo(() => {
         if (filteredAndSortedOrders.length === 0) return false
-        return filteredAndSortedOrders.every((o) => selectedOrderIds.includes(o.id))
+        return filteredAndSortedOrders.every((o) =>
+            selectedOrderIds.includes(o.id)
+        )
     }, [filteredAndSortedOrders, selectedOrderIds])
 
     const handleClearAll = () => {
@@ -120,7 +124,9 @@ export default function OrdersPage() {
         return (
             <div className="w-full max-w-6xl space-y-4 px-4 text-white">
                 <PageHeader
-                    title={role === 'ADMIN' ? 'Operations Console' : 'My Orders'}
+                    title={
+                        role === 'ADMIN' ? 'Operations Console' : 'My Orders'
+                    }
                     description="Loading shipment records…"
                 />
                 <SkeletonTable rows={5} cols={7} />
@@ -128,7 +134,16 @@ export default function OrdersPage() {
         )
     }
 
-    const statuses = ['ALL', 'PENDING', 'CONFIRMED', 'ASSIGNED', 'PICKED_UP', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED']
+    const statuses = [
+        'ALL',
+        'PENDING',
+        'CONFIRMED',
+        'ASSIGNED',
+        'PICKED_UP',
+        'OUT_FOR_DELIVERY',
+        'DELIVERED',
+        'CANCELLED',
+    ]
 
     return (
         <div className="w-full max-w-6xl space-y-4 px-4 text-white">
@@ -142,7 +157,10 @@ export default function OrdersPage() {
                 }
                 action={
                     role === 'CUSTOMER' ? (
-                        <Link href="/orders/create" className="premium-button-primary">
+                        <Link
+                            href="/orders/create"
+                            className="premium-button-primary"
+                        >
                             Book New Delivery
                         </Link>
                     ) : undefined
@@ -151,10 +169,12 @@ export default function OrdersPage() {
 
             {/* Shipment Records */}
             <div className="bg-neutral-900 border border-neutral-850 rounded-xl overflow-hidden">
-                
                 {/* Secondary Search & Filter Row */}
                 <TableToolbar
-                    resultCount={{ shown: filteredAndSortedOrders.length, total: orders.length }}
+                    resultCount={{
+                        shown: filteredAndSortedOrders.length,
+                        total: orders.length,
+                    }}
                 >
                     <SearchInput
                         ref={searchInputRef}
@@ -194,7 +214,9 @@ export default function OrdersPage() {
                             ))}
                         </FilterSelect>
 
-                        {(searchQuery || filterStatus !== 'ALL' || sortOrder !== 'NEWEST') && (
+                        {(searchQuery ||
+                            filterStatus !== 'ALL' ||
+                            sortOrder !== 'NEWEST') && (
                             <button
                                 type="button"
                                 onClick={handleClearAll}
@@ -209,8 +231,11 @@ export default function OrdersPage() {
                 {/* Selected Bulk Counts bar if selected */}
                 {selectedOrderIds.length > 0 && (
                     <div className="p-3 bg-indigo-500/10 border-b border-indigo-500/20 text-indigo-400 text-xs font-bold flex justify-between items-center px-5">
-                        <span>Selected {selectedOrderIds.length} orders for bulk review</span>
-                        <button 
+                        <span>
+                            Selected {selectedOrderIds.length} orders for bulk
+                            review
+                        </span>
+                        <button
                             onClick={() => setSelectedOrderIds([])}
                             className="text-neutral-400 hover:text-white text-[10px] uppercase font-bold cursor-pointer"
                         >
@@ -236,36 +261,67 @@ export default function OrdersPage() {
                                         </th>
                                         <th className="p-4">Order ID</th>
                                         <th className="p-4">Customer</th>
-                                        {role === 'ADMIN' && <th className="p-4">Assigned Agent</th>}
-                                        {role === 'DELIVERY_AGENT' && <th className="p-4">Pickup Address</th>}
+                                        {role === 'ADMIN' && (
+                                            <th className="p-4">
+                                                Assigned Agent
+                                            </th>
+                                        )}
+                                        {role === 'DELIVERY_AGENT' && (
+                                            <th className="p-4">
+                                                Pickup Address
+                                            </th>
+                                        )}
                                         <th className="p-4">Zone / PIN</th>
                                         <th className="p-4">Status</th>
                                         <th className="p-4">Created</th>
-                                        <th className="p-4 text-right">Actions</th>
+                                        <th className="p-4 text-right">
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-neutral-850">
                                     {filteredAndSortedOrders.map((order) => (
-                                        <tr key={order.id} className="premium-table-row">
+                                        <tr
+                                            key={order.id}
+                                            className="premium-table-row"
+                                        >
                                             <td className="premium-table-cell">
                                                 <input
                                                     type="checkbox"
-                                                    checked={selectedOrderIds.includes(order.id)}
-                                                    onChange={() => handleSelectRow(order.id)}
+                                                    checked={selectedOrderIds.includes(
+                                                        order.id
+                                                    )}
+                                                    onChange={() =>
+                                                        handleSelectRow(
+                                                            order.id
+                                                        )
+                                                    }
                                                     className="w-4 h-4 accent-indigo-650 rounded bg-neutral-900 border-neutral-800 cursor-pointer"
                                                 />
                                             </td>
                                             <td className="premium-table-cell font-bold font-mono tracking-wider text-xs text-neutral-300">
-                                                LMD-{highlightText(order.id.slice(0, 8).toUpperCase(), searchQuery)}
+                                                LMD-
+                                                {highlightText(
+                                                    order.id
+                                                        .slice(0, 8)
+                                                        .toUpperCase(),
+                                                    searchQuery
+                                                )}
                                             </td>
                                             <td className="premium-table-cell">
                                                 {order.customerName ? (
                                                     <div className="space-y-0.5">
                                                         <p className="font-semibold text-neutral-200">
-                                                            {highlightText(order.customerName, searchQuery)}
+                                                            {highlightText(
+                                                                order.customerName,
+                                                                searchQuery
+                                                            )}
                                                         </p>
                                                         <p className="text-[10px] text-neutral-500 font-mono">
-                                                            {highlightText(order.customerEmail, searchQuery)}
+                                                            {highlightText(
+                                                                order.customerEmail,
+                                                                searchQuery
+                                                            )}
                                                         </p>
                                                     </div>
                                                 ) : (
@@ -277,47 +333,82 @@ export default function OrdersPage() {
                                                     {order.agentName ? (
                                                         <div className="space-y-0.5">
                                                             <p className="font-semibold text-neutral-200">
-                                                                {highlightText(order.agentName, searchQuery)}
+                                                                {highlightText(
+                                                                    order.agentName,
+                                                                    searchQuery
+                                                                )}
                                                             </p>
                                                             <p className="text-[10px] text-neutral-500 font-mono">
-                                                                {highlightText(order.agentPhone, searchQuery)}
+                                                                {highlightText(
+                                                                    order.agentPhone,
+                                                                    searchQuery
+                                                                )}
                                                             </p>
                                                         </div>
                                                     ) : order.agentId ? (
                                                         `Agent #${order.agentId.slice(0, 8)}`
                                                     ) : (
-                                                        <span className="text-neutral-600 italic">Unassigned</span>
+                                                        <span className="text-neutral-600 italic">
+                                                            Unassigned
+                                                        </span>
                                                     )}
                                                 </td>
                                             )}
                                             {role === 'DELIVERY_AGENT' && (
-                                                <td className="premium-table-cell text-neutral-400 max-w-[180px] truncate" title={order.pickupAddress}>
-                                                    {highlightText(order.pickupAddress, searchQuery)}
+                                                <td
+                                                    className="premium-table-cell text-neutral-400 max-w-[180px] truncate"
+                                                    title={order.pickupAddress}
+                                                >
+                                                    {highlightText(
+                                                        order.pickupAddress,
+                                                        searchQuery
+                                                    )}
                                                 </td>
                                             )}
                                             <td className="premium-table-cell">
                                                 {order.zoneName ? (
                                                     <div className="space-y-0.5">
                                                         <p className="font-semibold text-neutral-200">
-                                                            {highlightText(order.zoneName, searchQuery)}
+                                                            {highlightText(
+                                                                order.zoneName,
+                                                                searchQuery
+                                                            )}
                                                         </p>
                                                         <p className="text-[10px] text-neutral-500 font-mono">
-                                                            PIN: {highlightText(order.deliveryPinCode, searchQuery)}
+                                                            PIN:{' '}
+                                                            {highlightText(
+                                                                order.deliveryPinCode,
+                                                                searchQuery
+                                                            )}
                                                         </p>
                                                     </div>
                                                 ) : (
-                                                    <span className="font-mono">{highlightText(order.deliveryPinCode, searchQuery)}</span>
+                                                    <span className="font-mono">
+                                                        {highlightText(
+                                                            order.deliveryPinCode,
+                                                            searchQuery
+                                                        )}
+                                                    </span>
                                                 )}
                                             </td>
                                             <td className="premium-table-cell">
-                                                <StatusBadge status={order.status} />
+                                                <StatusBadge
+                                                    status={order.status}
+                                                />
                                             </td>
                                             <td className="premium-table-cell text-neutral-400">
-                                                {new Date(order.createdAt).toLocaleDateString()}
+                                                {new Date(
+                                                    order.createdAt
+                                                ).toLocaleDateString()}
                                             </td>
                                             <td className="premium-table-action">
-                                                <Link href={`/orders/${order.id}`} className="premium-button-secondary h-8 text-[10px] px-3">
-                                                    {role === 'ADMIN' ? 'Manage' : 'Track'}
+                                                <Link
+                                                    href={`/orders/${order.id}`}
+                                                    className="premium-button-secondary h-8 text-[10px] px-3"
+                                                >
+                                                    {role === 'ADMIN'
+                                                        ? 'Manage'
+                                                        : 'Track'}
                                                 </Link>
                                             </td>
                                         </tr>
@@ -329,17 +420,27 @@ export default function OrdersPage() {
                         {/* Cards Layout (Mobile View) */}
                         <div className="block md:hidden divide-y divide-neutral-850">
                             {filteredAndSortedOrders.map((order) => (
-                                <div key={order.id} className="p-4 space-y-3 bg-neutral-900/10">
+                                <div
+                                    key={order.id}
+                                    className="p-4 space-y-3 bg-neutral-900/10"
+                                >
                                     <div className="flex justify-between items-start">
                                         <div className="flex items-center space-x-2">
                                             <input
                                                 type="checkbox"
-                                                checked={selectedOrderIds.includes(order.id)}
-                                                onChange={() => handleSelectRow(order.id)}
+                                                checked={selectedOrderIds.includes(
+                                                    order.id
+                                                )}
+                                                onChange={() =>
+                                                    handleSelectRow(order.id)
+                                                }
                                                 className="w-4 h-4 accent-indigo-650 rounded bg-neutral-900 border-neutral-800 cursor-pointer"
                                             />
                                             <span className="font-bold text-xs tracking-wide font-mono text-white">
-                                                LMD-{order.id.slice(0, 8).toUpperCase()}
+                                                LMD-
+                                                {order.id
+                                                    .slice(0, 8)
+                                                    .toUpperCase()}
                                             </span>
                                         </div>
                                         <StatusBadge status={order.status} />
@@ -348,31 +449,61 @@ export default function OrdersPage() {
                                         <div className="flex justify-between">
                                             <span>Customer</span>
                                             <span className="text-neutral-200">
-                                                {order.customerName ? highlightText(order.customerName, searchQuery) : `User #${order.customerId.slice(0, 8)}`}
+                                                {order.customerName
+                                                    ? highlightText(
+                                                          order.customerName,
+                                                          searchQuery
+                                                      )
+                                                    : `User #${order.customerId.slice(0, 8)}`}
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span>Agent</span>
                                             <span className="text-neutral-200">
-                                                {order.agentName ? highlightText(order.agentName, searchQuery) : (order.agentId ? `Agent #${order.agentId.slice(0, 8)}` : 'Unassigned')}
+                                                {order.agentName
+                                                    ? highlightText(
+                                                          order.agentName,
+                                                          searchQuery
+                                                      )
+                                                    : order.agentId
+                                                      ? `Agent #${order.agentId.slice(0, 8)}`
+                                                      : 'Unassigned'}
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span>Zone</span>
                                             <span className="text-neutral-200 text-right">
-                                                {order.zoneName ? highlightText(order.zoneName, searchQuery) : 'N/A'} (PIN: {highlightText(order.deliveryPinCode, searchQuery)})
+                                                {order.zoneName
+                                                    ? highlightText(
+                                                          order.zoneName,
+                                                          searchQuery
+                                                      )
+                                                    : 'N/A'}{' '}
+                                                (PIN:{' '}
+                                                {highlightText(
+                                                    order.deliveryPinCode,
+                                                    searchQuery
+                                                )}
+                                                )
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span>Created</span>
                                             <span className="text-neutral-200">
-                                                {new Date(order.createdAt).toLocaleDateString()}
+                                                {new Date(
+                                                    order.createdAt
+                                                ).toLocaleDateString()}
                                             </span>
                                         </div>
                                     </div>
                                     <div className="pt-2 border-t border-neutral-855 flex justify-end">
-                                        <Link href={`/orders/${order.id}`} className="premium-button-secondary h-8 text-[10px] px-3">
-                                            {role === 'ADMIN' ? 'Manage' : 'Track'}
+                                        <Link
+                                            href={`/orders/${order.id}`}
+                                            className="premium-button-secondary h-8 text-[10px] px-3"
+                                        >
+                                            {role === 'ADMIN'
+                                                ? 'Manage'
+                                                : 'Track'}
                                         </Link>
                                     </div>
                                 </div>
@@ -381,9 +512,9 @@ export default function OrdersPage() {
                     </>
                 ) : (
                     /* Search Empty State primitive */
-                    <EmptyState 
-                        icon={Package} 
-                        title="No deliveries found" 
+                    <EmptyState
+                        icon={Package}
+                        title="No deliveries found"
                         description="Try searching by Order ID, recipient address, customer credentials, or assigned driver names."
                         action={
                             <button

@@ -11,7 +11,10 @@ export async function GET(
     const session = await auth()
     if (!session || !session.user || !session.user.id) {
         return NextResponse.json(
-            { success: false, error: { code: 'UNAUTHENTICATED', message: 'Auth required' } },
+            {
+                success: false,
+                error: { code: 'UNAUTHENTICATED', message: 'Auth required' },
+            },
             { status: 401 }
         )
     }
@@ -21,18 +24,31 @@ export async function GET(
         const order = await orderService.getOrderDetail(id)
         if (!order) {
             return NextResponse.json(
-                { success: false, error: { code: 'NOT_FOUND', message: 'Order not found' } },
+                {
+                    success: false,
+                    error: { code: 'NOT_FOUND', message: 'Order not found' },
+                },
                 { status: 404 }
             )
         }
 
         // Access check
-        if (session.user.role !== 'ADMIN' && order.customerId !== session.user.id) {
-            const { findAgentByUserId } = await import('@/lib/queries/agents/select')
+        if (
+            session.user.role !== 'ADMIN' &&
+            order.customerId !== session.user.id
+        ) {
+            const { findAgentByUserId } =
+                await import('@/lib/queries/agents/select')
             const agent = await findAgentByUserId(session.user.id)
             if (!agent || order.agentId !== agent.id) {
                 return NextResponse.json(
-                    { success: false, error: { code: 'UNAUTHORIZED', message: 'Access denied' } },
+                    {
+                        success: false,
+                        error: {
+                            code: 'UNAUTHORIZED',
+                            message: 'Access denied',
+                        },
+                    },
                     { status: 403 }
                 )
             }
@@ -42,7 +58,10 @@ export async function GET(
         return NextResponse.json({ success: true, data: history })
     } catch (err: any) {
         return NextResponse.json(
-            { success: false, error: { code: 'INTERNAL_SERVER_ERROR', message: err.message } },
+            {
+                success: false,
+                error: { code: 'INTERNAL_SERVER_ERROR', message: err.message },
+            },
             { status: 500 }
         )
     }

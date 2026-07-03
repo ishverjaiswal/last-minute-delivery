@@ -13,7 +13,10 @@ export const findHistoryByOrderId = async (orderId: string) => {
             createdAt: orderStatusHistoryTable.createdAt,
         })
         .from(orderStatusHistoryTable)
-        .leftJoin(usersTable, eq(orderStatusHistoryTable.changedById, usersTable.id))
+        .leftJoin(
+            usersTable,
+            eq(orderStatusHistoryTable.changedById, usersTable.id)
+        )
         .where(eq(orderStatusHistoryTable.orderId, orderId))
         .orderBy(desc(orderStatusHistoryTable.createdAt))
 }

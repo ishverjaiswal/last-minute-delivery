@@ -181,8 +181,9 @@ export const deliveryAgentProfilesTable = pgTable('delivery_agent_profile', {
         .references(() => usersTable.id, { onDelete: 'cascade' })
         .unique(),
     phone: text('phone').notNull(),
-    assignedZoneId: text('assignedZoneId')
-        .references(() => zonesTable.id, { onDelete: 'set null' }),
+    assignedZoneId: text('assignedZoneId').references(() => zonesTable.id, {
+        onDelete: 'set null',
+    }),
     availability: boolean('availability').default(true).notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
 })
@@ -217,12 +218,15 @@ export const ordersTable = pgTable('order', {
     rateCardId: text('rateCardId')
         .notNull()
         .references(() => rateCardsTable.id),
-    agentId: text('agentId')
-        .references(() => deliveryAgentProfilesTable.id, { onDelete: 'set null' }),
+    agentId: text('agentId').references(() => deliveryAgentProfilesTable.id, {
+        onDelete: 'set null',
+    }),
     status: text('status').notNull(),
     price: doublePrecision('price').notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
-    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(() => new Date()),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
+        () => new Date()
+    ),
 })
 
 export const orderStatusHistoryTable = pgTable('order_status_history', {
@@ -233,8 +237,9 @@ export const orderStatusHistoryTable = pgTable('order_status_history', {
         .notNull()
         .references(() => ordersTable.id, { onDelete: 'cascade' }),
     status: text('status').notNull(),
-    changedById: text('changedById')
-        .references(() => usersTable.id, { onDelete: 'set null' }),
+    changedById: text('changedById').references(() => usersTable.id, {
+        onDelete: 'set null',
+    }),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
 })
 
@@ -249,21 +254,27 @@ export const deliveryOtpsTable = pgTable('delivery_otp', {
     expiresAt: timestamp('expiresAt', { mode: 'date' }).notNull(),
     verified: boolean('verified').default(false).notNull(),
     verifiedAt: timestamp('verifiedAt', { mode: 'date' }),
-    verifiedBy: text('verifiedBy')
-        .references(() => usersTable.id, { onDelete: 'set null' }),
+    verifiedBy: text('verifiedBy').references(() => usersTable.id, {
+        onDelete: 'set null',
+    }),
     attemptCount: integer('attemptCount').default(0).notNull(),
     resentCount: integer('resentCount').default(0).notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
-    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(() => new Date()),
-    createdBy: text('createdBy')
-        .references(() => usersTable.id, { onDelete: 'set null' }),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
+        () => new Date()
+    ),
+    createdBy: text('createdBy').references(() => usersTable.id, {
+        onDelete: 'set null',
+    }),
 })
 
 export type InsertZone = typeof zonesTable.$inferInsert
 export type SelectZone = typeof zonesTable.$inferSelect
 
-export type InsertDeliveryAgentProfile = typeof deliveryAgentProfilesTable.$inferInsert
-export type SelectDeliveryAgentProfile = typeof deliveryAgentProfilesTable.$inferSelect
+export type InsertDeliveryAgentProfile =
+    typeof deliveryAgentProfilesTable.$inferInsert
+export type SelectDeliveryAgentProfile =
+    typeof deliveryAgentProfilesTable.$inferSelect
 
 export type InsertRateCard = typeof rateCardsTable.$inferInsert
 export type SelectRateCard = typeof rateCardsTable.$inferSelect
@@ -271,9 +282,10 @@ export type SelectRateCard = typeof rateCardsTable.$inferSelect
 export type InsertOrder = typeof ordersTable.$inferInsert
 export type SelectOrder = typeof ordersTable.$inferSelect
 
-export type InsertOrderStatusHistory = typeof orderStatusHistoryTable.$inferInsert
-export type SelectOrderStatusHistory = typeof orderStatusHistoryTable.$inferSelect
+export type InsertOrderStatusHistory =
+    typeof orderStatusHistoryTable.$inferInsert
+export type SelectOrderStatusHistory =
+    typeof orderStatusHistoryTable.$inferSelect
 
 export type InsertDeliveryOtp = typeof deliveryOtpsTable.$inferInsert
 export type SelectDeliveryOtp = typeof deliveryOtpsTable.$inferSelect
-

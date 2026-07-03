@@ -25,12 +25,18 @@ const HowItWorks = () => {
     ]
 
     return (
-        <section id="how-it-works" className="w-full bg-black py-24 text-white border-t border-neutral-900">
+        <section
+            id="how-it-works"
+            className="w-full bg-black py-24 text-white border-t border-neutral-900"
+        >
             <div className="container mx-auto px-6 max-w-5xl space-y-16">
                 <div className="text-center space-y-3">
-                    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">How It Works</h2>
+                    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
+                        How It Works
+                    </h2>
                     <p className="text-neutral-400 text-sm md:text-base max-w-xl mx-auto">
-                        A seamless, automated dispatch lifecycle from user booking to driver delivery.
+                        A seamless, automated dispatch lifecycle from user
+                        booking to driver delivery.
                     </p>
                 </div>
 
@@ -41,8 +47,12 @@ const HowItWorks = () => {
                                 STEP {step.num}
                             </div>
                             <div className="space-y-2">
-                                <h3 className="text-lg font-bold tracking-tight text-neutral-200">{step.title}</h3>
-                                <p className="text-xs text-neutral-400 leading-relaxed">{step.desc}</p>
+                                <h3 className="text-lg font-bold tracking-tight text-neutral-200">
+                                    {step.title}
+                                </h3>
+                                <p className="text-xs text-neutral-400 leading-relaxed">
+                                    {step.desc}
+                                </p>
                             </div>
                         </div>
                     ))}

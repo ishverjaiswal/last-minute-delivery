@@ -9,13 +9,19 @@ export async function GET() {
     const session = await auth()
     if (!session || !session.user) {
         return NextResponse.json(
-            { success: false, error: { code: 'UNAUTHENTICATED', message: 'Auth required' } },
+            {
+                success: false,
+                error: { code: 'UNAUTHENTICATED', message: 'Auth required' },
+            },
             { status: 401 }
         )
     }
     if (session.user.role !== 'ADMIN') {
         return NextResponse.json(
-            { success: false, error: { code: 'UNAUTHORIZED', message: 'Admin only' } },
+            {
+                success: false,
+                error: { code: 'UNAUTHORIZED', message: 'Admin only' },
+            },
             { status: 403 }
         )
     }
@@ -25,7 +31,10 @@ export async function GET() {
         return NextResponse.json({ success: true, data: rateCards })
     } catch (err: any) {
         return NextResponse.json(
-            { success: false, error: { code: 'INTERNAL_SERVER_ERROR', message: err.message } },
+            {
+                success: false,
+                error: { code: 'INTERNAL_SERVER_ERROR', message: err.message },
+            },
             { status: 500 }
         )
     }
@@ -35,13 +44,19 @@ export async function POST(request: Request) {
     const session = await auth()
     if (!session || !session.user) {
         return NextResponse.json(
-            { success: false, error: { code: 'UNAUTHENTICATED', message: 'Auth required' } },
+            {
+                success: false,
+                error: { code: 'UNAUTHENTICATED', message: 'Auth required' },
+            },
             { status: 401 }
         )
     }
     if (session.user.role !== 'ADMIN') {
         return NextResponse.json(
-            { success: false, error: { code: 'UNAUTHORIZED', message: 'Admin only' } },
+            {
+                success: false,
+                error: { code: 'UNAUTHORIZED', message: 'Admin only' },
+            },
             { status: 403 }
         )
     }
@@ -51,7 +66,14 @@ export async function POST(request: Request) {
         const parsed = createRateCardSchema.safeParse(body)
         if (!parsed.success) {
             return NextResponse.json(
-                { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid fields', details: parsed.error.flatten() } },
+                {
+                    success: false,
+                    error: {
+                        code: 'VALIDATION_ERROR',
+                        message: 'Invalid fields',
+                        details: parsed.error.flatten(),
+                    },
+                },
                 { status: 400 }
             )
         }
@@ -60,7 +82,10 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, data: newRateCard })
     } catch (err: any) {
         return NextResponse.json(
-            { success: false, error: { code: 'INTERNAL_SERVER_ERROR', message: err.message } },
+            {
+                success: false,
+                error: { code: 'INTERNAL_SERVER_ERROR', message: err.message },
+            },
             { status: 500 }
         )
     }

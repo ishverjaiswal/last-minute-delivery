@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import React, { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
@@ -37,7 +37,12 @@ interface LoginFormProps {
     isModal?: boolean
 }
 
-export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: LoginFormProps) {
+export function LoginForm({
+    title,
+    subtitle,
+    buttonLabel,
+    isModal = false,
+}: LoginFormProps) {
     const router = useRouter()
     const [showPassword, setShowPassword] = useState(false)
     const [isPending, startTransition] = useTransition()
@@ -123,10 +128,10 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
     const handleDemoLogin = (email: string, roleName: string) => {
         if (isPending) return
         setLoadingRole(roleName)
-        
+
         let targetEmail = email
         let targetPassword = 'password123'
-        
+
         if (roleName === 'CUSTOMER') {
             targetEmail = DEMO_DATA.customerLogin.email
             targetPassword = DEMO_DATA.customerLogin.password
@@ -144,7 +149,7 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
         const demoValues: LoginValues = {
             email: targetEmail,
             password: targetPassword,
-            twoFactorCode: ''
+            twoFactorCode: '',
         }
         authenticate(demoValues)
     }
@@ -160,12 +165,12 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
     const submitLabel = buttonLabel ?? 'Log In'
 
     return (
-        <div className={cn(
-            "w-full max-w-md mx-auto relative text-white",
-            isModal
-                ? "bg-transparent p-0"
-                : "premium-card"
-        )}>
+        <div
+            className={cn(
+                'w-full max-w-md mx-auto relative text-white',
+                isModal ? 'bg-transparent p-0' : 'premium-card'
+            )}
+        >
             {!isModal && (
                 <button
                     onClick={handleClose}
@@ -181,9 +186,7 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                 <h2 className="text-xl font-bold tracking-tight text-neutral-200">
                     {title}
                 </h2>
-                <p className="mt-2 text-xs text-neutral-400">
-                    {subtitle}
-                </p>
+                <p className="mt-2 text-xs text-neutral-400">{subtitle}</p>
             </div>
 
             <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -193,8 +196,12 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                         control={form.control}
                         render={({ field, fieldState }) => (
                             <div className="premium-form-group">
-                                <Label htmlFor="twoFactorCode" className="premium-form-label">
-                                    Two-Factor Code <span className="text-red-500">*</span>
+                                <Label
+                                    htmlFor="twoFactorCode"
+                                    className="premium-form-label"
+                                >
+                                    Two-Factor Code{' '}
+                                    <span className="text-red-500">*</span>
                                 </Label>
                                 <Input
                                     id="twoFactorCode"
@@ -206,7 +213,9 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                                     disabled={isPending}
                                 />
                                 {fieldState.invalid && (
-                                    <p className="premium-form-error">{fieldState.error?.message}</p>
+                                    <p className="premium-form-error">
+                                        {fieldState.error?.message}
+                                    </p>
                                 )}
                             </div>
                         )}
@@ -219,8 +228,12 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <div className="premium-form-group">
-                                    <Label htmlFor="email" className="premium-form-label">
-                                        Email Address <span className="text-red-500">*</span>
+                                    <Label
+                                        htmlFor="email"
+                                        className="premium-form-label"
+                                    >
+                                        Email Address{' '}
+                                        <span className="text-red-500">*</span>
                                     </Label>
                                     <Input
                                         id="email"
@@ -232,7 +245,9 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                                         disabled={isPending}
                                     />
                                     {fieldState.invalid && (
-                                        <p className="premium-form-error">{fieldState.error?.message}</p>
+                                        <p className="premium-form-error">
+                                            {fieldState.error?.message}
+                                        </p>
                                     )}
                                 </div>
                             )}
@@ -243,8 +258,14 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                             render={({ field, fieldState }) => (
                                 <div className="premium-form-group">
                                     <div className="flex justify-between items-center">
-                                        <Label htmlFor="password" className="premium-form-label">
-                                            Password <span className="text-red-500">*</span>
+                                        <Label
+                                            htmlFor="password"
+                                            className="premium-form-label"
+                                        >
+                                            Password{' '}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
                                         </Label>
                                         <Link
                                             href="/reset-password"
@@ -257,7 +278,11 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                                         <Input
                                             id="password"
                                             placeholder="••••••••"
-                                            type={showPassword ? 'text' : 'password'}
+                                            type={
+                                                showPassword
+                                                    ? 'text'
+                                                    : 'password'
+                                            }
                                             {...field}
                                             aria-invalid={fieldState.invalid}
                                             autoComplete="current-password"
@@ -266,7 +291,9 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                                         />
                                         <button
                                             type="button"
-                                            onClick={() => setShowPassword(!showPassword)}
+                                            onClick={() =>
+                                                setShowPassword(!showPassword)
+                                            }
                                             className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-neutral-500 hover:text-neutral-200 cursor-pointer"
                                         >
                                             {showPassword ? (
@@ -277,7 +304,9 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                                         </button>
                                     </div>
                                     {fieldState.invalid && (
-                                        <p className="premium-form-error">{fieldState.error?.message}</p>
+                                        <p className="premium-form-error">
+                                            {fieldState.error?.message}
+                                        </p>
                                     )}
                                 </div>
                             )}
@@ -299,41 +328,63 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                             <button
                                 type="button"
                                 disabled={isPending}
-                                onClick={() => handleDemoLogin(DEMO_DATA.customerLogin.email, 'CUSTOMER')}
+                                onClick={() =>
+                                    handleDemoLogin(
+                                        DEMO_DATA.customerLogin.email,
+                                        'CUSTOMER'
+                                    )
+                                }
                                 className="premium-button-secondary text-xs h-8 justify-center select-none"
                             >
-                                {(isPending && loadingRole === 'CUSTOMER') ? (
+                                {isPending && loadingRole === 'CUSTOMER' ? (
                                     <span className="flex items-center gap-1.5">
                                         <span className="w-3.5 h-3.5 border-2 border-indigo-400 border-t-transparent animate-spin rounded-full" />
                                         Customer...
                                     </span>
-                                ) : 'Use Demo Customer'}
+                                ) : (
+                                    'Use Demo Customer'
+                                )}
                             </button>
                             <button
                                 type="button"
                                 disabled={isPending}
-                                onClick={() => handleDemoLogin(DEMO_DATA.adminLogin.email, 'ADMIN')}
+                                onClick={() =>
+                                    handleDemoLogin(
+                                        DEMO_DATA.adminLogin.email,
+                                        'ADMIN'
+                                    )
+                                }
                                 className="premium-button-secondary text-xs h-8 justify-center select-none"
                             >
-                                {(isPending && loadingRole === 'ADMIN') ? (
+                                {isPending && loadingRole === 'ADMIN' ? (
                                     <span className="flex items-center gap-1.5">
                                         <span className="w-3.5 h-3.5 border-2 border-indigo-400 border-t-transparent animate-spin rounded-full" />
                                         Admin...
                                     </span>
-                                ) : 'Use Demo Admin'}
+                                ) : (
+                                    'Use Demo Admin'
+                                )}
                             </button>
                             <button
                                 type="button"
                                 disabled={isPending}
-                                onClick={() => handleDemoLogin(DEMO_DATA.agentLogin.email, 'DELIVERY_AGENT')}
+                                onClick={() =>
+                                    handleDemoLogin(
+                                        DEMO_DATA.agentLogin.email,
+                                        'DELIVERY_AGENT'
+                                    )
+                                }
                                 className="premium-button-secondary text-xs h-8 justify-center select-none"
                             >
-                                {(isPending && loadingRole === 'DELIVERY_AGENT') ? (
+                                {isPending &&
+                                loadingRole === 'DELIVERY_AGENT' ? (
                                     <span className="flex items-center gap-1.5">
                                         <span className="w-3.5 h-3.5 border-2 border-indigo-400 border-t-transparent animate-spin rounded-full" />
                                         Driver...
                                     </span>
-                                ) : 'Use Demo Delivery Agent'}
+                                ) : (
+                                    'Use Demo Delivery Agent'
+                                )}
                             </button>
                         </div>
                     </div>
@@ -349,7 +400,9 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
                             <span className="w-4 h-4 border-2 border-neutral-900 border-t-transparent animate-spin rounded-full" />
                             Authenticating...
                         </span>
-                    ) : submitLabel}
+                    ) : (
+                        submitLabel
+                    )}
                 </button>
 
                 <div className="border-t border-neutral-850 pt-4 flex gap-3 justify-center">
@@ -382,8 +435,13 @@ export function LoginForm({ title, subtitle, buttonLabel, isModal = false }: Log
 
             <div className="mt-6 text-center text-[10px] text-neutral-500 leading-normal">
                 By continuing, you agree to our{' '}
-                <a href="/terms" className="text-indigo-400 hover:underline">Terms &amp; Conditions</a> and{' '}
-                <a href="/privacy" className="text-indigo-400 hover:underline">Privacy Policy</a>
+                <a href="/terms" className="text-indigo-400 hover:underline">
+                    Terms &amp; Conditions
+                </a>{' '}
+                and{' '}
+                <a href="/privacy" className="text-indigo-400 hover:underline">
+                    Privacy Policy
+                </a>
             </div>
 
             <div className="mt-4 text-center text-xs text-neutral-400">

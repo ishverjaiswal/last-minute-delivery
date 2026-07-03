@@ -7,6 +7,9 @@ export const findAllZones = async () => {
 }
 
 export const findZoneById = async (id: string) => {
-    const [zone] = await db.select().from(zonesTable).where(eq(zonesTable.id, id))
+    const [zone] = await db
+        .select()
+        .from(zonesTable)
+        .where(eq(zonesTable.id, id))
     return zone || null
 }

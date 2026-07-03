@@ -1,9 +1,20 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
 
-export function PageSkeleton({ children, className }: { children?: React.ReactNode; className?: string }) {
+export function PageSkeleton({
+    children,
+    className,
+}: {
+    children?: React.ReactNode
+    className?: string
+}) {
     return (
-        <div className={cn('w-full max-w-6xl space-y-6 px-4 text-white', className)}>
+        <div
+            className={cn(
+                'w-full max-w-6xl space-y-6 px-4 text-white',
+                className
+            )}
+        >
             {children}
         </div>
     )

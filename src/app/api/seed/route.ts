@@ -7,7 +7,7 @@ import {
     deliveryAgentProfilesTable,
     ordersTable,
     orderStatusHistoryTable,
-    UserRole
+    UserRole,
 } from '@/lib/dbconfig/schema'
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
@@ -38,7 +38,7 @@ export async function GET() {
             zoneId: kanpurZone.id,
             minWeight: 0,
             maxWeight: 100,
-            basePrice: 15.00,
+            basePrice: 15.0,
         })
 
         // 3. Create default Delhi Zone
@@ -57,7 +57,7 @@ export async function GET() {
             zoneId: delhiZone.id,
             minWeight: 0,
             maxWeight: 100,
-            basePrice: 12.00,
+            basePrice: 12.0,
         })
 
         // 5. Hash password
@@ -85,14 +85,17 @@ export async function GET() {
         })
 
         // Delivery Agent (pre-registered profile)
-        const [agentUser] = await db.insert(usersTable).values({
-            id: 'd05705e8-5d2d-411a-8b8a-115f2066fa63',
-            name: 'Demo Agent',
-            email: 'agent@lastmile.com',
-            password: hashedPassword,
-            role: UserRole.DELIVERY_AGENT,
-            emailVerified: new Date(),
-        }).returning()
+        const [agentUser] = await db
+            .insert(usersTable)
+            .values({
+                id: 'd05705e8-5d2d-411a-8b8a-115f2066fa63',
+                name: 'Demo Agent',
+                email: 'agent@lastmile.com',
+                password: hashedPassword,
+                role: UserRole.DELIVERY_AGENT,
+                emailVerified: new Date(),
+            })
+            .returning()
 
         await db.insert(deliveryAgentProfilesTable).values({
             userId: agentUser.id,
@@ -113,11 +116,15 @@ export async function GET() {
 
         return NextResponse.json({
             success: true,
-            message: 'Database seeded with default zones, rate cards, and demo users successfully.',
+            message:
+                'Database seeded with default zones, rate cards, and demo users successfully.',
         })
     } catch (err: any) {
         return NextResponse.json(
-            { success: false, error: { code: 'INTERNAL_SERVER_ERROR', message: err.message } },
+            {
+                success: false,
+                error: { code: 'INTERNAL_SERVER_ERROR', message: err.message },
+            },
             { status: 500 }
         )
     }

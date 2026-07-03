@@ -1,11 +1,19 @@
 import { createAgentProfile } from '@/lib/queries/agents/insert'
-import { findAllAgents, findAgentById, findAgentByUserId } from '@/lib/queries/agents/select'
+import {
+    findAllAgents,
+    findAgentById,
+    findAgentByUserId,
+} from '@/lib/queries/agents/select'
 import { updateAgentProfile } from '@/lib/queries/agents/update'
 import { updateUserById } from '@/lib/queries/users/update'
 import { UserRole } from '@/lib/dbconfig/schema'
 
 export const agentService = {
-    registerAgent: async (userId: string, phone: string, assignedZoneId?: string | null) => {
+    registerAgent: async (
+        userId: string,
+        phone: string,
+        assignedZoneId?: string | null
+    ) => {
         // Double check if profile exists
         const existing = await findAgentByUserId(userId)
         if (existing) {
@@ -36,7 +44,10 @@ export const agentService = {
         return updateAgentProfile(id, { availability })
     },
 
-    updateAgentProfileZone: async (id: string, assignedZoneId: string | null) => {
+    updateAgentProfileZone: async (
+        id: string,
+        assignedZoneId: string | null
+    ) => {
         return updateAgentProfile(id, { assignedZoneId })
     },
 }

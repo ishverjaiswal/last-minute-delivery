@@ -4,14 +4,29 @@ import React, { forwardRef } from 'react'
 import { Search, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-export interface SearchInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+export interface SearchInputProps extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    'type'
+> {
     onClear?: () => void
     containerClassName?: string
 }
 
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
-    ({ value, onChange, onClear, placeholder = 'Search…', className, containerClassName, ...props }, ref) => {
-        const hasValue = typeof value === 'string' ? value.length > 0 : Boolean(value)
+    (
+        {
+            value,
+            onChange,
+            onClear,
+            placeholder = 'Search…',
+            className,
+            containerClassName,
+            ...props
+        },
+        ref
+    ) => {
+        const hasValue =
+            typeof value === 'string' ? value.length > 0 : Boolean(value)
 
         return (
             <div className={cn('relative flex-1', containerClassName)}>

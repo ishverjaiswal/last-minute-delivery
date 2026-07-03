@@ -11,7 +11,10 @@ export async function GET(
     const session = await auth()
     if (!session || !session.user || !session.user.id) {
         return NextResponse.json(
-            { success: false, error: { code: 'UNAUTHENTICATED', message: 'Auth required' } },
+            {
+                success: false,
+                error: { code: 'UNAUTHENTICATED', message: 'Auth required' },
+            },
             { status: 401 }
         )
     }
@@ -21,7 +24,10 @@ export async function GET(
         const order = await orderService.getOrderDetail(id)
         if (!order) {
             return NextResponse.json(
-                { success: false, error: { code: 'NOT_FOUND', message: 'Order not found' } },
+                {
+                    success: false,
+                    error: { code: 'NOT_FOUND', message: 'Order not found' },
+                },
                 { status: 404 }
             )
         }
@@ -43,13 +49,23 @@ export async function GET(
         }
 
         // Access check
-        if (session.user.role !== 'ADMIN' && order.customerId !== session.user.id) {
+        if (
+            session.user.role !== 'ADMIN' &&
+            order.customerId !== session.user.id
+        ) {
             // Check if it's assigned to this courier agent
-            const { findAgentByUserId } = await import('@/lib/queries/agents/select')
+            const { findAgentByUserId } =
+                await import('@/lib/queries/agents/select')
             const agent = await findAgentByUserId(session.user.id)
             if (!agent || order.agentId !== agent.id) {
                 return NextResponse.json(
-                    { success: false, error: { code: 'UNAUTHORIZED', message: 'Access denied' } },
+                    {
+                        success: false,
+                        error: {
+                            code: 'UNAUTHORIZED',
+                            message: 'Access denied',
+                        },
+                    },
                     { status: 403 }
                 )
             }
@@ -58,7 +74,10 @@ export async function GET(
         return NextResponse.json({ success: true, data: orderWithPod })
     } catch (err: any) {
         return NextResponse.json(
-            { success: false, error: { code: 'INTERNAL_SERVER_ERROR', message: err.message } },
+            {
+                success: false,
+                error: { code: 'INTERNAL_SERVER_ERROR', message: err.message },
+            },
             { status: 500 }
         )
     }
@@ -71,7 +90,10 @@ export async function PATCH(
     const session = await auth()
     if (!session || !session.user || !session.user.id) {
         return NextResponse.json(
-            { success: false, error: { code: 'UNAUTHENTICATED', message: 'Auth required' } },
+            {
+                success: false,
+                error: { code: 'UNAUTHENTICATED', message: 'Auth required' },
+            },
             { status: 401 }
         )
     }
@@ -82,7 +104,14 @@ export async function PATCH(
         const parsed = updateOrderSchema.safeParse(body)
         if (!parsed.success) {
             return NextResponse.json(
-                { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid fields', details: parsed.error.flatten() } },
+                {
+                    success: false,
+                    error: {
+                        code: 'VALIDATION_ERROR',
+                        message: 'Invalid fields',
+                        details: parsed.error.flatten(),
+                    },
+                },
                 { status: 400 }
             )
         }
@@ -94,16 +123,27 @@ export async function PATCH(
         if (agentId !== undefined) {
             if (session.user.role !== 'ADMIN') {
                 return NextResponse.json(
-                    { success: false, error: { code: 'UNAUTHORIZED', message: 'Admin only for driver assignment' } },
+                    {
+                        success: false,
+                        error: {
+                            code: 'UNAUTHORIZED',
+                            message: 'Admin only for driver assignment',
+                        },
+                    },
                     { status: 403 }
                 )
             }
             if (agentId === null) {
                 // unassigning driver
-                const { updateOrder } = await import('@/lib/queries/orders/update')
+                const { updateOrder } =
+                    await import('@/lib/queries/orders/update')
                 updatedOrder = await updateOrder(id, { agentId: null })
             } else {
-                updatedOrder = await orderService.assignCourier(id, agentId, session.user.id)
+                updatedOrder = await orderService.assignCourier(
+                    id,
+                    agentId,
+                    session.user.id
+                )
             }
         }
 
@@ -113,38 +153,80 @@ export async function PATCH(
             const order = await orderService.getOrderDetail(id)
             if (!order) {
                 return NextResponse.json(
-                    { success: false, error: { code: 'NOT_FOUND', message: 'Order not found' } },
+                    {
+                        success: false,
+                        error: {
+                            code: 'NOT_FOUND',
+                            message: 'Order not found',
+                        },
+                    },
                     { status: 404 }
                 )
             }
 
             if (session.user.role === 'ADMIN') {
-                updatedOrder = await orderService.updateStatus(id, status, session.user.id)
+                updatedOrder = await orderService.updateStatus(
+                    id,
+                    status,
+                    session.user.id
+                )
             } else if (session.user.role === 'DELIVERY_AGENT') {
                 // Check if this order is assigned to the driver
-                const { findAgentByUserId } = await import('@/lib/queries/agents/select')
+                const { findAgentByUserId } =
+                    await import('@/lib/queries/agents/select')
                 const agent = await findAgentByUserId(session.user.id)
                 if (!agent || order.agentId !== agent.id) {
                     return NextResponse.json(
-                        { success: false, error: { code: 'UNAUTHORIZED', message: 'Access denied: not your assigned order' } },
+                        {
+                            success: false,
+                            error: {
+                                code: 'UNAUTHORIZED',
+                                message:
+                                    'Access denied: not your assigned order',
+                            },
+                        },
                         { status: 403 }
                     )
                 }
 
-                updatedOrder = await orderService.updateStatus(id, status, session.user.id)
+                updatedOrder = await orderService.updateStatus(
+                    id,
+                    status,
+                    session.user.id
+                )
             } else {
                 // Customer cannot change status except maybe cancel
-                if (status === 'CANCELLED' && order.customerId === session.user.id) {
+                if (
+                    status === 'CANCELLED' &&
+                    order.customerId === session.user.id
+                ) {
                     if (order.status !== 'PENDING') {
                         return NextResponse.json(
-                            { success: false, error: { code: 'BUSINESS_RULE_VIOLATION', message: 'Cannot cancel order once processed' } },
+                            {
+                                success: false,
+                                error: {
+                                    code: 'BUSINESS_RULE_VIOLATION',
+                                    message:
+                                        'Cannot cancel order once processed',
+                                },
+                            },
                             { status: 422 }
                         )
                     }
-                    updatedOrder = await orderService.updateStatus(id, 'CANCELLED', session.user.id)
+                    updatedOrder = await orderService.updateStatus(
+                        id,
+                        'CANCELLED',
+                        session.user.id
+                    )
                 } else {
                     return NextResponse.json(
-                        { success: false, error: { code: 'UNAUTHORIZED', message: 'Access denied' } },
+                        {
+                            success: false,
+                            error: {
+                                code: 'UNAUTHORIZED',
+                                message: 'Access denied',
+                            },
+                        },
                         { status: 403 }
                     )
                 }
@@ -154,7 +236,13 @@ export async function PATCH(
         return NextResponse.json({ success: true, data: updatedOrder })
     } catch (err: any) {
         return NextResponse.json(
-            { success: false, error: { code: 'BUSINESS_RULE_VIOLATION', message: err.message } },
+            {
+                success: false,
+                error: {
+                    code: 'BUSINESS_RULE_VIOLATION',
+                    message: err.message,
+                },
+            },
             { status: 422 }
         )
     }

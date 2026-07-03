@@ -4,7 +4,9 @@ import { eq } from 'drizzle-orm'
 
 export const updateOrder = async (
     id: string,
-    data: Partial<Omit<SelectOrder, 'id' | 'customerId' | 'createdAt' | 'updatedAt'>>
+    data: Partial<
+        Omit<SelectOrder, 'id' | 'customerId' | 'createdAt' | 'updatedAt'>
+    >
 ) => {
     const [updated] = await db
         .update(ordersTable)

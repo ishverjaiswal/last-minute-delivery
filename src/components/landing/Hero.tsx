@@ -17,7 +17,9 @@ export const Hero = () => {
 
                 {/* Subheading */}
                 <p className="max-w-2xl mx-auto text-lg md:text-xl text-neutral-400 font-normal leading-relaxed">
-                    Manage parcel deliveries, assign delivery agents, calculate shipping costs, and track every order from booking to delivery through a single unified dashboard.
+                    Manage parcel deliveries, assign delivery agents, calculate
+                    shipping costs, and track every order from booking to
+                    delivery through a single unified dashboard.
                 </p>
 
                 {/* CTAs */}

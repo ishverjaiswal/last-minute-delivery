@@ -26,14 +26,15 @@ export const ProofOfDeliveryService = {
         const { findUserById } = await import('@/lib/queries/users/select')
         const customer = await findUserById(order.customerId)
         const customerEmail = customer?.email || 'demo.customer@example.com'
-        
+
         let customerPhone = '+91 9876543210'
         const phoneMatch = order.deliveryAddress.match(/\((.*?)\)/)
         if (phoneMatch && phoneMatch[1]) {
             customerPhone = phoneMatch[1]
         }
 
-        const activeOtp = await DeliveryOtpRepository.findActiveOtpByOrderId(orderId)
+        const activeOtp =
+            await DeliveryOtpRepository.findActiveOtpByOrderId(orderId)
         const newResendCount = activeOtp ? activeOtp.resentCount + 1 : 0
 
         await DeliveryOtpRepository.invalidateAllOtpsForOrder(orderId)
@@ -51,11 +52,23 @@ export const ProofOfDeliveryService = {
         })
 
         if (newResendCount > 0) {
-            await statusHistoryService.logStatusChange(orderId, 'OTP Resent', agentUserId)
+            await statusHistoryService.logStatusChange(
+                orderId,
+                'OTP Resent',
+                agentUserId
+            )
         } else {
-            await statusHistoryService.logStatusChange(orderId, 'OTP Generated', agentUserId)
+            await statusHistoryService.logStatusChange(
+                orderId,
+                'OTP Generated',
+                agentUserId
+            )
         }
-        await statusHistoryService.logStatusChange(orderId, 'OTP Sent', agentUserId)
+        await statusHistoryService.logStatusChange(
+            orderId,
+            'OTP Sent',
+            agentUserId
+        )
 
         const provider = getNotificationProvider()
         await provider.sendOTP(customerEmail, customerPhone, otp)
@@ -67,10 +80,17 @@ export const ProofOfDeliveryService = {
         }
     },
 
-    verifyDeliveryOtp: async (orderId: string, otp: string, agentUserId: string) => {
-        const activeOtp = await DeliveryOtpRepository.findActiveOtpByOrderId(orderId)
+    verifyDeliveryOtp: async (
+        orderId: string,
+        otp: string,
+        agentUserId: string
+    ) => {
+        const activeOtp =
+            await DeliveryOtpRepository.findActiveOtpByOrderId(orderId)
         if (!activeOtp) {
-            throw new Error('No active verification code found for this order. Please send OTP first.')
+            throw new Error(
+                'No active verification code found for this order. Please send OTP first.'
+            )
         }
 
         if (activeOtp.verified) {
@@ -89,20 +109,35 @@ export const ProofOfDeliveryService = {
 
         const isMatch = await bcrypt.compare(otp, activeOtp.otpHash)
         if (!isMatch) {
-            await DeliveryOtpRepository.incrementAttempts(activeOtp.id, activeOtp.attemptCount)
+            await DeliveryOtpRepository.incrementAttempts(
+                activeOtp.id,
+                activeOtp.attemptCount
+            )
             const remaining = 5 - (activeOtp.attemptCount + 1)
             if (remaining <= 0) {
-                throw new Error('Invalid verification code. Maximum attempts exceeded. Please resend OTP.')
+                throw new Error(
+                    'Invalid verification code. Maximum attempts exceeded. Please resend OTP.'
+                )
             }
-            throw new Error(`Invalid verification code. ${remaining} attempts remaining.`)
+            throw new Error(
+                `Invalid verification code. ${remaining} attempts remaining.`
+            )
         }
 
         await DeliveryOtpRepository.verifyOtp(activeOtp.id, agentUserId)
 
         await updateOrder(orderId, { status: 'DELIVERED' })
 
-        await statusHistoryService.logStatusChange(orderId, 'OTP Verified', agentUserId)
-        await statusHistoryService.logStatusChange(orderId, 'Delivery Completed', agentUserId)
+        await statusHistoryService.logStatusChange(
+            orderId,
+            'OTP Verified',
+            agentUserId
+        )
+        await statusHistoryService.logStatusChange(
+            orderId,
+            'Delivery Completed',
+            agentUserId
+        )
 
         return { success: true }
     },

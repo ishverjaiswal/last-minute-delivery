@@ -1,5 +1,10 @@
 import { createOrder } from '@/lib/queries/orders/insert'
-import { findAllOrders, findOrderById, findOrdersByCustomerId, findOrdersByAgentId } from '@/lib/queries/orders/select'
+import {
+    findAllOrders,
+    findOrderById,
+    findOrdersByCustomerId,
+    findOrdersByAgentId,
+} from '@/lib/queries/orders/select'
 import { updateOrder } from '@/lib/queries/orders/update'
 import { billingService } from './billing.service'
 import { statusHistoryService } from './status-history.service'
@@ -15,7 +20,10 @@ export const orderService = {
         }
     ) => {
         // Calculate price and find corresponding zone & rate card
-        const priceInfo = await billingService.calculateOrderPrice(payload.deliveryPinCode, payload.weight)
+        const priceInfo = await billingService.calculateOrderPrice(
+            payload.deliveryPinCode,
+            payload.weight
+        )
 
         // Create order in DB with PENDING status
         const order = await createOrder({
@@ -31,7 +39,11 @@ export const orderService = {
         })
 
         // Log PENDING state to history
-        await statusHistoryService.logStatusChange(order.id, 'PENDING', customerId)
+        await statusHistoryService.logStatusChange(
+            order.id,
+            'PENDING',
+            customerId
+        )
 
         return order
     },
@@ -41,7 +53,8 @@ export const orderService = {
             return findAllOrders()
         } else if (role === 'DELIVERY_AGENT') {
             // Find driver profile first
-            const { findAgentByUserId } = await import('@/lib/queries/agents/select')
+            const { findAgentByUserId } =
+                await import('@/lib/queries/agents/select')
             const agent = await findAgentByUserId(userId)
             if (!agent) return []
             return findOrdersByAgentId(agent.id)
@@ -87,13 +100,23 @@ export const orderService = {
         }
 
         // Check valid statuses
-        const validStatuses = ['PENDING', 'CONFIRMED', 'ASSIGNED', 'PICKED_UP', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED']
+        const validStatuses = [
+            'PENDING',
+            'CONFIRMED',
+            'ASSIGNED',
+            'PICKED_UP',
+            'OUT_FOR_DELIVERY',
+            'DELIVERED',
+            'CANCELLED',
+        ]
         if (!validStatuses.includes(status)) {
             throw new Error(`Invalid order status: ${status}`)
         }
 
         if (status === 'DELIVERED') {
-            throw new Error('A parcel can never become DELIVERED unless verified via OTP.')
+            throw new Error(
+                'A parcel can never become DELIVERED unless verified via OTP.'
+            )
         }
 
         const updated = await updateOrder(id, { status })

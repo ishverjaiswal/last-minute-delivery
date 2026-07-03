@@ -21,7 +21,11 @@ export function ActivityTimeline({
     className,
 }: ActivityTimelineProps) {
     if (items.length === 0) {
-        return <p className="py-6 text-center text-xs text-neutral-500">{emptyMessage}</p>
+        return (
+            <p className="py-6 text-center text-xs text-neutral-500">
+                {emptyMessage}
+            </p>
+        )
     }
 
     return (
@@ -40,10 +44,15 @@ export function ActivityTimeline({
                         <div className="flex flex-wrap items-center gap-2">
                             <StatusBadge status={item.status} />
                             {item.actor && (
-                                <span className="text-xs text-neutral-400">by {item.actor}</span>
+                                <span className="text-xs text-neutral-400">
+                                    by {item.actor}
+                                </span>
                             )}
                         </div>
-                        <time className="text-[10px] font-medium text-neutral-500" dateTime={item.timestamp}>
+                        <time
+                            className="text-[10px] font-medium text-neutral-500"
+                            dateTime={item.timestamp}
+                        >
                             {item.timestamp}
                         </time>
                     </div>

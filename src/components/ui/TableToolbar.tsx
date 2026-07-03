@@ -9,7 +9,11 @@ export interface TableToolbarProps {
     className?: string
 }
 
-export function TableToolbar({ children, resultCount, className }: TableToolbarProps) {
+export function TableToolbar({
+    children,
+    resultCount,
+    className,
+}: TableToolbarProps) {
     return (
         <div
             className={cn(
@@ -17,7 +21,9 @@ export function TableToolbar({ children, resultCount, className }: TableToolbarP
                 className
             )}
         >
-            <div className="flex flex-1 flex-col gap-3 md:flex-row md:items-center">{children}</div>
+            <div className="flex flex-1 flex-col gap-3 md:flex-row md:items-center">
+                {children}
+            </div>
             {resultCount !== undefined && (
                 <span
                     className="premium-typo-secondary shrink-0 whitespace-nowrap font-semibold"

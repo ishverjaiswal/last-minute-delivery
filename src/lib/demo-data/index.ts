@@ -10,33 +10,33 @@ export const DEMO_DATA = {
         pin: '209305',
         weight: 2.5,
         packageCategory: 'Clothing',
-        notes: 'Fragile. Handle with care. Please call before delivery.'
+        notes: 'Fragile. Handle with care. Please call before delivery.',
     },
     adminLogin: {
         email: 'admin@lastmile.com',
-        password: 'password123'
+        password: 'password123',
     },
     customerLogin: {
         email: 'customer@lastmile.com',
-        password: 'password123'
+        password: 'password123',
     },
     agentLogin: {
         email: 'agent@lastmile.com',
-        password: 'password123'
+        password: 'password123',
     },
     zone: {
         name: 'West Delhi Zone',
         city: 'New Delhi',
         state: 'Delhi',
-        pinCodes: '110018, 110027, 110058'
+        pinCodes: '110018, 110027, 110058',
     },
     rateCard: {
         minWeight: 1.0,
         maxWeight: 20.0,
-        basePrice: 8.50
+        basePrice: 8.5,
     },
     agent: {
         userId: 'e05705e8-5d2d-411a-8b8a-115f2066fa64',
-        phone: '+91 9999988888'
-    }
+        phone: '+91 9999988888',
+    },
 } as const

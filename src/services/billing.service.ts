@@ -21,10 +21,14 @@ export const billingService = {
         // Get rate cards for this zone
         const rateCards = await findRateCardsByZoneId(matchedZone.id)
         // Find a card where weight is between minWeight and maxWeight
-        const matchedCard = rateCards.find((c) => weight >= c.minWeight && weight <= c.maxWeight)
+        const matchedCard = rateCards.find(
+            (c) => weight >= c.minWeight && weight <= c.maxWeight
+        )
 
         if (!matchedCard) {
-            throw new Error(`No rate card configured for weight ${weight} kg in zone ${matchedZone.name}`)
+            throw new Error(
+                `No rate card configured for weight ${weight} kg in zone ${matchedZone.name}`
+            )
         }
 
         return {

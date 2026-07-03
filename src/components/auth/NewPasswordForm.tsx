@@ -98,12 +98,12 @@ export function NewPasswordForm({
     const submitLabel = buttonLabel ?? 'Reset Password'
 
     return (
-        <div className={cn(
-            "w-full max-w-md mx-auto relative text-white",
-            isModal 
-                ? "bg-transparent p-0" 
-                : "premium-card"
-        )}>
+        <div
+            className={cn(
+                'w-full max-w-md mx-auto relative text-white',
+                isModal ? 'bg-transparent p-0' : 'premium-card'
+            )}
+        >
             {!isModal && (
                 <button
                     onClick={handleClose}
@@ -119,9 +119,7 @@ export function NewPasswordForm({
                 <h2 className="text-xl font-bold tracking-tight text-neutral-200">
                     {title}
                 </h2>
-                <p className="mt-2 text-xs text-neutral-400">
-                    {subtitle}
-                </p>
+                <p className="mt-2 text-xs text-neutral-400">{subtitle}</p>
             </div>
 
             <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -130,7 +128,10 @@ export function NewPasswordForm({
                     control={form.control}
                     render={({ field, fieldState }) => (
                         <div className="premium-form-group">
-                            <Label htmlFor="password" className="premium-form-label">
+                            <Label
+                                htmlFor="password"
+                                className="premium-form-label"
+                            >
                                 Password <span className="text-red-500">*</span>
                             </Label>
                             <div className="relative">
@@ -146,7 +147,9 @@ export function NewPasswordForm({
                                 />
                                 <button
                                     type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
+                                    onClick={() =>
+                                        setShowPassword(!showPassword)
+                                    }
                                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-neutral-500 hover:text-neutral-200 cursor-pointer"
                                 >
                                     {showPassword ? (
@@ -157,7 +160,9 @@ export function NewPasswordForm({
                                 </button>
                             </div>
                             {fieldState.invalid && (
-                                <p className="premium-form-error">{fieldState.error?.message}</p>
+                                <p className="premium-form-error">
+                                    {fieldState.error?.message}
+                                </p>
                             )}
                         </div>
                     )}
@@ -168,14 +173,22 @@ export function NewPasswordForm({
                     control={form.control}
                     render={({ field, fieldState }) => (
                         <div className="premium-form-group">
-                            <Label htmlFor="confirmPassword" className="premium-form-label">
-                                Confirm Password <span className="text-red-500">*</span>
+                            <Label
+                                htmlFor="confirmPassword"
+                                className="premium-form-label"
+                            >
+                                Confirm Password{' '}
+                                <span className="text-red-500">*</span>
                             </Label>
                             <div className="relative">
                                 <Input
                                     id="confirmPassword"
                                     placeholder="••••••••"
-                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    type={
+                                        showConfirmPassword
+                                            ? 'text'
+                                            : 'password'
+                                    }
                                     {...field}
                                     aria-invalid={fieldState.invalid}
                                     autoComplete="new-password"
@@ -184,7 +197,11 @@ export function NewPasswordForm({
                                 />
                                 <button
                                     type="button"
-                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    onClick={() =>
+                                        setShowConfirmPassword(
+                                            !showConfirmPassword
+                                        )
+                                    }
                                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-neutral-500 hover:text-neutral-200 cursor-pointer"
                                 >
                                     {showConfirmPassword ? (
@@ -195,7 +212,9 @@ export function NewPasswordForm({
                                 </button>
                             </div>
                             {fieldState.invalid && (
-                                <p className="premium-form-error">{fieldState.error?.message}</p>
+                                <p className="premium-form-error">
+                                    {fieldState.error?.message}
+                                </p>
                             )}
                         </div>
                     )}
@@ -216,7 +235,9 @@ export function NewPasswordForm({
                             <span className="w-4 h-4 border-2 border-neutral-900 border-t-transparent animate-spin rounded-full" />
                             Resetting Password...
                         </span>
-                    ) : submitLabel}
+                    ) : (
+                        submitLabel
+                    )}
                 </button>
             </form>
 

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 'use client'
 import React, { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
@@ -32,7 +32,12 @@ interface SignupFormProps {
     isModal?: boolean
 }
 
-export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: SignupFormProps) {
+export function SignupForm({
+    title,
+    subtitle,
+    buttonLabel,
+    isModal = false,
+}: SignupFormProps) {
     const router = useRouter()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -76,7 +81,8 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                 )
 
                 const message =
-                    response.data?.message ?? 'Account created successfully. Please check your email to verify.'
+                    response.data?.message ??
+                    'Account created successfully. Please check your email to verify.'
                 setSuccess(message)
             } catch (err) {
                 if (axios.isAxiosError(err)) {
@@ -102,12 +108,12 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
     const submitLabel = buttonLabel ?? 'Sign Up'
 
     return (
-        <div className={cn(
-            "w-full max-w-md mx-auto relative text-white",
-            isModal 
-                ? "bg-transparent p-0" 
-                : "premium-card"
-        )}>
+        <div
+            className={cn(
+                'w-full max-w-md mx-auto relative text-white',
+                isModal ? 'bg-transparent p-0' : 'premium-card'
+            )}
+        >
             {!isModal && (
                 <button
                     onClick={handleClose}
@@ -123,9 +129,7 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                 <h2 className="text-xl font-bold tracking-tight text-neutral-200">
                     {title}
                 </h2>
-                <p className="mt-2 text-xs text-neutral-400">
-                    {subtitle}
-                </p>
+                <p className="mt-2 text-xs text-neutral-400">{subtitle}</p>
             </div>
 
             <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -135,8 +139,12 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                         control={form.control}
                         render={({ field, fieldState }) => (
                             <div className="premium-form-group flex-1">
-                                <Label htmlFor="firstName" className="premium-form-label">
-                                    First Name <span className="text-red-500">*</span>
+                                <Label
+                                    htmlFor="firstName"
+                                    className="premium-form-label"
+                                >
+                                    First Name{' '}
+                                    <span className="text-red-500">*</span>
                                 </Label>
                                 <Input
                                     id="firstName"
@@ -148,7 +156,9 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                                     disabled={isPending}
                                 />
                                 {fieldState.invalid && (
-                                    <p className="premium-form-error">{fieldState.error?.message}</p>
+                                    <p className="premium-form-error">
+                                        {fieldState.error?.message}
+                                    </p>
                                 )}
                             </div>
                         )}
@@ -158,8 +168,12 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                         control={form.control}
                         render={({ field, fieldState }) => (
                             <div className="premium-form-group flex-1">
-                                <Label htmlFor="lastName" className="premium-form-label">
-                                    Last Name <span className="text-red-500">*</span>
+                                <Label
+                                    htmlFor="lastName"
+                                    className="premium-form-label"
+                                >
+                                    Last Name{' '}
+                                    <span className="text-red-500">*</span>
                                 </Label>
                                 <Input
                                     id="lastName"
@@ -171,7 +185,9 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                                     disabled={isPending}
                                 />
                                 {fieldState.invalid && (
-                                    <p className="premium-form-error">{fieldState.error?.message}</p>
+                                    <p className="premium-form-error">
+                                        {fieldState.error?.message}
+                                    </p>
                                 )}
                             </div>
                         )}
@@ -183,8 +199,12 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                     control={form.control}
                     render={({ field, fieldState }) => (
                         <div className="premium-form-group">
-                            <Label htmlFor="email" className="premium-form-label">
-                                Email Address <span className="text-red-500">*</span>
+                            <Label
+                                htmlFor="email"
+                                className="premium-form-label"
+                            >
+                                Email Address{' '}
+                                <span className="text-red-500">*</span>
                             </Label>
                             <Input
                                 id="email"
@@ -196,7 +216,9 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                                 disabled={isPending}
                             />
                             {fieldState.invalid && (
-                                <p className="premium-form-error">{fieldState.error?.message}</p>
+                                <p className="premium-form-error">
+                                    {fieldState.error?.message}
+                                </p>
                             )}
                         </div>
                     )}
@@ -207,7 +229,10 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                     control={form.control}
                     render={({ field, fieldState }) => (
                         <div className="premium-form-group">
-                            <Label htmlFor="password" className="premium-form-label">
+                            <Label
+                                htmlFor="password"
+                                className="premium-form-label"
+                            >
                                 Password <span className="text-red-500">*</span>
                             </Label>
                             <div className="relative">
@@ -223,7 +248,9 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                                 />
                                 <button
                                     type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
+                                    onClick={() =>
+                                        setShowPassword(!showPassword)
+                                    }
                                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-neutral-500 hover:text-neutral-200 cursor-pointer"
                                 >
                                     {showPassword ? (
@@ -234,7 +261,9 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                                 </button>
                             </div>
                             {fieldState.invalid && (
-                                <p className="premium-form-error">{fieldState.error?.message}</p>
+                                <p className="premium-form-error">
+                                    {fieldState.error?.message}
+                                </p>
                             )}
                         </div>
                     )}
@@ -245,14 +274,22 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                     control={form.control}
                     render={({ field, fieldState }) => (
                         <div className="premium-form-group">
-                            <Label htmlFor="confirmPassword" className="premium-form-label">
-                                Confirm Password <span className="text-red-500">*</span>
+                            <Label
+                                htmlFor="confirmPassword"
+                                className="premium-form-label"
+                            >
+                                Confirm Password{' '}
+                                <span className="text-red-500">*</span>
                             </Label>
                             <div className="relative">
                                 <Input
                                     id="confirmPassword"
                                     placeholder="••••••••"
-                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    type={
+                                        showConfirmPassword
+                                            ? 'text'
+                                            : 'password'
+                                    }
                                     {...field}
                                     aria-invalid={fieldState.invalid}
                                     autoComplete="new-password"
@@ -261,7 +298,11 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                                 />
                                 <button
                                     type="button"
-                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    onClick={() =>
+                                        setShowConfirmPassword(
+                                            !showConfirmPassword
+                                        )
+                                    }
                                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-neutral-500 hover:text-neutral-200 cursor-pointer"
                                 >
                                     {showConfirmPassword ? (
@@ -272,7 +313,9 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                                 </button>
                             </div>
                             {fieldState.invalid && (
-                                <p className="premium-form-error">{fieldState.error?.message}</p>
+                                <p className="premium-form-error">
+                                    {fieldState.error?.message}
+                                </p>
                             )}
                         </div>
                     )}
@@ -293,7 +336,9 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
                             <span className="w-4 h-4 border-2 border-neutral-900 border-t-transparent animate-spin rounded-full" />
                             Creating Account...
                         </span>
-                    ) : submitLabel}
+                    ) : (
+                        submitLabel
+                    )}
                 </button>
 
                 <div className="border-t border-neutral-850 pt-4 flex gap-3 justify-center">
@@ -326,8 +371,13 @@ export function SignupForm({ title, subtitle, buttonLabel, isModal = false }: Si
 
             <div className="mt-6 text-center text-[10px] text-neutral-500 leading-normal">
                 By continuing, you agree to our{' '}
-                <a href="/terms" className="text-indigo-400 hover:underline">Terms &amp; Conditions</a> and{' '}
-                <a href="/privacy" className="text-indigo-400 hover:underline">Privacy Policy</a>
+                <a href="/terms" className="text-indigo-400 hover:underline">
+                    Terms &amp; Conditions
+                </a>{' '}
+                and{' '}
+                <a href="/privacy" className="text-indigo-400 hover:underline">
+                    Privacy Policy
+                </a>
             </div>
 
             <div className="mt-4 text-center text-xs text-neutral-400">

@@ -4,7 +4,9 @@ export interface NotificationProvider {
 
 export class DemoNotificationProvider implements NotificationProvider {
     async sendOTP(email: string, phone: string, otp: string): Promise<void> {
-        console.log(`[DEMO NOTIFICATION] OTP for ${email} (${phone}) is: ${otp}`)
+        console.log(
+            `[DEMO NOTIFICATION] OTP for ${email} (${phone}) is: ${otp}`
+        )
     }
 }
 
@@ -13,7 +15,9 @@ export class EmailNotificationProvider implements NotificationProvider {
         const { Resend } = await import('resend')
         const resendApiKey = process.env.RESEND_API_KEY?.trim()
         if (!resendApiKey) {
-            console.warn('RESEND_API_KEY is not configured; skipping email dispatch.')
+            console.warn(
+                'RESEND_API_KEY is not configured; skipping email dispatch.'
+            )
             return
         }
         const resend = new Resend(resendApiKey)

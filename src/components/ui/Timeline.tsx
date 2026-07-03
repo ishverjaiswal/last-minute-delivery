@@ -14,16 +14,25 @@ export interface TimelineProps {
     className?: string
 }
 
-export function Timeline({ steps, currentIndex, isComplete = false, className }: TimelineProps) {
-    const progressWidth =
-        isComplete
-            ? 'calc(100% - 48px)'
-            : currentIndex > 0
-              ? `calc(${(currentIndex / (steps.length - 1)) * 100}% - 48px)`
-              : '0px'
+export function Timeline({
+    steps,
+    currentIndex,
+    isComplete = false,
+    className,
+}: TimelineProps) {
+    const progressWidth = isComplete
+        ? 'calc(100% - 48px)'
+        : currentIndex > 0
+          ? `calc(${(currentIndex / (steps.length - 1)) * 100}% - 48px)`
+          : '0px'
 
     return (
-        <div className={cn('relative flex flex-col items-stretch justify-between gap-6 sm:flex-row sm:items-center', className)}>
+        <div
+            className={cn(
+                'relative flex flex-col items-stretch justify-between gap-6 sm:flex-row sm:items-center',
+                className
+            )}
+        >
             <div className="absolute left-6 right-6 top-4 -z-0 hidden h-[2px] bg-neutral-800 sm:block" />
             <div
                 className="absolute left-6 top-4 -z-0 hidden h-[2px] bg-green-500 transition-all duration-500 sm:block"
@@ -35,14 +44,17 @@ export function Timeline({ steps, currentIndex, isComplete = false, className }:
                 const isStepComplete = idx < currentIndex || isComplete
                 const isCurrent = idx === currentIndex && !isComplete
 
-                let nodeClass = 'border-neutral-800 bg-neutral-950 text-neutral-500'
+                let nodeClass =
+                    'border-neutral-800 bg-neutral-950 text-neutral-500'
                 let labelClass = 'text-neutral-500'
 
                 if (isStepComplete) {
-                    nodeClass = 'border-green-500 bg-green-500/10 text-green-500'
+                    nodeClass =
+                        'border-green-500 bg-green-500/10 text-green-500'
                     labelClass = 'text-green-500 font-bold'
                 } else if (isCurrent) {
-                    nodeClass = 'border-indigo-500 bg-indigo-500/10 text-indigo-400'
+                    nodeClass =
+                        'border-indigo-500 bg-indigo-500/10 text-indigo-400'
                     labelClass = 'text-indigo-400 font-extrabold'
                 }
 
@@ -61,11 +73,18 @@ export function Timeline({ steps, currentIndex, isComplete = false, className }:
                             {isStepComplete ? '✓' : idx + 1}
                         </div>
                         <div className="space-y-0.5 text-left sm:text-center">
-                            <p className={cn('text-[10px] font-bold uppercase tracking-tight transition-colors duration-300', labelClass)}>
+                            <p
+                                className={cn(
+                                    'text-[10px] font-bold uppercase tracking-tight transition-colors duration-300',
+                                    labelClass
+                                )}
+                            >
                                 {step.label}
                             </p>
                             {step.timestamp && (
-                                <p className="text-[10px] font-medium text-neutral-500">{step.timestamp}</p>
+                                <p className="text-[10px] font-medium text-neutral-500">
+                                    {step.timestamp}
+                                </p>
                             )}
                         </div>
                     </div>

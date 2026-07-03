@@ -10,19 +10,28 @@ import { NextResponse } from 'next/server'
 export async function GET() {
     const session = await auth()
     if (!session || !session.user || !session.user.id) {
-        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
+        return NextResponse.json(
+            { success: false, error: 'Unauthorized' },
+            { status: 401 }
+        )
     }
 
     try {
         const agent = await findAgentByUserId(session.user.id)
         if (!agent) {
-            return NextResponse.json({ success: false, error: 'Agent profile not found' }, { status: 404 })
+            return NextResponse.json(
+                { success: false, error: 'Agent profile not found' },
+                { status: 404 }
+            )
         }
 
         // Get zone name if assigned
         let zoneName = 'No Zone Assigned'
         if (agent.assignedZoneId) {
-            const [zone] = await db.select().from(zonesTable).where(eq(zonesTable.id, agent.assignedZoneId))
+            const [zone] = await db
+                .select()
+                .from(zonesTable)
+                .where(eq(zonesTable.id, agent.assignedZoneId))
             if (zone) zoneName = zone.name
         }
 
@@ -33,23 +42,32 @@ export async function GET() {
                 name: session.user.name,
                 email: session.user.email,
                 zoneName,
-            }
+            },
         })
     } catch (err: any) {
-        return NextResponse.json({ success: false, error: err.message }, { status: 500 })
+        return NextResponse.json(
+            { success: false, error: err.message },
+            { status: 500 }
+        )
     }
 }
 
 export async function PATCH(request: Request) {
     const session = await auth()
     if (!session || !session.user || !session.user.id) {
-        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
+        return NextResponse.json(
+            { success: false, error: 'Unauthorized' },
+            { status: 401 }
+        )
     }
 
     try {
         const agent = await findAgentByUserId(session.user.id)
         if (!agent) {
-            return NextResponse.json({ success: false, error: 'Agent profile not found' }, { status: 404 })
+            return NextResponse.json(
+                { success: false, error: 'Agent profile not found' },
+                { status: 404 }
+            )
         }
 
         const body = await request.json()
@@ -59,8 +77,14 @@ export async function PATCH(request: Request) {
             await agentService.toggleAgentAvailability(agent.id, availability)
         }
 
-        return NextResponse.json({ success: true, message: 'Availability status updated successfully.' })
+        return NextResponse.json({
+            success: true,
+            message: 'Availability status updated successfully.',
+        })
     } catch (err: any) {
-        return NextResponse.json({ success: false, error: err.message }, { status: 500 })
+        return NextResponse.json(
+            { success: false, error: err.message },
+            { status: 500 }
+        )
     }
 }

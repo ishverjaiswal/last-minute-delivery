@@ -5,7 +5,10 @@ import type { InsertDeliveryOtp } from '@/lib/dbconfig/schema'
 
 export const DeliveryOtpRepository = {
     createOtp: async (data: InsertDeliveryOtp) => {
-        const [otp] = await db.insert(deliveryOtpsTable).values(data).returning()
+        const [otp] = await db
+            .insert(deliveryOtpsTable)
+            .values(data)
+            .returning()
         return otp
     },
 

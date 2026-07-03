@@ -1,10 +1,16 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
 
-export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+export function Skeleton({
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
-            className={cn('animate-pulse rounded-md bg-neutral-800/60', className)}
+            className={cn(
+                'animate-pulse rounded-md bg-neutral-800/60',
+                className
+            )}
             {...props}
         />
     )
@@ -14,7 +20,10 @@ export function SkeletonMetrics({ count = 4 }: { count?: number }) {
     return (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
             {Array.from({ length: count }).map((_, i) => (
-                <div key={i} className="premium-card flex flex-col justify-between h-20 p-4 space-y-2">
+                <div
+                    key={i}
+                    className="premium-card flex flex-col justify-between h-20 p-4 space-y-2"
+                >
                     <Skeleton className="h-3 w-16" />
                     <div className="flex justify-between items-end">
                         <Skeleton className="h-6 w-10" />
@@ -26,7 +35,13 @@ export function SkeletonMetrics({ count = 4 }: { count?: number }) {
     )
 }
 
-export function SkeletonTable({ rows = 5, cols = 5 }: { rows?: number; cols?: number }) {
+export function SkeletonTable({
+    rows = 5,
+    cols = 5,
+}: {
+    rows?: number
+    cols?: number
+}) {
     return (
         <div className="bg-neutral-900 border border-neutral-850 rounded-xl overflow-hidden w-full">
             <div className="p-5 border-b border-neutral-855 flex justify-between bg-neutral-900/50">
@@ -93,7 +108,10 @@ export function SkeletonDetails() {
                         <Skeleton className="h-4 w-32 border-b border-neutral-850 pb-2" />
                         <div className="flex gap-4">
                             {Array.from({ length: 6 }).map((_, i) => (
-                                <div key={i} className="flex flex-col items-center space-y-2 flex-1">
+                                <div
+                                    key={i}
+                                    className="flex flex-col items-center space-y-2 flex-1"
+                                >
                                     <Skeleton className="h-8 w-8 rounded-full" />
                                     <Skeleton className="h-3 w-12" />
                                 </div>

@@ -20,7 +20,12 @@ export function EmptyState({
 }: EmptyStateProps) {
     return (
         <div className={cn('premium-empty-state', className)} role="status">
-            {Icon && <Icon className="premium-empty-icon mb-2 h-6 w-6 text-neutral-500" aria-hidden="true" />}
+            {Icon && (
+                <Icon
+                    className="premium-empty-icon mb-2 h-6 w-6 text-neutral-500"
+                    aria-hidden="true"
+                />
+            )}
             <h3 className="premium-empty-title">{title}</h3>
             <p className="premium-empty-desc">{description}</p>
             {(action || secondaryAction) && (

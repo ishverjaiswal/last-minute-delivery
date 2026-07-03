@@ -39,7 +39,8 @@ export default function SettingsPage() {
                 session?.user?.role === 'CUSTOMER' ||
                 session?.user?.role === 'DELIVERY_AGENT' ||
                 session?.user?.role === 'ADMIN'
-                    ? (session.user.role as 'CUSTOMER' | 'DELIVERY_AGENT' | 'ADMIN')
+                    ? (session.user.role as
+                          'CUSTOMER' | 'DELIVERY_AGENT' | 'ADMIN')
                     : 'CUSTOMER',
             isTwoFactorEnabled: session?.user?.twoFactorEnabled || false,
             password: '',
@@ -71,7 +72,8 @@ export default function SettingsPage() {
                 } else {
                     setMessage({
                         type: 'error',
-                        text: response.data.error || 'Failed to update settings',
+                        text:
+                            response.data.error || 'Failed to update settings',
                     })
                 }
             } catch (err: unknown) {
@@ -107,19 +109,24 @@ export default function SettingsPage() {
                 description="Manage your logistics profile options, security preferences, and roles."
             />
 
-            {message && <FormAlert variant={message.type} message={message.text} />}
+            {message && (
+                <FormAlert variant={message.type} message={message.text} />
+            )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                
                 {/* 1. Profile Information section */}
                 <div className="premium-card space-y-4">
                     <div className="flex items-center space-x-2 border-b border-neutral-850 pb-2">
                         <User className="w-4 h-4 text-neutral-400" />
-                        <h2 className="premium-tyo-card">Profile Information</h2>
+                        <h2 className="premium-tyo-card">
+                            Profile Information
+                        </h2>
                     </div>
 
                     <div className="premium-form-group">
-                        <label htmlFor="name" className="premium-form-label">Full Name</label>
+                        <label htmlFor="name" className="premium-form-label">
+                            Full Name
+                        </label>
                         <input
                             id="name"
                             {...register('name')}
@@ -128,12 +135,16 @@ export default function SettingsPage() {
                             className="premium-input w-full"
                         />
                         {errors.name && (
-                            <p className="premium-form-error">{errors.name.message}</p>
+                            <p className="premium-form-error">
+                                {errors.name.message}
+                            </p>
                         )}
                     </div>
 
                     <div className="premium-form-group">
-                        <label htmlFor="email" className="premium-form-label">Email Address</label>
+                        <label htmlFor="email" className="premium-form-label">
+                            Email Address
+                        </label>
                         <input
                             id="email"
                             type="email"
@@ -143,7 +154,9 @@ export default function SettingsPage() {
                             className="premium-input w-full"
                         />
                         {errors.email && (
-                            <p className="premium-form-error">{errors.email.message}</p>
+                            <p className="premium-form-error">
+                                {errors.email.message}
+                            </p>
                         )}
                         {session?.user?.isOAuth && (
                             <p className="premium-form-helper">
@@ -153,7 +166,9 @@ export default function SettingsPage() {
                     </div>
 
                     <div className="premium-form-group">
-                        <label htmlFor="role" className="premium-form-label">User Access Role</label>
+                        <label htmlFor="role" className="premium-form-label">
+                            User Access Role
+                        </label>
                         <select
                             id="role"
                             {...register('role')}
@@ -161,15 +176,23 @@ export default function SettingsPage() {
                             className="premium-input w-full h-[2.25rem] bg-neutral-955 text-white font-bold"
                         >
                             <option value="CUSTOMER">Customer Profile</option>
-                            <option value="DELIVERY_AGENT">Delivery Driver</option>
+                            <option value="DELIVERY_AGENT">
+                                Delivery Driver
+                            </option>
                             <option value="ADMIN">Operations Admin</option>
                         </select>
                         {errors.role && (
-                            <p className="premium-form-error">{errors.role.message}</p>
+                            <p className="premium-form-error">
+                                {errors.role.message}
+                            </p>
                         )}
                         <div className="flex items-center gap-2 pt-1.5">
-                            <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Active Role Indicator:</span>
-                            <span className={`premium-badge ${getRoleBadge(currentRole)}`}>
+                            <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
+                                Active Role Indicator:
+                            </span>
+                            <span
+                                className={`premium-badge ${getRoleBadge(currentRole)}`}
+                            >
                                 {currentRole}
                             </span>
                         </div>
@@ -181,11 +204,18 @@ export default function SettingsPage() {
                     <div className="premium-card space-y-4">
                         <div className="flex items-center space-x-2 border-b border-neutral-850 pb-2">
                             <KeyRound className="w-4 h-4 text-neutral-400" />
-                            <h2 className="premium-tyo-card">Security Credentials</h2>
+                            <h2 className="premium-tyo-card">
+                                Security Credentials
+                            </h2>
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="password" className="premium-form-label">Current Password</label>
+                            <label
+                                htmlFor="password"
+                                className="premium-form-label"
+                            >
+                                Current Password
+                            </label>
                             <input
                                 id="password"
                                 type="password"
@@ -195,12 +225,19 @@ export default function SettingsPage() {
                                 className="premium-input w-full"
                             />
                             {errors.password && (
-                                <p className="premium-form-error">{errors.password.message}</p>
+                                <p className="premium-form-error">
+                                    {errors.password.message}
+                                </p>
                             )}
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="newPassword" className="premium-form-label">New Password</label>
+                            <label
+                                htmlFor="newPassword"
+                                className="premium-form-label"
+                            >
+                                New Password
+                            </label>
                             <input
                                 id="newPassword"
                                 type="password"
@@ -210,7 +247,9 @@ export default function SettingsPage() {
                                 className="premium-input w-full"
                             />
                             {errors.newPassword && (
-                                <p className="premium-form-error">{errors.newPassword.message}</p>
+                                <p className="premium-form-error">
+                                    {errors.newPassword.message}
+                                </p>
                             )}
                             <p className="premium-form-helper">
                                 Leave blank to keep current system password.
@@ -223,7 +262,9 @@ export default function SettingsPage() {
                 <div className="premium-card space-y-4">
                     <div className="flex items-center space-x-2 border-b border-neutral-850 pb-2">
                         <ShieldAlert className="w-4 h-4 text-neutral-400" />
-                        <h2 className="premium-tyo-card">Authentication Preferences</h2>
+                        <h2 className="premium-tyo-card">
+                            Authentication Preferences
+                        </h2>
                     </div>
 
                     <div className="flex items-center space-x-2 py-1">
@@ -242,9 +283,13 @@ export default function SettingsPage() {
                         </label>
                     </div>
 
-                    <p className={`text-[10px] uppercase font-bold tracking-wider ${
-                        isTwoFactorEnabled ? 'text-green-500' : 'text-red-500'
-                    }`}>
+                    <p
+                        className={`text-[10px] uppercase font-bold tracking-wider ${
+                            isTwoFactorEnabled
+                                ? 'text-green-500'
+                                : 'text-red-500'
+                        }`}
+                    >
                         {isTwoFactorEnabled
                             ? '✓ Two-factor security active'
                             : '✕ Two-factor security inactive'}
@@ -252,7 +297,8 @@ export default function SettingsPage() {
 
                     {session?.user?.isOAuth && (
                         <p className="premium-form-helper">
-                            Two-factor configurations are managed by your OAuth SSO provider.
+                            Two-factor configurations are managed by your OAuth
+                            SSO provider.
                         </p>
                     )}
                 </div>

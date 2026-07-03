@@ -5,12 +5,14 @@ const Features = () => {
     const featuresList = [
         {
             title: 'Order Management',
-            description: 'Create, organize and monitor parcel deliveries from one place.',
+            description:
+                'Create, organize and monitor parcel deliveries from one place.',
             icon: <Package className="w-6 h-6 text-neutral-300" />,
         },
         {
             title: 'Delivery Agent Assignment',
-            description: 'Assign delivery agents and monitor active deliveries.',
+            description:
+                'Assign delivery agents and monitor active deliveries.',
             icon: <Bike className="w-6 h-6 text-neutral-300" />,
         },
         {
@@ -20,20 +22,25 @@ const Features = () => {
         },
         {
             title: 'Real-Time Tracking',
-            description: 'Track order lifecycle from booking to successful delivery.',
+            description:
+                'Track order lifecycle from booking to successful delivery.',
             icon: <Navigation className="w-6 h-6 text-neutral-300" />,
         },
     ]
 
     return (
-        <section id="features" className="w-full bg-black py-24 text-white border-t border-neutral-900">
+        <section
+            id="features"
+            className="w-full bg-black py-24 text-white border-t border-neutral-900"
+        >
             <div className="container mx-auto px-6 max-w-6xl space-y-12">
                 <div className="text-center space-y-3">
                     <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
                         Logistics Workflows Built for Speed
                     </h2>
                     <p className="text-neutral-400 text-sm md:text-base max-w-xl mx-auto">
-                        Unified operations to coordinate agents, pricing limits, coverage, and tracking states.
+                        Unified operations to coordinate agents, pricing limits,
+                        coverage, and tracking states.
                     </p>
                 </div>
 
@@ -47,8 +54,12 @@ const Features = () => {
                                 {feat.icon}
                             </div>
                             <div className="space-y-1">
-                                <h3 className="text-xl font-bold tracking-tight">{feat.title}</h3>
-                                <p className="text-sm text-neutral-400 leading-relaxed">{feat.description}</p>
+                                <h3 className="text-xl font-bold tracking-tight">
+                                    {feat.title}
+                                </h3>
+                                <p className="text-sm text-neutral-400 leading-relaxed">
+                                    {feat.description}
+                                </p>
                             </div>
                         </div>
                     ))}

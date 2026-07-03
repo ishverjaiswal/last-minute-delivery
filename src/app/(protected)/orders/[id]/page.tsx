@@ -11,17 +11,17 @@ import { Timeline } from '@/components/ui/Timeline'
 import { ActivityTimeline } from '@/components/ui/ActivityTimeline'
 import { PremiumDialog } from '@/components/ui/PremiumDialog'
 import { PremiumButton } from '@/components/ui/PremiumButton'
-import { 
-    Clock, 
-    CheckCircle, 
-    Bike, 
-    Package, 
-    MapPin, 
-    DollarSign, 
-    AlertTriangle, 
-    HelpCircle, 
-    ArrowLeft, 
-    Map 
+import {
+    Clock,
+    CheckCircle,
+    Bike,
+    Package,
+    MapPin,
+    DollarSign,
+    AlertTriangle,
+    HelpCircle,
+    ArrowLeft,
+    Map,
 } from 'lucide-react'
 
 export default function OrderDetailPage() {
@@ -45,7 +45,9 @@ export default function OrderDetailPage() {
     const [isVerifying, setIsVerifying] = useState(false)
     const [demoOtp, setDemoOtp] = useState<string | null>(null)
     const [recipientEmail, setRecipientEmail] = useState<string | null>(null)
-    const [verificationError, setVerificationError] = useState<string | null>(null)
+    const [verificationError, setVerificationError] = useState<string | null>(
+        null
+    )
     const [showSuccessModal, setShowSuccessModal] = useState(false)
     const [loadingAction, setLoadingAction] = useState(false)
 
@@ -94,7 +96,9 @@ export default function OrderDetailPage() {
                 fetchOrderDetail()
             }
         } catch (err: any) {
-            alert(err.response?.data?.error?.message || 'Failed to assign agent')
+            alert(
+                err.response?.data?.error?.message || 'Failed to assign agent'
+            )
         }
     }
 
@@ -109,7 +113,10 @@ export default function OrderDetailPage() {
                 fetchOrderDetail()
             }
         } catch (err: any) {
-            alert(err.response?.data?.error?.message || 'Failed to update order status')
+            alert(
+                err.response?.data?.error?.message ||
+                    'Failed to update order status'
+            )
         }
     }
 
@@ -144,9 +151,12 @@ export default function OrderDetailPage() {
         setLoadingAction(true)
         setVerificationError(null)
         try {
-            const res = await axios.post(`/api/orders/${params.id}/pod/verify`, {
-                otp: otpCode,
-            })
+            const res = await axios.post(
+                `/api/orders/${params.id}/pod/verify`,
+                {
+                    otp: otpCode,
+                }
+            )
             if (res.data.success) {
                 setShowSuccessModal(true)
                 setIsVerifying(false)
@@ -154,7 +164,9 @@ export default function OrderDetailPage() {
                 setDemoOtp(null)
             }
         } catch (err: any) {
-            setVerificationError(err.response?.data?.error?.message || 'Verification failed')
+            setVerificationError(
+                err.response?.data?.error?.message || 'Verification failed'
+            )
         } finally {
             setLoadingAction(false)
         }
@@ -175,13 +187,18 @@ export default function OrderDetailPage() {
         }
     }
 
-    const handleOtpKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    const handleOtpKeyDown = (
+        e: React.KeyboardEvent<HTMLInputElement>,
+        index: number
+    ) => {
         if (e.key === 'Backspace') {
             if (!otpValues[index] && index > 0) {
                 const newOtp = [...otpValues]
                 newOtp[index - 1] = ''
                 setOtpValues(newOtp)
-                const prevInput = document.getElementById(`otp-input-${index - 1}`)
+                const prevInput = document.getElementById(
+                    `otp-input-${index - 1}`
+                )
                 if (prevInput) {
                     prevInput.focus()
                 }
@@ -210,7 +227,11 @@ export default function OrderDetailPage() {
         if (match) {
             return { name: match[1], phone: match[2], address: match[3] }
         }
-        return { name: 'Standard Custody', phone: 'Not Listed', address: addressStr }
+        return {
+            name: 'Standard Custody',
+            phone: 'Not Listed',
+            address: addressStr,
+        }
     }
 
     const getStatusColor = (status: string) => {
@@ -245,8 +266,12 @@ export default function OrderDetailPage() {
     if (error || !order) {
         return (
             <div className="w-full max-w-lg mx-auto bg-neutral-900 border border-neutral-800 rounded-xl p-8 space-y-4 text-center text-white">
-                <h1 className="text-2xl font-bold text-red-500">Error Loading Order</h1>
-                <p className="text-neutral-400">{error || 'Order record not found.'}</p>
+                <h1 className="text-2xl font-bold text-red-500">
+                    Error Loading Order
+                </h1>
+                <p className="text-neutral-400">
+                    {error || 'Order record not found.'}
+                </p>
                 <button
                     onClick={() => router.push('/dashboard')}
                     className="premium-button-primary"
@@ -269,13 +294,26 @@ export default function OrderDetailPage() {
         { label: 'Delivered', key: 'DELIVERED' },
     ]
 
-    const currentStatusIndex = timelineStates.findIndex((s) => s.key === order.status)
-    const allStatuses = ['PENDING', 'CONFIRMED', 'ASSIGNED', 'PICKED_UP', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED']
+    const currentStatusIndex = timelineStates.findIndex(
+        (s) => s.key === order.status
+    )
+    const allStatuses = [
+        'PENDING',
+        'CONFIRMED',
+        'ASSIGNED',
+        'PICKED_UP',
+        'OUT_FOR_DELIVERY',
+        'DELIVERED',
+        'CANCELLED',
+    ]
 
     const getTimelineTimestamp = (statusKey: string) => {
         const found = history.find((h) => h.status === statusKey)
         if (!found) return null
-        return new Date(found.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        return new Date(found.createdAt).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+        })
     }
 
     const assignedAgentObj = agents.find((a) => a.id === order.agentId)
@@ -286,14 +324,20 @@ export default function OrderDetailPage() {
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-neutral-900 pb-4">
                 <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2">
-                        <span className="premium-tyo-caption">Shipment Details</span>
+                        <span className="premium-tyo-caption">
+                            Shipment Details
+                        </span>
                         <h1 className="premium-tyo-page leading-none">
                             LMD-{order.id.slice(0, 8).toUpperCase()}
                         </h1>
                         <StatusBadge status={order.status} />
                     </div>
                     <p className="premium-tyo-secondary">
-                        Sender: <strong className="text-neutral-200">{pickupInfo.name}</strong> • Created:{' '}
+                        Sender:{' '}
+                        <strong className="text-neutral-200">
+                            {pickupInfo.name}
+                        </strong>{' '}
+                        • Created:{' '}
                         {new Date(order.createdAt).toLocaleDateString()}
                     </p>
                 </div>
@@ -316,10 +360,8 @@ export default function OrderDetailPage() {
 
             {/* Desktop Layout 70/30 split */}
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
-                
                 {/* Left Side Timeline & Details (70%) */}
                 <div className="lg:col-span-7 space-y-6">
-                    
                     {/* Visual Status Timeline (Visually Dominates) */}
                     <div className="premium-card space-y-6">
                         <h2 className="premium-tyo-card border-b border-neutral-850 pb-2">
@@ -345,168 +387,306 @@ export default function OrderDetailPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Route Path */}
                             <div className="space-y-1">
-                                <p className="premium-tyo-caption">Pickup Location</p>
-                                <p className="text-sm font-bold text-neutral-200">{pickupInfo.name}</p>
-                                <p className="text-xs text-neutral-400">{pickupInfo.phone}</p>
-                                <p className="text-xs text-neutral-400 leading-relaxed">{pickupInfo.address}</p>
+                                <p className="premium-tyo-caption">
+                                    Pickup Location
+                                </p>
+                                <p className="text-sm font-bold text-neutral-200">
+                                    {pickupInfo.name}
+                                </p>
+                                <p className="text-xs text-neutral-400">
+                                    {pickupInfo.phone}
+                                </p>
+                                <p className="text-xs text-neutral-400 leading-relaxed">
+                                    {pickupInfo.address}
+                                </p>
                             </div>
                             <div className="space-y-1">
-                                <p className="premium-tyo-caption">Recipient Location</p>
-                                <p className="text-sm font-bold text-neutral-200">{deliveryInfo.name}</p>
-                                <p className="text-xs text-neutral-400">{deliveryInfo.phone}</p>
-                                <p className="text-xs text-neutral-400 leading-relaxed">{deliveryInfo.address}</p>
-                                <p className="text-xs text-neutral-400 font-mono">Kanpur PIN: {order.deliveryPinCode}</p>
+                                <p className="premium-tyo-caption">
+                                    Recipient Location
+                                </p>
+                                <p className="text-sm font-bold text-neutral-200">
+                                    {deliveryInfo.name}
+                                </p>
+                                <p className="text-xs text-neutral-400">
+                                    {deliveryInfo.phone}
+                                </p>
+                                <p className="text-xs text-neutral-400 leading-relaxed">
+                                    {deliveryInfo.address}
+                                </p>
+                                <p className="text-xs text-neutral-400 font-mono">
+                                    Kanpur PIN: {order.deliveryPinCode}
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     {/* Proof of Delivery OTP verification form */}
-                    {((['OUT_FOR_DELIVERY', 'DELIVERED'].includes(order.status)) || order.podOtp) && (
+                    {(['OUT_FOR_DELIVERY', 'DELIVERED'].includes(
+                        order.status
+                    ) ||
+                        order.podOtp) && (
                         <div className="premium-card space-y-6">
                             <div className="border-b border-neutral-850 pb-2">
-                                <h2 className="premium-tyo-card">Proof of Delivery (POD)</h2>
+                                <h2 className="premium-tyo-card">
+                                    Proof of Delivery (POD)
+                                </h2>
                                 <p className="premium-tyo-secondary">
-                                    Recipient OTP verification is required to complete delivery.
+                                    Recipient OTP verification is required to
+                                    complete delivery.
                                 </p>
                             </div>
-                            
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                                 <div className="space-y-3">
                                     <div className="flex justify-between py-1 border-b border-neutral-850">
-                                        <span className="text-neutral-500 font-semibold">Verification</span>
-                                        <span className={`font-bold px-2 py-0.5 rounded text-[10px] uppercase border ${
-                                            !order.podOtp ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
-                                            order.podOtp.verified ? 'bg-green-500/10 text-green-500 border-green-500/20' :
-                                            new Date(order.podOtp.expiresAt) < new Date() ? 'bg-red-500/10 text-red-500 border-red-500/20' :
-                                            'bg-blue-500/10 text-blue-500 border-blue-500/20'
-                                        }`}>
-                                            {!order.podOtp ? 'Waiting' :
-                                             order.podOtp.verified ? 'Verified' :
-                                             new Date(order.podOtp.expiresAt) < new Date() ? 'Expired' :
-                                             'OTP Sent'}
+                                        <span className="text-neutral-500 font-semibold">
+                                            Verification
+                                        </span>
+                                        <span
+                                            className={`font-bold px-2 py-0.5 rounded text-[10px] uppercase border ${
+                                                !order.podOtp
+                                                    ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
+                                                    : order.podOtp.verified
+                                                      ? 'bg-green-500/10 text-green-500 border-green-500/20'
+                                                      : new Date(
+                                                              order.podOtp
+                                                                  .expiresAt
+                                                          ) < new Date()
+                                                        ? 'bg-red-500/10 text-red-500 border-red-500/20'
+                                                        : 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+                                            }`}
+                                        >
+                                            {!order.podOtp
+                                                ? 'Waiting'
+                                                : order.podOtp.verified
+                                                  ? 'Verified'
+                                                  : new Date(
+                                                          order.podOtp.expiresAt
+                                                      ) < new Date()
+                                                    ? 'Expired'
+                                                    : 'OTP Sent'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between py-1 border-b border-neutral-850">
-                                        <span className="text-neutral-500 font-semibold">Resend Limit</span>
+                                        <span className="text-neutral-500 font-semibold">
+                                            Resend Limit
+                                        </span>
                                         <span className="text-neutral-200 font-medium">
-                                            {order.podOtp ? `${order.podOtp.resentCount} / 3 times` : '0'}
+                                            {order.podOtp
+                                                ? `${order.podOtp.resentCount} / 3 times`
+                                                : '0'}
                                         </span>
                                     </div>
                                 </div>
                                 <div className="space-y-3">
                                     <div className="flex justify-between py-1 border-b border-neutral-850">
-                                        <span className="text-neutral-500 font-semibold">Attempts Rem.</span>
+                                        <span className="text-neutral-500 font-semibold">
+                                            Attempts Rem.
+                                        </span>
                                         <span className="text-neutral-200 font-medium">
-                                            {order.podOtp ? Math.max(0, 5 - order.podOtp.attemptCount) : '5'}
+                                            {order.podOtp
+                                                ? Math.max(
+                                                      0,
+                                                      5 -
+                                                          order.podOtp
+                                                              .attemptCount
+                                                  )
+                                                : '5'}
                                         </span>
                                     </div>
-                                    {order.podOtp && order.podOtp.verifiedAt && (
-                                        <div className="flex justify-between py-1 border-b border-neutral-850">
-                                            <span className="text-neutral-500 font-semibold">Verified Time</span>
-                                            <span className="text-neutral-200 font-medium">
-                                                {new Date(order.podOtp.verifiedAt).toLocaleString()}
-                                            </span>
-                                        </div>
-                                    )}
+                                    {order.podOtp &&
+                                        order.podOtp.verifiedAt && (
+                                            <div className="flex justify-between py-1 border-b border-neutral-850">
+                                                <span className="text-neutral-500 font-semibold">
+                                                    Verified Time
+                                                </span>
+                                                <span className="text-neutral-200 font-medium">
+                                                    {new Date(
+                                                        order.podOtp.verifiedAt
+                                                    ).toLocaleString()}
+                                                </span>
+                                            </div>
+                                        )}
                                 </div>
                             </div>
 
                             {/* Demo Mode helper */}
-                            {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' && demoOtp && (
-                                <div className="p-4 rounded-lg border border-indigo-500/20 bg-indigo-500/10 text-xs space-y-2">
-                                    <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">🧪 DEMO MODE AUTO-VERIFICATION</p>
-                                    <div className="flex justify-between items-center">
-                                        <span>Recipient Verification Code:</span>
-                                        <span className="font-extrabold text-white text-base tracking-widest">{demoOtp}</span>
+                            {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' &&
+                                demoOtp && (
+                                    <div className="p-4 rounded-lg border border-indigo-500/20 bg-indigo-500/10 text-xs space-y-2">
+                                        <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+                                            🧪 DEMO MODE AUTO-VERIFICATION
+                                        </p>
+                                        <div className="flex justify-between items-center">
+                                            <span>
+                                                Recipient Verification Code:
+                                            </span>
+                                            <span className="font-extrabold text-white text-base tracking-widest">
+                                                {demoOtp}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
 
                             {/* Verification Form logic */}
-                            {role === 'DELIVERY_AGENT' && order.status === 'OUT_FOR_DELIVERY' && (
-                                <div className="space-y-4 pt-4 border-t border-neutral-850">
-                                    {!order.podOtp && (
-                                        <button
-                                            onClick={handleSendOtp}
-                                            disabled={loadingAction}
-                                            className="premium-button-primary w-full h-10"
-                                        >
-                                            {loadingAction ? 'Sending OTP...' : 'Send Delivery OTP'}
-                                        </button>
-                                    )}
+                            {role === 'DELIVERY_AGENT' &&
+                                order.status === 'OUT_FOR_DELIVERY' && (
+                                    <div className="space-y-4 pt-4 border-t border-neutral-850">
+                                        {!order.podOtp && (
+                                            <button
+                                                onClick={handleSendOtp}
+                                                disabled={loadingAction}
+                                                className="premium-button-primary w-full h-10"
+                                            >
+                                                {loadingAction
+                                                    ? 'Sending OTP...'
+                                                    : 'Send Delivery OTP'}
+                                            </button>
+                                        )}
 
-                                    {order.podOtp && !order.podOtp.verified && (
-                                        <div className="space-y-4">
-                                            {isVerifying ? (
-                                                <div className="space-y-3">
-                                                    <label className="premium-form-label block text-center">
-                                                        Enter 6-Digit OTP:
-                                                    </label>
-                                                    <div className="flex gap-2 justify-center">
-                                                        {otpValues.map((val, idx) => (
-                                                            <input
-                                                                key={idx}
-                                                                id={`otp-input-${idx}`}
-                                                                type="text"
-                                                                maxLength={1}
-                                                                value={val}
-                                                                onChange={(e) => handleOtpChange(e.target.value, idx)}
-                                                                onKeyDown={(e) => handleOtpKeyDown(e, idx)}
-                                                                onPaste={handleOtpPaste}
-                                                                className="w-9 h-11 bg-neutral-950 border border-neutral-800 rounded-lg text-center font-bold text-base focus:outline-none focus:border-neutral-700 text-white font-mono"
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                    
-                                                    {verificationError && (
-                                                        <div className="bg-red-500/10 border border-red-500/50 text-red-500 rounded-lg p-2.5 text-xs text-center">
-                                                            {verificationError}
+                                        {order.podOtp &&
+                                            !order.podOtp.verified && (
+                                                <div className="space-y-4">
+                                                    {isVerifying ? (
+                                                        <div className="space-y-3">
+                                                            <label className="premium-form-label block text-center">
+                                                                Enter 6-Digit
+                                                                OTP:
+                                                            </label>
+                                                            <div className="flex gap-2 justify-center">
+                                                                {otpValues.map(
+                                                                    (
+                                                                        val,
+                                                                        idx
+                                                                    ) => (
+                                                                        <input
+                                                                            key={
+                                                                                idx
+                                                                            }
+                                                                            id={`otp-input-${idx}`}
+                                                                            type="text"
+                                                                            maxLength={
+                                                                                1
+                                                                            }
+                                                                            value={
+                                                                                val
+                                                                            }
+                                                                            onChange={(
+                                                                                e
+                                                                            ) =>
+                                                                                handleOtpChange(
+                                                                                    e
+                                                                                        .target
+                                                                                        .value,
+                                                                                    idx
+                                                                                )
+                                                                            }
+                                                                            onKeyDown={(
+                                                                                e
+                                                                            ) =>
+                                                                                handleOtpKeyDown(
+                                                                                    e,
+                                                                                    idx
+                                                                                )
+                                                                            }
+                                                                            onPaste={
+                                                                                handleOtpPaste
+                                                                            }
+                                                                            className="w-9 h-11 bg-neutral-950 border border-neutral-800 rounded-lg text-center font-bold text-base focus:outline-none focus:border-neutral-700 text-white font-mono"
+                                                                        />
+                                                                    )
+                                                                )}
+                                                            </div>
+
+                                                            {verificationError && (
+                                                                <div className="bg-red-500/10 border border-red-500/50 text-red-500 rounded-lg p-2.5 text-xs text-center">
+                                                                    {
+                                                                        verificationError
+                                                                    }
+                                                                </div>
+                                                            )}
+
+                                                            <div className="flex gap-2 pt-2">
+                                                                <button
+                                                                    onClick={
+                                                                        handleVerifyOtp
+                                                                    }
+                                                                    disabled={
+                                                                        loadingAction ||
+                                                                        otpValues.join(
+                                                                            ''
+                                                                        )
+                                                                            .length <
+                                                                            6
+                                                                    }
+                                                                    className="premium-button-primary flex-1 h-9"
+                                                                >
+                                                                    {loadingAction
+                                                                        ? 'Verifying...'
+                                                                        : 'Verify OTP'}
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setIsVerifying(
+                                                                            false
+                                                                        )
+                                                                        setOtpValues(
+                                                                            Array(
+                                                                                6
+                                                                            ).fill(
+                                                                                ''
+                                                                            )
+                                                                        )
+                                                                        setVerificationError(
+                                                                            null
+                                                                        )
+                                                                    }}
+                                                                    className="premium-button-secondary h-9"
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex gap-2">
+                                                            {new Date(
+                                                                order.podOtp
+                                                                    .expiresAt
+                                                            ) > new Date() &&
+                                                                order.podOtp
+                                                                    .attemptCount <
+                                                                    5 && (
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            setIsVerifying(
+                                                                                true
+                                                                            )
+                                                                        }
+                                                                        className="premium-button-primary flex-1 h-9 bg-indigo-650 text-white"
+                                                                    >
+                                                                        Verify
+                                                                        OTP
+                                                                    </button>
+                                                                )}
+                                                            <button
+                                                                onClick={
+                                                                    handleSendOtp
+                                                                }
+                                                                disabled={
+                                                                    loadingAction
+                                                                }
+                                                                className="premium-button-secondary flex-1 h-9"
+                                                            >
+                                                                {loadingAction
+                                                                    ? 'Resending...'
+                                                                    : 'Resend OTP Code'}
+                                                            </button>
                                                         </div>
                                                     )}
-
-                                                    <div className="flex gap-2 pt-2">
-                                                        <button
-                                                            onClick={handleVerifyOtp}
-                                                            disabled={loadingAction || otpValues.join('').length < 6}
-                                                            className="premium-button-primary flex-1 h-9"
-                                                        >
-                                                            {loadingAction ? 'Verifying...' : 'Verify OTP'}
-                                                        </button>
-                                                        <button
-                                                            onClick={() => {
-                                                                setIsVerifying(false)
-                                                                setOtpValues(Array(6).fill(''))
-                                                                setVerificationError(null)
-                                                            }}
-                                                            className="premium-button-secondary h-9"
-                                                        >
-                                                            Cancel
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div className="flex gap-2">
-                                                    {new Date(order.podOtp.expiresAt) > new Date() && order.podOtp.attemptCount < 5 && (
-                                                        <button
-                                                            onClick={() => setIsVerifying(true)}
-                                                            className="premium-button-primary flex-1 h-9 bg-indigo-650 text-white"
-                                                        >
-                                                            Verify OTP
-                                                        </button>
-                                                    )}
-                                                    <button
-                                                        onClick={handleSendOtp}
-                                                        disabled={loadingAction}
-                                                        className="premium-button-secondary flex-1 h-9"
-                                                    >
-                                                        {loadingAction ? 'Resending...' : 'Resend OTP Code'}
-                                                    </button>
                                                 </div>
                                             )}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
+                                    </div>
+                                )}
 
                             {/* Completed verification state */}
                             {order.podOtp && order.podOtp.verified && (
@@ -526,11 +706,17 @@ export default function OrderDetailPage() {
                         <ActivityTimeline
                             items={history
                                 .slice()
-                                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                                .sort(
+                                    (a, b) =>
+                                        new Date(b.createdAt).getTime() -
+                                        new Date(a.createdAt).getTime()
+                                )
                                 .map((step) => ({
                                     id: step.id,
                                     status: step.status,
-                                    timestamp: new Date(step.createdAt).toLocaleString(),
+                                    timestamp: new Date(
+                                        step.createdAt
+                                    ).toLocaleString(),
                                     actor: step.changedByName,
                                 }))}
                             emptyMessage="No shipment tracking updates recorded."
@@ -540,29 +726,38 @@ export default function OrderDetailPage() {
 
                 {/* Right Side Allocation, package params & support actions (30%) */}
                 <div className="lg:col-span-3 space-y-6">
-                    
                     {/* Status & pricing details card */}
                     <div className="premium-card space-y-4">
-                        <h2 className="premium-tyo-caption">Shipment Specifications</h2>
+                        <h2 className="premium-tyo-caption">
+                            Shipment Specifications
+                        </h2>
                         <div className="space-y-3 text-xs text-neutral-400">
                             <div className="flex justify-between py-1 border-b border-neutral-850">
                                 <span>Weight</span>
-                                <span className="font-bold text-neutral-200">{order.weight} kg</span>
+                                <span className="font-bold text-neutral-200">
+                                    {order.weight} kg
+                                </span>
                             </div>
                             <div className="flex justify-between py-1 border-b border-neutral-850">
                                 <span>Price Paid</span>
-                                <span className="font-extrabold text-indigo-400">${order.price.toFixed(2)}</span>
+                                <span className="font-extrabold text-indigo-400">
+                                    ${order.price.toFixed(2)}
+                                </span>
                             </div>
                             <div className="flex justify-between py-1">
                                 <span>Estimated Transit</span>
-                                <span className="font-bold text-neutral-200">2-3 Business Days</span>
+                                <span className="font-bold text-neutral-200">
+                                    2-3 Business Days
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     {/* Assigned Driver Agent details */}
                     <div className="premium-card space-y-4">
-                        <h2 className="premium-tyo-caption">Assigned Delivery Agent</h2>
+                        <h2 className="premium-tyo-caption">
+                            Assigned Delivery Agent
+                        </h2>
                         {order.agentId ? (
                             <div className="space-y-3">
                                 <div className="flex items-center space-x-3">
@@ -571,29 +766,37 @@ export default function OrderDetailPage() {
                                     </div>
                                     <div className="space-y-0.5">
                                         <p className="text-xs font-bold text-neutral-200">
-                                            {assignedAgentObj?.name || 'Assigned Courier'}
+                                            {assignedAgentObj?.name ||
+                                                'Assigned Courier'}
                                         </p>
                                         <p className="text-[10px] text-neutral-500 font-mono">
-                                            {assignedAgentObj?.phone || '+91 98765 43210'}
+                                            {assignedAgentObj?.phone ||
+                                                '+91 98765 43210'}
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         ) : (
-                            <p className="text-xs text-neutral-500 italic py-2 text-center">Unassigned</p>
+                            <p className="text-xs text-neutral-500 italic py-2 text-center">
+                                Unassigned
+                            </p>
                         )}
                     </div>
 
                     {/* Action forms for Dispatcher or Courier */}
                     <div className="premium-card space-y-4">
-                        <h2 className="premium-tyo-caption">Operations Console</h2>
+                        <h2 className="premium-tyo-caption">
+                            Operations Console
+                        </h2>
 
                         {/* Customer Cancel action */}
                         {role === 'CUSTOMER' && (
                             <div className="space-y-3">
                                 {order.status === 'PENDING' ? (
                                     <button
-                                        onClick={() => handleStatusTransition('CANCELLED')}
+                                        onClick={() =>
+                                            handleStatusTransition('CANCELLED')
+                                        }
                                         className="premium-button-primary w-full bg-red-600 hover:bg-red-700 text-white h-9"
                                     >
                                         Cancel Shipment Booking
@@ -604,7 +807,9 @@ export default function OrderDetailPage() {
                                     </p>
                                 )}
                                 <button
-                                    onClick={() => alert('Support desk ticket created!')}
+                                    onClick={() =>
+                                        alert('Support desk ticket created!')
+                                    }
                                     className="premium-button-secondary w-full h-9"
                                 >
                                     Contact Support
@@ -617,7 +822,9 @@ export default function OrderDetailPage() {
                             <div className="space-y-3">
                                 {order.status === 'ASSIGNED' && (
                                     <button
-                                        onClick={() => handleStatusTransition('PICKED_UP')}
+                                        onClick={() =>
+                                            handleStatusTransition('PICKED_UP')
+                                        }
                                         className="premium-button-primary w-full h-9 bg-indigo-600 text-white"
                                     >
                                         Mark Picked Up
@@ -625,7 +832,11 @@ export default function OrderDetailPage() {
                                 )}
                                 {order.status === 'PICKED_UP' && (
                                     <button
-                                        onClick={() => handleStatusTransition('OUT_FOR_DELIVERY')}
+                                        onClick={() =>
+                                            handleStatusTransition(
+                                                'OUT_FOR_DELIVERY'
+                                            )
+                                        }
                                         className="premium-button-primary w-full h-9 bg-orange-600 text-white"
                                     >
                                         Mark Out For Delivery
@@ -633,10 +844,13 @@ export default function OrderDetailPage() {
                                 )}
                                 {order.status === 'OUT_FOR_DELIVERY' && (
                                     <p className="text-xs text-neutral-500 text-center py-2">
-                                        Please perform Proof of Delivery verification to complete delivery.
+                                        Please perform Proof of Delivery
+                                        verification to complete delivery.
                                     </p>
                                 )}
-                                {['DELIVERED', 'CANCELLED'].includes(order.status) && (
+                                {['DELIVERED', 'CANCELLED'].includes(
+                                    order.status
+                                ) && (
                                     <p className="text-xs text-neutral-500 text-center py-2 text-neutral-500 italic">
                                         No active driver transitions available.
                                     </p>
@@ -648,20 +862,29 @@ export default function OrderDetailPage() {
                         {role === 'ADMIN' && (
                             <div className="space-y-4">
                                 <div className="premium-form-group">
-                                    <label htmlFor="agentAssign" className="premium-form-label">
+                                    <label
+                                        htmlFor="agentAssign"
+                                        className="premium-form-label"
+                                    >
                                         Assign Agent
                                     </label>
                                     <div className="flex gap-2">
                                         <select
                                             id="agentAssign"
                                             value={selectedAgent}
-                                            onChange={(e) => setSelectedAgent(e.target.value)}
+                                            onChange={(e) =>
+                                                setSelectedAgent(e.target.value)
+                                            }
                                             className="premium-input flex-1 h-9 bg-neutral-950"
                                         >
                                             <option value="">Unassigned</option>
                                             {agents.map((agent) => (
-                                                <option key={agent.id} value={agent.id}>
-                                                    {agent.name || 'Agent'} ({agent.phone})
+                                                <option
+                                                    key={agent.id}
+                                                    value={agent.id}
+                                                >
+                                                    {agent.name || 'Agent'} (
+                                                    {agent.phone})
                                                 </option>
                                             ))}
                                         </select>
@@ -675,14 +898,21 @@ export default function OrderDetailPage() {
                                 </div>
 
                                 <div className="premium-form-group border-t border-neutral-850 pt-3">
-                                    <label htmlFor="statusOverride" className="premium-form-label">
+                                    <label
+                                        htmlFor="statusOverride"
+                                        className="premium-form-label"
+                                    >
                                         Status Override
                                     </label>
                                     <div className="flex gap-2">
                                         <select
                                             id="statusOverride"
                                             value={selectedStatus}
-                                            onChange={(e) => setSelectedStatus(e.target.value)}
+                                            onChange={(e) =>
+                                                setSelectedStatus(
+                                                    e.target.value
+                                                )
+                                            }
                                             className="premium-input flex-1 h-9 bg-neutral-955"
                                         >
                                             {allStatuses.map((st) => (
@@ -692,7 +922,9 @@ export default function OrderDetailPage() {
                                             ))}
                                         </select>
                                         <button
-                                            onClick={() => handleStatusTransition()}
+                                            onClick={() =>
+                                                handleStatusTransition()
+                                            }
                                             className="premium-button-primary h-9 px-3"
                                         >
                                             Save
@@ -730,7 +962,8 @@ export default function OrderDetailPage() {
                         <CheckCircle className="h-6 w-6" aria-hidden="true" />
                     </div>
                     <p className="premium-typo-secondary">
-                        Recipient verification succeeded. Order status changed to DELIVERED.
+                        Recipient verification succeeded. Order status changed
+                        to DELIVERED.
                     </p>
                 </div>
             </PremiumDialog>

@@ -18,7 +18,8 @@ const Navbar = () => {
     const role = user?.role
     const pathname = usePathname()
 
-    const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
+    const isActive = (href: string) =>
+        pathname === href || pathname.startsWith(`${href}/`)
 
     return (
         <nav
@@ -29,26 +30,43 @@ const Navbar = () => {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white">
                     L
                 </div>
-                <span className="font-semibold tracking-wider text-white">LastMile</span>
+                <span className="font-semibold tracking-wider text-white">
+                    LastMile
+                </span>
             </div>
 
             <div className="flex items-center space-x-4">
-                <Link href="/dashboard" className={navLinkClass(isActive('/dashboard'))}>
+                <Link
+                    href="/dashboard"
+                    className={navLinkClass(isActive('/dashboard'))}
+                >
                     Dashboard
                 </Link>
 
                 {role === 'ADMIN' && (
                     <>
-                        <Link href="/orders" className={navLinkClass(isActive('/orders'))}>
+                        <Link
+                            href="/orders"
+                            className={navLinkClass(isActive('/orders'))}
+                        >
                             Orders
                         </Link>
-                        <Link href="/agents" className={navLinkClass(isActive('/agents'))}>
+                        <Link
+                            href="/agents"
+                            className={navLinkClass(isActive('/agents'))}
+                        >
                             Agents
                         </Link>
-                        <Link href="/zones" className={navLinkClass(isActive('/zones'))}>
+                        <Link
+                            href="/zones"
+                            className={navLinkClass(isActive('/zones'))}
+                        >
                             Zones
                         </Link>
-                        <Link href="/rate-cards" className={navLinkClass(isActive('/rate-cards'))}>
+                        <Link
+                            href="/rate-cards"
+                            className={navLinkClass(isActive('/rate-cards'))}
+                        >
                             Rate Cards
                         </Link>
                     </>
@@ -56,10 +74,16 @@ const Navbar = () => {
 
                 {role === 'CUSTOMER' && (
                     <>
-                        <Link href="/orders" className={navLinkClass(isActive('/orders'))}>
+                        <Link
+                            href="/orders"
+                            className={navLinkClass(isActive('/orders'))}
+                        >
                             My Orders
                         </Link>
-                        <Link href="/orders/create" className={navLinkClass(isActive('/orders/create'))}>
+                        <Link
+                            href="/orders/create"
+                            className={navLinkClass(isActive('/orders/create'))}
+                        >
                             Create Order
                         </Link>
                     </>
@@ -67,19 +91,36 @@ const Navbar = () => {
 
                 {role === 'DELIVERY_AGENT' && (
                     <>
-                        <Link href="/orders" className={navLinkClass(isActive('/orders') && !isActive('/delivery-history'))}>
+                        <Link
+                            href="/orders"
+                            className={navLinkClass(
+                                isActive('/orders') &&
+                                    !isActive('/delivery-history')
+                            )}
+                        >
                             My Deliveries
                         </Link>
-                        <Link href="/delivery-history" className={navLinkClass(isActive('/delivery-history'))}>
+                        <Link
+                            href="/delivery-history"
+                            className={navLinkClass(
+                                isActive('/delivery-history')
+                            )}
+                        >
                             Delivery History
                         </Link>
-                        <Link href="/profile" className={navLinkClass(isActive('/profile'))}>
+                        <Link
+                            href="/profile"
+                            className={navLinkClass(isActive('/profile'))}
+                        >
                             Profile
                         </Link>
                     </>
                 )}
 
-                <Link href="/settings" className={navLinkClass(isActive('/settings'))}>
+                <Link
+                    href="/settings"
+                    className={navLinkClass(isActive('/settings'))}
+                >
                     Settings
                 </Link>
             </div>

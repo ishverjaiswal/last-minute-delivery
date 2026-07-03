@@ -7,5 +7,8 @@ export const findAllRateCards = async () => {
 }
 
 export const findRateCardsByZoneId = async (zoneId: string) => {
-    return db.select().from(rateCardsTable).where(eq(rateCardsTable.zoneId, zoneId))
+    return db
+        .select()
+        .from(rateCardsTable)
+        .where(eq(rateCardsTable.zoneId, zoneId))
 }

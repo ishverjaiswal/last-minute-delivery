@@ -39,9 +39,14 @@ export default function ProfilePage() {
         setUpdating(true)
         try {
             const targetState = !profile.availability
-            const res = await axios.patch('/api/agents/me', { availability: targetState })
+            const res = await axios.patch('/api/agents/me', {
+                availability: targetState,
+            })
             if (res.data.success) {
-                setProfile((prev: any) => ({ ...prev, availability: targetState }))
+                setProfile((prev: any) => ({
+                    ...prev,
+                    availability: targetState,
+                }))
             }
         } catch (err: any) {
             alert(err.response?.data?.error || 'Failed to toggle availability')
@@ -69,9 +74,16 @@ export default function ProfilePage() {
             <PageSkeleton className="max-w-md mx-auto">
                 <EmptyState
                     title="Failed to load agent profile"
-                    description={error || 'Make sure you are logged in as a registered delivery agent.'}
+                    description={
+                        error ||
+                        'Make sure you are logged in as a registered delivery agent.'
+                    }
                     action={
-                        <button type="button" onClick={fetchProfile} className="premium-button-primary h-8 text-xs">
+                        <button
+                            type="button"
+                            onClick={fetchProfile}
+                            className="premium-button-primary h-8 text-xs"
+                        >
                             Retry
                         </button>
                     }
@@ -90,23 +102,38 @@ export default function ProfilePage() {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                 <div className="premium-card flex flex-col items-center space-y-4 text-center md:col-span-1">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full border border-neutral-800 bg-neutral-850">
-                        <Bike className="h-7 w-7 text-neutral-400" aria-hidden="true" />
+                        <Bike
+                            className="h-7 w-7 text-neutral-400"
+                            aria-hidden="true"
+                        />
                     </div>
                     <div>
-                        <h2 className="premium-typo-card">{profile.name || 'Anonymous Agent'}</h2>
-                        <p className="premium-typo-caption mt-0.5">Delivery Officer</p>
+                        <h2 className="premium-typo-card">
+                            {profile.name || 'Anonymous Agent'}
+                        </h2>
+                        <p className="premium-typo-caption mt-0.5">
+                            Delivery Officer
+                        </p>
                     </div>
 
                     <div className="w-full space-y-3 border-t border-neutral-850 pt-4">
                         <div className="flex items-center justify-between text-xs">
                             <span className="text-neutral-400">Status</span>
-                            <StatusBadge status={profile.availability ? 'ONLINE' : 'OFFLINE'} />
+                            <StatusBadge
+                                status={
+                                    profile.availability ? 'ONLINE' : 'OFFLINE'
+                                }
+                            />
                         </div>
 
                         <PremiumButton
                             variant="primary"
                             loading={updating}
-                            loadingText={profile.availability ? 'Going offline…' : 'Going online…'}
+                            loadingText={
+                                profile.availability
+                                    ? 'Going offline…'
+                                    : 'Going online…'
+                            }
                             onClick={toggleAvailability}
                             className="w-full h-9"
                         >
@@ -122,19 +149,33 @@ export default function ProfilePage() {
                         </h3>
                         <dl className="grid grid-cols-1 gap-4 text-xs sm:grid-cols-2">
                             <div className="space-y-0.5">
-                                <dt className="text-neutral-500 font-semibold">Registered Email</dt>
-                                <dd className="font-bold text-neutral-200">{profile.email}</dd>
+                                <dt className="text-neutral-500 font-semibold">
+                                    Registered Email
+                                </dt>
+                                <dd className="font-bold text-neutral-200">
+                                    {profile.email}
+                                </dd>
                             </div>
                             <div className="space-y-0.5">
-                                <dt className="text-neutral-500 font-semibold">Contact Number</dt>
-                                <dd className="font-bold text-neutral-200">{profile.phone}</dd>
+                                <dt className="text-neutral-500 font-semibold">
+                                    Contact Number
+                                </dt>
+                                <dd className="font-bold text-neutral-200">
+                                    {profile.phone}
+                                </dd>
                             </div>
                             <div className="space-y-0.5">
-                                <dt className="text-neutral-500 font-semibold">Assigned Zone</dt>
-                                <dd className="font-bold text-neutral-200">{profile.zoneName}</dd>
+                                <dt className="text-neutral-500 font-semibold">
+                                    Assigned Zone
+                                </dt>
+                                <dd className="font-bold text-neutral-200">
+                                    {profile.zoneName}
+                                </dd>
                             </div>
                             <div className="space-y-0.5">
-                                <dt className="text-neutral-500 font-semibold">Employee ID</dt>
+                                <dt className="text-neutral-500 font-semibold">
+                                    Employee ID
+                                </dt>
                                 <dd className="font-mono text-[10px] font-bold text-neutral-200">
                                     {profile.id.slice(0, 8).toUpperCase()}
                                 </dd>
@@ -148,20 +189,36 @@ export default function ProfilePage() {
                         </h3>
                         <dl className="grid grid-cols-1 gap-4 text-xs sm:grid-cols-2">
                             <div className="space-y-0.5">
-                                <dt className="text-neutral-500 font-semibold">Vehicle Type</dt>
-                                <dd className="font-bold text-neutral-200">Eco EV Cargo-Van</dd>
+                                <dt className="text-neutral-500 font-semibold">
+                                    Vehicle Type
+                                </dt>
+                                <dd className="font-bold text-neutral-200">
+                                    Eco EV Cargo-Van
+                                </dd>
                             </div>
                             <div className="space-y-0.5">
-                                <dt className="text-neutral-500 font-semibold">License Plate</dt>
-                                <dd className="font-mono text-[10px] font-bold text-neutral-200">UP-78-EV-9823</dd>
+                                <dt className="text-neutral-500 font-semibold">
+                                    License Plate
+                                </dt>
+                                <dd className="font-mono text-[10px] font-bold text-neutral-200">
+                                    UP-78-EV-9823
+                                </dd>
                             </div>
                             <div className="space-y-0.5">
-                                <dt className="text-neutral-500 font-semibold">Payload Limit</dt>
-                                <dd className="font-bold text-neutral-200">500 kg max</dd>
+                                <dt className="text-neutral-500 font-semibold">
+                                    Payload Limit
+                                </dt>
+                                <dd className="font-bold text-neutral-200">
+                                    500 kg max
+                                </dd>
                             </div>
                             <div className="space-y-0.5">
-                                <dt className="text-neutral-500 font-semibold">Telemetry ID</dt>
-                                <dd className="font-mono text-[10px] font-bold text-neutral-200">T-8523-EV</dd>
+                                <dt className="text-neutral-500 font-semibold">
+                                    Telemetry ID
+                                </dt>
+                                <dd className="font-mono text-[10px] font-bold text-neutral-200">
+                                    T-8523-EV
+                                </dd>
                             </div>
                         </dl>
                     </section>

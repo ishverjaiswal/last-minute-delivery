@@ -14,7 +14,10 @@ export const findAllAgents = async () => {
             email: usersTable.email,
         })
         .from(deliveryAgentProfilesTable)
-        .innerJoin(usersTable, eq(deliveryAgentProfilesTable.userId, usersTable.id))
+        .innerJoin(
+            usersTable,
+            eq(deliveryAgentProfilesTable.userId, usersTable.id)
+        )
 }
 
 export const findAgentById = async (id: string) => {
@@ -29,7 +32,10 @@ export const findAgentById = async (id: string) => {
             email: usersTable.email,
         })
         .from(deliveryAgentProfilesTable)
-        .innerJoin(usersTable, eq(deliveryAgentProfilesTable.userId, usersTable.id))
+        .innerJoin(
+            usersTable,
+            eq(deliveryAgentProfilesTable.userId, usersTable.id)
+        )
         .where(eq(deliveryAgentProfilesTable.id, id))
     return agent || null
 }

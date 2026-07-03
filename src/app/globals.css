@@ -41,8 +41,7 @@
     --radius-md: var(--radius);
     --radius-lg: calc(var(--radius) + 2px);
     --radius-xl: calc(var(--radius) + 4px);
-    --shadow-input:
-        0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+    --shadow-input: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
 }
 
 :root {
@@ -61,11 +60,11 @@
     --muted-foreground: oklch(0.55 0 0);
     --accent: oklch(0.96 0 0);
     --accent-foreground: oklch(0.25 0 0);
-    --destructive: oklch(0.60 0.22 25);
-    --border: oklch(0.90 0 0);
-    --input: oklch(0.90 0 0);
-    --ring: oklch(0.60 0.20 264);
-    --chart-1: oklch(0.60 0.20 264);
+    --destructive: oklch(0.6 0.22 25);
+    --border: oklch(0.9 0 0);
+    --input: oklch(0.9 0 0);
+    --ring: oklch(0.6 0.2 264);
+    --chart-1: oklch(0.6 0.2 264);
     --chart-2: oklch(0.69 0.17 162);
     --chart-3: oklch(0.76 0.18 70);
     --chart-4: oklch(0.62 0.26 303);
@@ -76,8 +75,8 @@
     --sidebar-primary-foreground: oklch(0.99 0 0);
     --sidebar-accent: oklch(0.96 0 0);
     --sidebar-accent-foreground: oklch(0.25 0 0);
-    --sidebar-border: oklch(0.90 0 0);
-    --sidebar-ring: oklch(0.60 0 0);
+    --sidebar-border: oklch(0.9 0 0);
+    --sidebar-ring: oklch(0.6 0 0);
 }
 
 .dark {
@@ -92,7 +91,7 @@
     --secondary: oklch(0.16 0 0);
     --secondary-foreground: oklch(0.98 0 0);
     --muted: oklch(0.15 0 0);
-    --muted-foreground: oklch(0.60 0 0);
+    --muted-foreground: oklch(0.6 0 0);
     --accent: oklch(0.16 0 0);
     --accent-foreground: oklch(0.98 0 0);
     --destructive: oklch(0.58 0.22 25); /* Crimson destructive tag */
@@ -274,7 +273,9 @@
     font-size: 0.875rem;
     height: 2.25rem; /* Standardized 36px height */
     outline: none;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
 
     &:focus {
         border-color: var(--ring);
@@ -332,7 +333,9 @@
     }
     &:focus-visible {
         outline: none;
-        box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+        box-shadow:
+            0 0 0 2px var(--background),
+            0 0 0 4px var(--ring);
     }
     &:disabled {
         opacity: 0.5;
@@ -360,7 +363,9 @@
     }
     &:focus-visible {
         outline: none;
-        box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+        box-shadow:
+            0 0 0 2px var(--background),
+            0 0 0 4px var(--ring);
     }
     &:disabled {
         opacity: 0.5;
@@ -427,15 +432,15 @@
 }
 
 @utility premium-badge-confirmed {
-    background-color: oklch(0.60 0.16 220 / 10%);
-    color: oklch(0.60 0.16 220);
-    border-color: oklch(0.60 0.16 220 / 20%);
+    background-color: oklch(0.6 0.16 220 / 10%);
+    color: oklch(0.6 0.16 220);
+    border-color: oklch(0.6 0.16 220 / 20%);
 }
 
 @utility premium-badge-assigned {
-    background-color: oklch(0.50 0.18 290 / 10%);
-    color: oklch(0.50 0.18 290);
-    border-color: oklch(0.50 0.18 290 / 20%);
+    background-color: oklch(0.5 0.18 290 / 10%);
+    color: oklch(0.5 0.18 290);
+    border-color: oklch(0.5 0.18 290 / 20%);
 }
 
 @utility premium-badge-picked-up {
@@ -473,7 +478,9 @@
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--muted-foreground);
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
 
     &:hover {
         background-color: var(--secondary);
@@ -526,7 +533,9 @@
     border: 1px solid var(--border);
     border-radius: calc(var(--radius) + 4px);
     padding: 1.5rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.3),
+        0 10px 10px -5px rgba(0, 0, 0, 0.3);
     max-width: 28rem;
     width: 100%;
     display: flex;

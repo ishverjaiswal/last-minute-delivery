@@ -69,9 +69,15 @@ export default function RateCardsPage() {
         if (zones && zones.length > 0) {
             setValue('zoneId', zones[0].id, { shouldValidate: true })
         }
-        setValue('minWeight', DEMO_DATA.rateCard.minWeight, { shouldValidate: true })
-        setValue('maxWeight', DEMO_DATA.rateCard.maxWeight, { shouldValidate: true })
-        setValue('basePrice', DEMO_DATA.rateCard.basePrice, { shouldValidate: true })
+        setValue('minWeight', DEMO_DATA.rateCard.minWeight, {
+            shouldValidate: true,
+        })
+        setValue('maxWeight', DEMO_DATA.rateCard.maxWeight, {
+            shouldValidate: true,
+        })
+        setValue('basePrice', DEMO_DATA.rateCard.basePrice, {
+            shouldValidate: true,
+        })
     }
 
     const onSubmit = async (values: any) => {
@@ -120,12 +126,14 @@ export default function RateCardsPage() {
             {/* Header */}
             <div className="space-y-1">
                 <h1 className="premium-tyo-display">Pricing Rate Cards</h1>
-                <p className="premium-tyo-secondary">Configure logistics base rates and weight ranges for serviceable zones.</p>
+                <p className="premium-tyo-secondary">
+                    Configure logistics base rates and weight ranges for
+                    serviceable zones.
+                </p>
             </div>
 
             {/* Split layout (Left Form / Right Table) */}
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
-                
                 {/* Left Card: Create Rate Card Form (30% equivalent / col-span-3) */}
                 <div className="lg:col-span-3 premium-card space-y-4 h-fit">
                     <div className="flex flex-col sm:flex-row lg:flex-col gap-3 justify-between border-b border-neutral-850 pb-2">
@@ -146,10 +154,17 @@ export default function RateCardsPage() {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-4"
+                    >
                         <div className="premium-form-group">
-                            <label htmlFor="zoneId" className="premium-form-label">
-                                Target Zone <span className="text-red-500">*</span>
+                            <label
+                                htmlFor="zoneId"
+                                className="premium-form-label"
+                            >
+                                Target Zone{' '}
+                                <span className="text-red-500">*</span>
                             </label>
                             <select
                                 id="zoneId"
@@ -165,58 +180,84 @@ export default function RateCardsPage() {
                                 ))}
                             </select>
                             {errors.zoneId && (
-                                <p className="premium-form-error">{errors.zoneId.message as string}</p>
+                                <p className="premium-form-error">
+                                    {errors.zoneId.message as string}
+                                </p>
                             )}
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="minWeight" className="premium-form-label">
-                                Min Weight (kg) <span className="text-red-500">*</span>
+                            <label
+                                htmlFor="minWeight"
+                                className="premium-form-label"
+                            >
+                                Min Weight (kg){' '}
+                                <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="minWeight"
                                 type="number"
                                 step="0.1"
-                                {...register('minWeight', { valueAsNumber: true })}
+                                {...register('minWeight', {
+                                    valueAsNumber: true,
+                                })}
                                 disabled={isPending}
                                 className="premium-input w-full"
                             />
                             {errors.minWeight && (
-                                <p className="premium-form-error">{errors.minWeight.message as string}</p>
+                                <p className="premium-form-error">
+                                    {errors.minWeight.message as string}
+                                </p>
                             )}
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="maxWeight" className="premium-form-label">
-                                Max Weight (kg) <span className="text-red-500">*</span>
+                            <label
+                                htmlFor="maxWeight"
+                                className="premium-form-label"
+                            >
+                                Max Weight (kg){' '}
+                                <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="maxWeight"
                                 type="number"
                                 step="0.1"
-                                {...register('maxWeight', { valueAsNumber: true })}
+                                {...register('maxWeight', {
+                                    valueAsNumber: true,
+                                })}
                                 disabled={isPending}
                                 className="premium-input w-full"
                             />
                             {errors.maxWeight && (
-                                <p className="premium-form-error">{errors.maxWeight.message as string}</p>
+                                <p className="premium-form-error">
+                                    {errors.maxWeight.message as string}
+                                </p>
                             )}
                         </div>
 
                         <div className="premium-form-group">
-                            <label htmlFor="basePrice" className="premium-form-label">
-                                Base Price ($) <span className="text-red-500">*</span>
+                            <label
+                                htmlFor="basePrice"
+                                className="premium-form-label"
+                            >
+                                Base Price ($){' '}
+                                <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="basePrice"
                                 type="number"
                                 step="0.01"
-                                {...register('basePrice', { valueAsNumber: true })}
+                                {...register('basePrice', {
+                                    valueAsNumber: true,
+                                })}
                                 disabled={isPending}
                                 className="premium-input w-full"
                             />
                             {errors.basePrice && (
-                                <p className="premium-form-error">{errors.basePrice.message as string}</p>
+                                <p className="premium-form-error">
+                                    {errors.basePrice.message as string}
+                                </p>
                             )}
                         </div>
 
@@ -230,7 +271,9 @@ export default function RateCardsPage() {
                                     <span className="w-3.5 h-3.5 border-2 border-neutral-900 border-t-transparent animate-spin rounded-full" />
                                     Saving rule...
                                 </span>
-                            ) : 'Add Rate Card'}
+                            ) : (
+                                'Add Rate Card'
+                            )}
                         </button>
                     </form>
                 </div>
@@ -238,7 +281,9 @@ export default function RateCardsPage() {
                 {/* Right Card: Pricing Table (70% equivalent / col-span-7) */}
                 <div className="lg:col-span-7 bg-neutral-900 border border-neutral-850 rounded-xl overflow-hidden">
                     <div className="p-5 border-b border-neutral-855 bg-neutral-900/50">
-                        <h2 className="premium-tyo-card">Active Pricing Rules ({rateCards.length})</h2>
+                        <h2 className="premium-tyo-card">
+                            Active Pricing Rules ({rateCards.length})
+                        </h2>
                     </div>
 
                     {rateCards.length > 0 ? (
@@ -250,30 +295,54 @@ export default function RateCardsPage() {
                                         <th className="p-4">Weight Range</th>
                                         <th className="p-4">Base Price</th>
                                         <th className="p-4">Created</th>
-                                        <th className="p-4 text-right">Actions</th>
+                                        <th className="p-4 text-right">
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-neutral-850">
                                     {rateCards.map((card) => {
-                                        const zone = zones.find((z) => z.id === card.zoneId)
+                                        const zone = zones.find(
+                                            (z) => z.id === card.zoneId
+                                        )
                                         return (
-                                            <tr key={card.id} className="premium-table-row">
+                                            <tr
+                                                key={card.id}
+                                                className="premium-table-row"
+                                            >
                                                 <td className="premium-table-cell">
-                                                    <span className="text-indigo-400 font-extrabold">{zone ? zone.name : 'Unknown Zone'}</span>
-                                                    {zone && <span className="text-[10px] text-neutral-500 block">{zone.city}</span>}
+                                                    <span className="text-indigo-400 font-extrabold">
+                                                        {zone
+                                                            ? zone.name
+                                                            : 'Unknown Zone'}
+                                                    </span>
+                                                    {zone && (
+                                                        <span className="text-[10px] text-neutral-500 block">
+                                                            {zone.city}
+                                                        </span>
+                                                    )}
                                                 </td>
                                                 <td className="premium-table-cell font-mono text-neutral-200">
-                                                    {card.minWeight} kg - {card.maxWeight} kg
+                                                    {card.minWeight} kg -{' '}
+                                                    {card.maxWeight} kg
                                                 </td>
                                                 <td className="premium-table-cell font-extrabold text-white">
                                                     ${card.basePrice.toFixed(2)}
                                                 </td>
                                                 <td className="premium-table-cell text-neutral-500">
-                                                    {card.createdAt ? new Date(card.createdAt).toLocaleDateString() : 'N/A'}
+                                                    {card.createdAt
+                                                        ? new Date(
+                                                              card.createdAt
+                                                          ).toLocaleDateString()
+                                                        : 'N/A'}
                                                 </td>
                                                 <td className="premium-table-action">
                                                     <button
-                                                        onClick={() => alert(`Rate Card editing is restricted.`)}
+                                                        onClick={() =>
+                                                            alert(
+                                                                `Rate Card editing is restricted.`
+                                                            )
+                                                        }
                                                         className="premium-button-secondary h-8 text-[10px] cursor-pointer"
                                                     >
                                                         Edit
@@ -287,10 +356,10 @@ export default function RateCardsPage() {
                         </div>
                     ) : (
                         /* Empty state primitive */
-                        <EmptyState 
-                            icon={DollarSign} 
-                            title="No rate cards configured" 
-                            description="Create a rate card pricing rule to charge for shipments." 
+                        <EmptyState
+                            icon={DollarSign}
+                            title="No rate cards configured"
+                            description="Create a rate card pricing rule to charge for shipments."
                         />
                     )}
                 </div>

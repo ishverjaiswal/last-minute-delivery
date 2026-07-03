@@ -54,7 +54,9 @@ export function PremiumDialog({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="premium-dialog-title"
-                aria-describedby={description ? 'premium-dialog-description' : undefined}
+                aria-describedby={
+                    description ? 'premium-dialog-description' : undefined
+                }
                 tabIndex={-1}
                 className={cn('premium-dialog max-w-md', className)}
             >
@@ -75,7 +77,10 @@ export function PremiumDialog({
                 {(description || children) && (
                     <div className="premium-dialog-body space-y-3">
                         {description && (
-                            <p id="premium-dialog-description" className="premium-typo-secondary">
+                            <p
+                                id="premium-dialog-description"
+                                className="premium-typo-secondary"
+                            >
                                 {description}
                             </p>
                         )}
@@ -83,7 +88,9 @@ export function PremiumDialog({
                     </div>
                 )}
 
-                {footer && <div className="premium-dialog-footer">{footer}</div>}
+                {footer && (
+                    <div className="premium-dialog-footer">{footer}</div>
+                )}
             </div>
         </div>
     )
