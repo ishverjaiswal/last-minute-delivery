@@ -1,141 +1,310 @@
-# Last Mile Delivery Tracker
+# 🚚 Last Mile Delivery Tracker
 
-This repository contains a Next.js application that provides a secure authentication and authorization foundation for the Last Mile Delivery Tracker platform. It includes signup, login, password reset, protected routes, and API infrastructure that can be extended for delivery operations.
+> A modern full-stack logistics management platform for managing the
+> complete last-mile delivery lifecycle with **role-based access**,
+> **OTP-based proof of delivery**, **pricing management**, **delivery
+> agents**, **service zones**, and **real-time shipment tracking**.
 
-Summary
+> **Assignment Context:** Built as part of the **Unthinkable Solutions
+> (Daffodil Software)** campus placement assignment.
 
-- Framework: Next.js (App Router)
-- Styling: Tailwind CSS
-- Animations: GSAP / Framer Motion (where used)
-- Purpose: Demonstration and implementation of authentication flows, protected routes, and UI components for an event-style site.
+------------------------------------------------------------------------
 
-## Table of Contents
+## ✨ Overview
 
-- Getting started
-- Development
-- Build & Production
-- Environment variables
-- Project structure
-- Key components
-- Contributing
-- License
+Last Mile Delivery Tracker is a logistics management platform designed
+for three different users:
 
-## Getting started
+-   👤 Customer
+-   🛵 Delivery Agent
+-   🛠️ Administrator
 
-Prerequisites
+The platform demonstrates a production-inspired architecture using
+**Next.js App Router**, **TypeScript**, **NextAuth**, **Drizzle ORM**,
+and **PostgreSQL**, emphasizing maintainability, clean architecture, and
+scalability.
 
-- Node.js 18+ (or the version your monorepo requires)
-- pnpm (recommended) — or npm / yarn
+------------------------------------------------------------------------
 
-Install dependencies
+# 🚀 Key Features
 
-```powershell
+## 🔐 Authentication & Security
+
+-   Secure Login / Signup
+-   Email Verification
+-   Password Reset
+-   Protected Routes
+-   Role Based Access Control
+-   JWT Session Management
+-   Secure Password Hashing
+
+------------------------------------------------------------------------
+
+## 👤 Customer
+
+-   Book parcel deliveries
+-   Serviceability check using PIN code
+-   Automatic delivery cost estimation
+-   Track order progress
+-   View shipment history
+-   Manage profile
+-   Demo Login
+
+------------------------------------------------------------------------
+
+## 🛵 Delivery Agent
+
+-   View assigned deliveries
+-   Update delivery status
+-   Send Proof-of-Delivery OTP
+-   Verify customer OTP
+-   Complete deliveries securely
+
+------------------------------------------------------------------------
+
+## 🛠️ Admin
+
+-   Dashboard analytics
+-   Manage Orders
+-   Manage Delivery Agents
+-   Manage Service Zones
+-   Configure Rate Cards
+-   Assign delivery agents
+-   Monitor delivery pipeline
+
+------------------------------------------------------------------------
+
+# 🔒 Proof of Delivery (OTP)
+
+``` text
+Customer creates order
+        │
+Admin confirms
+        │
+Admin assigns agent
+        │
+Agent picks up
+        │
+Out For Delivery
+        │
+Agent Sends OTP
+        │
+Customer Shares OTP
+        │
+OTP Verified
+        │
+Delivered
+```
+
+Security highlights:
+
+-   6-digit OTP
+-   Hashed before storage
+-   Expiration time
+-   Limited verification attempts
+-   Resend support
+-   Audit history
+
+------------------------------------------------------------------------
+
+# 👥 User Roles
+
+  Role             Responsibilities
+  ---------------- ------------------------------------------------
+  Customer         Create orders, track shipments, manage profile
+  Delivery Agent   Pickup, delivery, OTP verification
+  Admin            Full logistics management
+
+------------------------------------------------------------------------
+
+# 🛠 Tech Stack
+
+## Frontend
+
+-   Next.js (App Router)
+-   React
+-   TypeScript
+-   Tailwind CSS
+
+## Backend
+
+-   Next.js Route Handlers
+-   NextAuth
+
+## Database
+
+-   PostgreSQL
+-   Drizzle ORM
+
+## Validation
+
+-   Zod
+-   React Hook Form
+
+## Email
+
+-   Resend (development/demo)
+
+------------------------------------------------------------------------
+
+# 🏗 Architecture
+
+``` text
+UI
+ │
+ ▼
+API Routes
+ │
+ ▼
+Service Layer
+ │
+ ▼
+Repository Layer
+ │
+ ▼
+Drizzle ORM
+ │
+ ▼
+PostgreSQL
+```
+
+------------------------------------------------------------------------
+
+# 📂 Project Structure
+
+``` text
+src/
+├── app/
+│   ├── (auth)
+│   ├── (protected)
+│   └── api
+├── components/
+├── services/
+├── lib/
+│   ├── dbconfig
+│   ├── queries
+│   ├── schema
+│   └── utils
+├── auth.ts
+├── auth.config.ts
+├── proxy.ts
+└── route.ts
+```
+
+------------------------------------------------------------------------
+
+# 📦 Core Modules
+
+-   Authentication
+-   Order Management
+-   Delivery Agent Management
+-   Zone Management
+-   Rate Card Management
+-   Shipment Tracking
+-   Proof of Delivery
+-   Settings
+
+------------------------------------------------------------------------
+
+# 📸 Screenshots
+
+Replace these placeholders with actual screenshots.
+
+-   Landing Page
+-   Login
+-   Customer Dashboard
+-   Create Order
+-   My Orders
+-   Tracking
+-   Admin Dashboard
+-   Agent Dashboard
+-   Zones
+-   Rate Cards
+-   Settings
+
+------------------------------------------------------------------------
+
+# ⚡ Demo
+
+The login page provides one-click demo buttons:
+
+-   Use Demo Customer
+-   Use Demo Delivery Agent
+-   Use Demo Admin
+
+No manual credential entry required.
+
+------------------------------------------------------------------------
+
+# ⚙️ Installation
+
+``` bash
+git clone <repository-url>
+
+cd Last-Mile-Delivery
+
 pnpm install
-# or
-npm install
-```
 
-Run development server
+cp .env.example .env
 
-```powershell
 pnpm dev
-# or
-npm run dev
 ```
 
-Open http://localhost:3000 in your browser.
+------------------------------------------------------------------------
 
-## Development
+# 🌱 Environment Variables
 
-- Routes and pages live under `src/app/` (App Router).
-- API endpoints are under `src/app/api/`.
-- UI components live in `src/components/`.
-- Utilities, db helpers and services are under `src/lib/` and `src/services/`.
+  Variable              Purpose
+  --------------------- -----------------------------
+  DATABASE_URL          PostgreSQL connection
+  NEXTAUTH_SECRET       Authentication secret
+  NEXTAUTH_URL          Base application URL
+  AUTH_TRUST_HOST       NextAuth production support
+  RESEND_API_KEY        Email provider
+  NEXT_PUBLIC_APP_URL   Frontend URL
 
-Tip: Many pages use client components (`"use client"`) for animations and interactive UX.
+------------------------------------------------------------------------
 
-## Build & Production
+# 🚀 Deployment
 
-Build for production
+Recommended platform:
 
-```powershell
-pnpm build
-pnpm start
-```
+-   Vercel
 
-Deploy: This project can be deployed to Vercel, Netlify, or any Node-compatible host. If using Vercel, the app router is supported out of the box.
+Checklist:
 
-## Environment variables
+-   Configure all environment variables
+-   Connect PostgreSQL database
+-   Run Drizzle migrations
+-   Deploy
 
-Create a `.env.local` with the variables your app needs. Example variables used in this project (update names to match the actual code):
+------------------------------------------------------------------------
 
-```
-DATABASE_URL=postgres://user:pass@host:5432/dbname
-NEXTAUTH_URL=https://your-site.com
-NEXTAUTH_SECRET=some-secret
-SMTP_URL=smtp://user:pass@smtp.example.com:587
-STRIPE_SECRET_KEY=sk_live_...
-TWILIO_SID=ACxxxx
-TWILIO_TOKEN=xxxx
-```
+# 🧪 Quality
 
-Only add secrets to `.env*` files and never commit them to source control.
+-   TypeScript
+-   ESLint
+-   Clean layered architecture
+-   Reusable UI components
+-   Responsive design
+-   Protected routes
+-   OTP-based Proof of Delivery
 
-## Project structure (high level)
+------------------------------------------------------------------------
 
-Key folders under `src/`:
+# 🔮 Future Improvements
 
-- `app/` — Next.js app routes and pages (App Router)
-- `app/(auth)` — Authentication pages and flows (signup, login, password reset)
-- `app/(protected)` — Layout and pages for protected routes
-- `components/` — Reusable UI components (auth forms, landing, dashboard, ui primitives)
-- `lib/` — Utilities, db connectors and helpers
-- `services/` — Business logic (auth services, mail, token, user helpers)
+-   Live GPS tracking
+-   Google Maps integration
+-   SMS Gateway
+-   Push Notifications
+-   Route Optimization
+-   Analytics Dashboard
+-   Multi-warehouse support
 
-Example files / entry points:
+------------------------------------------------------------------------
 
-- `src/app/page.tsx` — Landing / home page
-- `src/app/layout.tsx` — Global layout
-- `src/app/api/auth/...` — NextAuth and API routes
+# 📄 License
 
-## Key components and features
-
-- Authentication flows: Sign up, verify email, login, reset password, new password
-- Protected routes and server-side checks
-- Preloader and page transition animations (GSAP / Tailwind utility classes)
-- Lenis-based smooth scroll on some landing pages
-
-## Troubleshooting & common commands
-
-- Run linting (if configured): `pnpm lint`
-- Run tests (if present): `pnpm test`
-- Format code: `pnpm format` or via your editor setup
-
-## Contributing
-
-1. Fork the repo
-2. Create a new branch: `feature/xyz`
-3. Make changes and add tests
-4. Open a pull request describing the change
-
-Please follow the repository's code style and commit message guidelines.
-
-## Where to find things
-
-- Authentication pages: `src/app/(auth)`
-- Page transition overlay component: `src/app/(routes)/_components/PageTransition.tsx` (controls tile animations)
-- Landing scene & hero: `src/components/landing/*`
-
-## License
-
-This project does not include a license file. Add a `LICENSE` if you want to open-source it (MIT / Apache-2.0 are common choices).
-
----
-
-If you want, I can:
-
-- Add a `CONTRIBUTING.md` with PR and branch rules
-- Add example `.env.local.example` with variable names used by the app
-- Add automated scripts for lint/test/build in package.json
-
-If you'd like me to write one of those now, tell me which and I'll add it.
+This project was created for educational and placement evaluation
+purposes.
