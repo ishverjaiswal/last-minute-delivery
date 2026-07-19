@@ -1,37 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * POST /api/orders/preview
+ *
+ * Runs the full rate engine and returns a pricing breakdown
+ * WITHOUT creating an order. Used by the UI to show the customer
+ * actual weight, volumetric weight, billable weight, rate, COD
+ * surcharge, and total before they confirm the booking.
+ */
 import { auth } from '@/auth'
-import { orderService } from '@/services/order.service'
+import { billingService } from '@/services/billing.service'
 import { createOrderSchema } from '@/lib/schema/delivery.schema'
 import { NextResponse } from 'next/server'
-
-export async function GET() {
-    const session = await auth()
-    if (!session || !session.user || !session.user.id) {
-        return NextResponse.json(
-            {
-                success: false,
-                error: { code: 'UNAUTHENTICATED', message: 'Auth required' },
-            },
-            { status: 401 }
-        )
-    }
-
-    try {
-        const orders = await orderService.getOrdersByRole(
-            session.user.id,
-            session.user.role || 'CUSTOMER'
-        )
-        return NextResponse.json({ success: true, data: orders })
-    } catch (err: any) {
-        return NextResponse.json(
-            {
-                success: false,
-                error: { code: 'INTERNAL_SERVER_ERROR', message: err.message },
-            },
-            { status: 500 }
-        )
-    }
-}
 
 export async function POST(request: Request) {
     const session = await auth()
@@ -47,6 +26,8 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json()
+
+        // Re-use the same Zod schema – no extra validation needed
         const parsed = createOrderSchema.safeParse(body)
         if (!parsed.success) {
             return NextResponse.json(
@@ -62,8 +43,6 @@ export async function POST(request: Request) {
             )
         }
 
-        // Compute pricing preview before persisting so we can return it
-        const { billingService } = await import('@/services/billing.service')
         const pricing = await billingService.calculateOrderPrice({
             deliveryPinCode: parsed.data.deliveryPinCode,
             pickupPinCode: parsed.data.pickupPinCode,
@@ -75,23 +54,17 @@ export async function POST(request: Request) {
             paymentType: parsed.data.paymentType ?? 'PREPAID',
         })
 
-        const newOrder = await orderService.createNewOrder(
-            session.user.id,
-            parsed.data
-        )
-
-        // Return order + full pricing breakdown
         return NextResponse.json({
             success: true,
-            data: newOrder,
-            pricing: {
+            data: {
+                zone: pricing.zoneName,
+                zoneType: pricing.zoneType,
                 actualWeight: pricing.actualWeight,
                 volumetricWeight: pricing.volumetricWeight,
                 billableWeight: pricing.billableWeight,
                 appliedRate: pricing.appliedRate,
                 surcharge: pricing.surchargeAmount,
                 total: pricing.totalPrice,
-                zoneType: pricing.zoneType,
             },
         })
     } catch (err: any) {

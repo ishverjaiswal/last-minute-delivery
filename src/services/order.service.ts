@@ -17,28 +17,63 @@ export const orderService = {
             deliveryAddress: string
             deliveryPinCode: string
             weight: number
+            length?: number
+            width?: number
+            height?: number
+            orderType?: 'B2B' | 'B2C'
+            paymentType?: 'PREPAID' | 'COD'
+            pickupPinCode?: string
         }
     ) => {
-        // Calculate price and find corresponding zone & rate card
-        const priceInfo = await billingService.calculateOrderPrice(
-            payload.deliveryPinCode,
-            payload.weight
-        )
+        const {
+            pickupAddress,
+            deliveryAddress,
+            deliveryPinCode,
+            weight,
+            length,
+            width,
+            height,
+            orderType = 'B2C',
+            paymentType = 'PREPAID',
+            pickupPinCode,
+        } = payload
 
-        // Create order in DB with PENDING status
-        const order = await createOrder({
-            customerId,
-            pickupAddress: payload.pickupAddress,
-            deliveryAddress: payload.deliveryAddress,
-            deliveryPinCode: payload.deliveryPinCode,
-            weight: payload.weight,
-            zoneId: priceInfo.zoneId,
-            rateCardId: priceInfo.rateCardId,
-            status: 'PENDING',
-            price: priceInfo.price,
+        // ── Calculate full pricing breakdown ───────────────────────────────────
+        const pricing = await billingService.calculateOrderPrice({
+            deliveryPinCode,
+            pickupPinCode,
+            weight,
+            length,
+            width,
+            height,
+            orderType,
+            paymentType,
         })
 
-        // Log PENDING state to history
+        // ── Create order in DB with PENDING status ─────────────────────────────
+        const order = await createOrder({
+            customerId,
+            pickupAddress,
+            deliveryAddress,
+            deliveryPinCode,
+            weight,
+            length: length ?? null,
+            width: width ?? null,
+            height: height ?? null,
+            volumetricWeight: pricing.volumetricWeight,
+            billableWeight: pricing.billableWeight,
+            orderType,
+            paymentType,
+            codSurchargeAmount: pricing.surchargeAmount,
+            pickupPinCode: pickupPinCode ?? null,
+            pickupZoneId: pricing.pickupZoneId,
+            zoneId: pricing.zoneId,
+            rateCardId: pricing.rateCardId,
+            status: 'PENDING',
+            price: pricing.totalPrice,
+        })
+
+        // ── Log PENDING state to status history ────────────────────────────────
         await statusHistoryService.logStatusChange(
             order.id,
             'PENDING',

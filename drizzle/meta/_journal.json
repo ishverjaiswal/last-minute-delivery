@@ -92,6 +92,13 @@
       "when": 1762989225507,
       "tag": "0012_next_silvermane",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1783076539089,
+      "tag": "0013_absent_silverclaw",
+      "breakpoints": true
     }
   ]
 }

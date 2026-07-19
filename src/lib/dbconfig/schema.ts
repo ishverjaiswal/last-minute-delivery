@@ -198,6 +198,12 @@ export const rateCardsTable = pgTable('rate_card', {
     minWeight: doublePrecision('minWeight').notNull(),
     maxWeight: doublePrecision('maxWeight').notNull(),
     basePrice: doublePrecision('basePrice').notNull(),
+    // B2B or B2C rate card
+    orderType: text('orderType').$type<'B2B' | 'B2C'>().notNull().default('B2C'),
+    // INTRA = same zone, INTER = cross-zone
+    zoneType: text('zoneType').$type<'INTRA' | 'INTER'>().notNull().default('INTRA'),
+    // Admin-configurable COD surcharge percentage (e.g. 1.5 = 1.5%)
+    codSurcharge: doublePrecision('codSurcharge').notNull().default(0),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
 })
 
@@ -212,6 +218,26 @@ export const ordersTable = pgTable('order', {
     deliveryAddress: text('deliveryAddress').notNull(),
     deliveryPinCode: text('deliveryPinCode').notNull(),
     weight: doublePrecision('weight').notNull(),
+    // Package dimensions (cm) — optional, used for volumetric weight
+    length: doublePrecision('length'),
+    width: doublePrecision('width'),
+    height: doublePrecision('height'),
+    // Volumetric weight = (L×W×H)/5000; stored for auditing
+    volumetricWeight: doublePrecision('volumetricWeight'),
+    // Billable weight = max(actualWeight, volumetricWeight)
+    billableWeight: doublePrecision('billableWeight'),
+    // B2B or B2C shipment
+    orderType: text('orderType').$type<'B2B' | 'B2C'>().notNull().default('B2C'),
+    // PREPAID or COD
+    paymentType: text('paymentType').$type<'PREPAID' | 'COD'>().notNull().default('PREPAID'),
+    // Absolute COD surcharge amount applied (for auditing)
+    codSurchargeAmount: doublePrecision('codSurchargeAmount').notNull().default(0),
+    // Pickup PIN code (used for intra/inter zone detection)
+    pickupPinCode: text('pickupPinCode'),
+    // Pickup zone FK (resolved from pickupPinCode)
+    pickupZoneId: text('pickupZoneId').references(() => zonesTable.id, {
+        onDelete: 'set null',
+    }),
     zoneId: text('zoneId')
         .notNull()
         .references(() => zonesTable.id),

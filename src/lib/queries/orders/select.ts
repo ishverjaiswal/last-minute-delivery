@@ -20,6 +20,19 @@ const selectWithDetails = () => {
             deliveryAddress: ordersTable.deliveryAddress,
             deliveryPinCode: ordersTable.deliveryPinCode,
             weight: ordersTable.weight,
+            // Package dimensions
+            length: ordersTable.length,
+            width: ordersTable.width,
+            height: ordersTable.height,
+            // Weight breakdown
+            volumetricWeight: ordersTable.volumetricWeight,
+            billableWeight: ordersTable.billableWeight,
+            // Order meta
+            orderType: ordersTable.orderType,
+            paymentType: ordersTable.paymentType,
+            codSurchargeAmount: ordersTable.codSurchargeAmount,
+            pickupPinCode: ordersTable.pickupPinCode,
+            pickupZoneId: ordersTable.pickupZoneId,
             zoneId: ordersTable.zoneId,
             rateCardId: ordersTable.rateCardId,
             agentId: ordersTable.agentId,

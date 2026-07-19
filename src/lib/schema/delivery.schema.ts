@@ -15,6 +15,13 @@ export const createRateCardSchema = z
         minWeight: z.number().min(0, 'Minimum weight must be at least 0'),
         maxWeight: z.number().positive('Maximum weight must be positive'),
         basePrice: z.number().positive('Base price must be positive'),
+        orderType: z.enum(['B2B', 'B2C']).default('B2C'),
+        zoneType: z.enum(['INTRA', 'INTER']).default('INTRA'),
+        // Admin-configurable COD surcharge percentage (e.g. 1.5 = 1.5%)
+        codSurcharge: z
+            .number()
+            .min(0, 'COD surcharge must be non-negative')
+            .default(0),
     })
     .refine((data) => data.maxWeight > data.minWeight, {
         message: 'Maximum weight must be greater than minimum weight',
@@ -45,6 +52,19 @@ export const createOrderSchema = z.object({
         .string()
         .regex(/^\d+$/, 'PIN code must contain only digits'),
     weight: z.number().positive('Weight must be positive'),
+    // Package dimensions in cm (optional; enables volumetric weight calculation)
+    length: z.number().positive('Length must be positive').optional(),
+    width: z.number().positive('Width must be positive').optional(),
+    height: z.number().positive('Height must be positive').optional(),
+    // Order type: B2B (business-to-business) or B2C (business-to-consumer)
+    orderType: z.enum(['B2B', 'B2C']).default('B2C'),
+    // Payment type: PREPAID or Cash on Delivery
+    paymentType: z.enum(['PREPAID', 'COD']).default('PREPAID'),
+    // Pickup PIN code for intra/inter zone detection
+    pickupPinCode: z
+        .string()
+        .regex(/^\d+$/, 'PIN code must contain only digits')
+        .optional(),
 })
 
 export const updateOrderSchema = z.object({
